@@ -1,7 +1,8 @@
 import re
 from token_ import Token, TokenKind
 
-KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'if', 'else', 'while', 'for', 'return', 'break', 'continue', 'true', 'false', 'null', 'main']
+KEYWORDS = ['if', 'else', 'while', 'for', 'return', 'break', 'continue', 'true', 'false', 'null',]
+TYPE_KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'main']
 OPERATORS = ['+', '-', '*', '/', '%', '==', '!=', '>', '>=', '<', '<=', '&&', '||', '!', '=', '+=', '-=', '*=', '/=', '%=', '++', '--']
 SYMBOLS = ['(', ')', '{', '}', '[', ']', ',', ';', ':', '.', '$']
 
@@ -18,6 +19,9 @@ class Tokenizer:
       if keyword := self.__match_keyword():
         token = Token(TokenKind.KEYWORD, keyword, self.line, self.column)
         self.column += len(keyword)
+      elif type_keyword := self.__match_type_keyword():
+        token = Token(TokenKind.TYPE_KEYWORD, type_keyword, self.line, self.column)
+        self.column += len(type_keyword)
       elif identifier := self.__match_identifier():
         token = Token(TokenKind.IDENTIFIER, identifier, self.line, self.column)
         self.column += len(identifier)
@@ -59,6 +63,13 @@ class Tokenizer:
         return keyword 
     return None
   
+  def __match_type_keyword(self):
+    for keyword in TYPE_KEYWORDS:
+      if self.code[self.pos:self.pos + len(keyword)] == keyword and not self.code[self.pos + len(keyword)].isalnum():
+        self.pos += len(keyword)
+        return keyword 
+    return None
+
   def __match_operator(self):
     for operator in OPERATORS:
       if self.code[self.pos:self.pos + len(operator)] == operator:
