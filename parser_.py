@@ -1,4 +1,4 @@
-from nodes import AssignmentNode, AttributeAccessNode, BinaryExpressionNode, CommentNode, DeclarationNode, DividerNode, FunctionCallNode, FunctionDeclarationNode, GlobalIdentifierNode, IdentifierNode, IndexAccessNode, MainNode, NumberNode, ProgramNode, StringNode
+from nodes import AssignmentNode, AttributeAccessNode, BinaryExpressionNode, BlockNode, CommentNode, DeclarationNode, DividerNode, ElseIfClauseNode, FunctionCallNode, FunctionDeclarationNode, GlobalIdentifierNode, IdentifierNode, IfStatementNode, IndexAccessNode, MainNode, NumberNode, ProgramNode, StringNode
 from token_ import TokenError, TokenKind
 
 
@@ -63,6 +63,8 @@ class Parser:
     elif self.__match(TokenKind.COMMENT):
       comment_value = self.__consume(TokenKind.COMMENT)
       return CommentNode(comment_value)
+    elif self.__match(TokenKind.IF):
+      return self.__parse_if_statement()
     elif self.__match(TokenKind.MAIN_KEYWORD):
       return self.__parse_main()
     else:
@@ -94,7 +96,7 @@ class Parser:
                 break
 
         # After parsing the left side, expect an "=" operator for assignment
-        if self.__peek(n).kind == TokenKind.OPERATOR and self.__peek(n).value == "=":
+        if self.__peek(n).kind == TokenKind.ASSIGNMENT_OPERATOR:
             return True
 
     return False
@@ -143,17 +145,17 @@ class Parser:
     left = self.__parse_factor()
     
     # Expect "=" operator
-    if not (self.__match(TokenKind.OPERATOR) and self.__current().value == "="):
+    if not self.__match(TokenKind.ASSIGNMENT_OPERATOR):
         raise TokenError("Expected '=' in assignment", self.__current())
-    self.__consume(TokenKind.OPERATOR)  # Consume the "="
+    self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
 
-    # Parse the right side (assignment value) as a full expression
-    value = self.__parse_expression()
+    # Parse the right side (assignment value) as a comparison, allowing for complex expressions returning boolean values as well
+    value = self.__parse_comparison()
     
     # Expect a semicolon
     if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
         raise TokenError("Expected ';' at the end of assignment", self.__current())
-    self.__consume(TokenKind.SYMBOL)  # Consume the ";"
+    self.__consume(TokenKind.SYMBOL)
 
     return AssignmentNode(left, value)
 
@@ -163,8 +165,8 @@ class Parser:
     left = self.__parse_term()
     
     # Handle addition and subtraction (lower precedence)
-    while self.__match(TokenKind.OPERATOR) and self.__current().value in ['+', '-']:
-        operator = self.__consume(TokenKind.OPERATOR)
+    while self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in ['+', '-']:
+        operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
         right = self.__parse_term()
         left = BinaryExpressionNode(left, operator.value, right)
     
@@ -175,8 +177,8 @@ class Parser:
     left = self.__parse_factor()
     
     # Handle multiplication and division (higher precedence than + and -)
-    while self.__match(TokenKind.OPERATOR) and self.__current().value in ['*', '/']:
-        operator = self.__consume(TokenKind.OPERATOR)
+    while self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in ['*', '/']:
+        operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
         right = self.__parse_factor()
         left = BinaryExpressionNode(left, operator.value, right)
     
@@ -259,9 +261,9 @@ class Parser:
     identifiers = [(identifier, None)]  # Start a list to hold identifiers and their initial values
 
     # Check if there's an initialization (only allowed for a single identifier)
-    if self.__match(TokenKind.OPERATOR) and self.__current().value == "=":
+    if self.__match(TokenKind.ASSIGNMENT_OPERATOR):
         # Consume the "="
-        self.__consume(TokenKind.OPERATOR)
+        self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
         
         # Parse the initial value for the single identifier
         initial_value = self.__parse_expression()
@@ -308,24 +310,10 @@ class Parser:
         raise SyntaxError("Expected ')' after parameter list")
     self.__consume(TokenKind.SYMBOL)
 
-    # Expect and consume the opening brace for the function body
-    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "{"):
-        raise SyntaxError("Expected '{' before function body")
-    self.__consume(TokenKind.SYMBOL)
-
-    # Parse the statements in the function body
-    statements = []
-    while not (self.__match(TokenKind.SYMBOL) and self.__current().value == "}"):
-        statement = self.__parse_statement()
-        statements.append(statement)
-
-    # Expect and consume the closing brace for the function body
-    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "}"):
-        raise SyntaxError("Expected '}' after function body")
-    self.__consume(TokenKind.SYMBOL)
+    block = self.__parse_block()
 
     # Return a FunctionDeclarationNode with the parsed information
-    return FunctionDeclarationNode(type_keyword.value, function_name.value, parameters, statements)
+    return FunctionDeclarationNode(type_keyword.value, function_name.value, parameters, block)
   
   def __parse_parameter_list(self):
     # Start with an empty list of parameters
@@ -418,21 +406,59 @@ class Parser:
         raise SyntaxError("Expected ')' after main function parameter list")
     self.__consume(TokenKind.SYMBOL)
 
-    # Expect and consume the opening brace for the main function body
-    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "{"):
-        raise SyntaxError("Expected '{' before main function body")
-    self.__consume(TokenKind.SYMBOL)
-
-    # Parse the statements in the main function body
-    statements = []
-    while not (self.__match(TokenKind.SYMBOL) and self.__current().value == "}"):
-        statement = self.__parse_statement()
-        statements.append(statement)
-
-    # Expect and consume the closing brace for the main function body
-    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "}"):
-        raise SyntaxError("Expected '}' after main function body")
-    self.__consume(TokenKind.SYMBOL)
+    block = self.__parse_block()
 
     # Return a FunctionDeclarationNode with the parsed information
-    return MainNode(parameters, statements)
+    return MainNode(parameters, block)
+  
+  def __parse_if_statement(self):
+    # Consume the "if" keyword
+    self.__consume(TokenKind.IF)
+    
+    # Parse the condition within parentheses
+    self.__consume(TokenKind.SYMBOL)
+    condition = self.__parse_comparison()
+    self.__consume(TokenKind.SYMBOL)
+    
+    # Parse the "if" block
+    if_block = self.__parse_block()
+    
+    # Parse any "else if" clauses
+    else_if_clauses = []
+    while self.__match(TokenKind.ELSE_IF):
+        self.__consume(TokenKind.ELSE_IF)
+        
+        self.__consume(TokenKind.SYMBOL)
+        else_if_condition = self.__parse_comparison()
+        self.__consume(TokenKind.SYMBOL)
+        
+        else_if_block = self.__parse_block()
+        else_if_clauses.append(ElseIfClauseNode(else_if_condition, else_if_block))
+    
+    # Parse an optional "else" clause
+    else_block = None
+    if self.__match(TokenKind.ELSE):
+        self.__consume(TokenKind.ELSE)
+        else_block = self.__parse_block()
+    
+    return IfStatementNode(condition, if_block, else_if_clauses, else_block)
+
+  def __parse_block(self):
+    statements = []
+    self.__consume(TokenKind.SYMBOL)
+    while not (self.__match(TokenKind.SYMBOL) and self.__current().value == "}"):
+        statements.append(self.__parse_statement())
+    self.__consume(TokenKind.SYMBOL)
+    return BlockNode(statements)
+  
+  def __parse_comparison(self):
+    # Parse the left side of the comparison
+    left = self.__parse_expression()
+
+    # Check for comparison operators
+    while self.__match(TokenKind.COMPARISON_OPERATOR):
+        operator = self.__consume(TokenKind.COMPARISON_OPERATOR)
+        right = self.__parse_expression()
+        left = BinaryExpressionNode(left, operator.value, right)
+    
+    return left

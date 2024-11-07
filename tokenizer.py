@@ -1,9 +1,11 @@
 import re
 from token_ import Token, TokenKind
 
-KEYWORDS = ['if', 'else', 'while', 'for', 'return', 'break', 'continue', 'true', 'false', 'null']
+KEYWORDS = ['while', 'for', 'return', 'break', 'continue', 'true', 'false', 'null']
 TYPE_KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'dyn_dyn_string', 'mapping']
-OPERATORS = ['+', '-', '*', '/', '%', '==', '!=', '>', '>=', '<', '<=', '&&', '||', '!', '=', '+=', '-=', '*=', '/=', '%=', '++', '--']
+ARITHMETIC_OPERATORS = ['+', '-', '*', '/', '%', '+=', '-=', '*=', '/=', '%=', '++', '--']
+COMPARISON_OPERATORS = ['==', '!=', '>', '>=', '<', '<=']
+LOGICAL_OPERATORS = ['&&', '||', '!']
 SYMBOLS = ['(', ')', '{', '}', '[', ']', ',', ';', ':', '.', '$']
 
 class Tokenizer:
@@ -16,9 +18,8 @@ class Tokenizer:
   def tokenize(self):
     tokens = []
     while self.pos < len(self.code):
-      if keyword := self.__match_keyword():
-        token = Token(TokenKind.KEYWORD, keyword, self.line, self.column)
-        self.column += len(keyword)
+      if token := self.__match_keyword():        
+        self.column += len(token.value)
       elif main_keyword := self.__match_main_keyword():
         token = Token(TokenKind.MAIN_KEYWORD, main_keyword, self.line, self.column)
         self.column += len(main_keyword)
@@ -31,9 +32,8 @@ class Tokenizer:
       elif comment := self.__match_comment():
         token = Token(TokenKind.COMMENT, comment, self.line, self.column)
         self.column += len(comment)
-      elif operator := self.__match_operator():
-        token = Token(TokenKind.OPERATOR, operator, self.line, self.column)
-        self.column += len(operator)
+      elif token := self.__match_operator():
+        self.column += len(token.value)
       elif number := self.__match_number():
         token = Token(TokenKind.NUMBER, number, self.line, self.column)
         self.column += len(number)
@@ -61,10 +61,31 @@ class Tokenizer:
     return tokens
   
   def __match_keyword(self):
+    # Regular expression to match "else if" with any amount of whitespace in between
+    else_if_pattern = re.compile(r"else\s+if\b")
+    
+    # Check for "else if" with flexible whitespace
+    match = else_if_pattern.match(self.code[self.pos:])
+    if match:
+        self.pos += match.end()
+        return Token(TokenKind.ELSE_IF, "else if", self.line, self.column)
+    
+    # Check for "if"
+    elif self.code[self.pos:self.pos + 2] == "if" and not self.code[self.pos + 2].isalnum():
+        self.pos += 2
+        return Token(TokenKind.IF, "if", self.line, self.column)
+
+    # Check for "else"
+    elif self.code[self.pos:self.pos + 4] == "else" and not self.code[self.pos + 4].isalnum():
+        self.pos += 4
+        return Token(TokenKind.ELSE, "else", self.line, self.column)
+
+    # Check other keywords
     for keyword in KEYWORDS:
-      if self.code[self.pos:self.pos + len(keyword)] == keyword and not self.code[self.pos + len(keyword)].isalnum():
-        self.pos += len(keyword)
-        return keyword 
+        if self.code[self.pos:self.pos + len(keyword)] == keyword and not self.code[self.pos + len(keyword)].isalnum():
+            self.pos += len(keyword)
+            return Token(TokenKind.KEYWORD, keyword, self.line, self.column)
+
     return None
   
   def __match_type_keyword(self):
@@ -75,10 +96,29 @@ class Tokenizer:
     return None
 
   def __match_operator(self):
-    for operator in OPERATORS:
-      if self.code[self.pos:self.pos + len(operator)] == operator:
-        self.pos += len(operator)
-        return operator
+    # Check for comparison operators first
+    for operator in COMPARISON_OPERATORS:
+        if self.code[self.pos:self.pos + len(operator)] == operator:
+            self.pos += len(operator)
+            return Token(TokenKind.COMPARISON_OPERATOR, operator, self.line, self.column)
+
+    # Check for assignment operator "=" specifically
+    if self.code[self.pos] == '=' and (self.pos + 1 >= len(self.code) or self.code[self.pos + 1] != '='):
+        self.pos += 1
+        return Token(TokenKind.ASSIGNMENT_OPERATOR, '=', self.line, self.column)
+
+    # Check for arithmetic operators
+    for operator in ARITHMETIC_OPERATORS:
+        if self.code[self.pos:self.pos + len(operator)] == operator:
+            self.pos += len(operator)
+            return Token(TokenKind.ARITHMETIC_OPERATOR, operator, self.line, self.column)
+    
+    # Optionally, handle logical operators if needed
+    for operator in LOGICAL_OPERATORS:
+        if self.code[self.pos:self.pos + len(operator)] == operator:
+            self.pos += len(operator)
+            return Token(TokenKind.LOGICAL_OPERATOR, operator, self.line, self.column)
+    
     return None
   
   def __match_identifier(self):

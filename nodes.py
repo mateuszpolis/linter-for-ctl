@@ -155,20 +155,18 @@ class IndexAccessNode:
         return f'{indent_str(indent)}IndexAccessNode({self.identifier}, {self.index})'
     
 class FunctionDeclarationNode:
-    def __init__(self, return_type, identifier, parameters, statements):
+    def __init__(self, return_type, identifier, parameters, block):
         self.return_type = return_type
         self.identifier = identifier
         self.parameters = parameters
-        self.statements = statements
+        self.block = block
 
     def __repr__(self, indent=0):
         string = f'{indent_str(indent)}FunctionDeclarationNode(\n'
         string += f'{indent_str(indent + 1)}return_type: {self.return_type}\n'
         string += f'{indent_str(indent + 1)}identifier: {self.identifier}\n'
         string += f'{indent_str(indent + 1)}parameters: {self.parameters}\n'
-        string += f'{indent_str(indent + 1)}statements: [\n'
-        for statement in self.statements:
-            string += statement.__repr__(indent + 2) + '\n'
+        string += f'{indent_str(indent + 1)}block: {self.block}\n'
         string += f'{indent_str(indent + 1)}]\n'
         string += f'{indent_str(indent)})'
         return string
@@ -189,14 +187,59 @@ class FunctionCallNode:
         return string
     
 class MainNode:
-    def __init__(self, parameters, statements):
+    def __init__(self, parameters, block):
         self.parameters = parameters
-        self.statements = statements
+        self.block = block
 
     def __repr__(self, indent=0):
         string = f'{indent_str(indent)}MainNode(\n'
         string += f'{indent_str(indent + 1)}parameters: {self.parameters}\n'
-        for statement in self.statements:
-            string += statement.__repr__(indent + 1) + '\n'
+        string += f'{indent_str(indent + 1)}block: {self.block}\n'
         string += f'{indent_str(indent)})'
         return string
+    
+class IfStatementNode:
+    def __init__(self, condition, if_block, else_if_clauses=None, else_block=None):
+        self.condition = condition
+        self.if_block = if_block
+        self.else_if_clauses = else_if_clauses if else_if_clauses is not None else []
+        self.else_block = else_block
+
+    def __repr__(self, indent=0):
+        result = f"{indent_str(indent)}IfStatementNode(\n"
+        result += f"{indent_str(indent + 1)}condition={self.condition},\n"
+        result += f"{indent_str(indent + 1)}if_block={self.if_block},\n"
+        result += f"{indent_str(indent + 1)}else_if_clauses=[\n"
+        for clause in self.else_if_clauses:
+            result += clause.__repr__(indent + 2) + "\n"
+        result += f"{indent_str(indent + 1)}],\n"
+        result += f"{indent_str(indent + 1)}else_block={self.else_block}\n"
+        result += f"{indent_str(indent)})"
+        return result
+
+class ElseIfClauseNode:
+    def __init__(self, condition, block):
+        self.condition = condition
+        self.block = block
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}ElseIfClauseNode(condition={self.condition}, block={self.block})"
+
+class ElseClauseNode:
+    def __init__(self, block):
+        self.block = block
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}ElseClauseNode(block={self.block})"
+
+
+class BlockNode:
+    def __init__(self, statements):
+        self.statements = statements
+
+    def __repr__(self, indent=0):
+        result = f"{indent_str(indent)}BlockNode([\n"
+        for statement in self.statements:
+            result += statement.__repr__(indent + 1) + "\n"
+        result += f"{indent_str(indent)}])"
+        return result

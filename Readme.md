@@ -14,19 +14,24 @@ Statement           -> Assignment
                     | Declaration 
                     | FunctionDeclaration 
                     | FunctionCall ";"
+                    | IfStatement
                     | DividingLine
-Assignment          -> Expression "=" Expression ";"
+IfStatement         -> "if" "(" Comparison ")" Block (ElseIfClause)* (ElseClause)?
+ElseIfClause        -> "else" "if" "(" Comparison ")" Block
+ElseClause          -> "else" Block
+Assignment          -> Expression "=" Comparison ";"
 Declaration         -> type_keyword identifier ("=" Expression)? (";" | ("," identifier ("=" Expression)*)? ";")
 FunctionDeclaration -> type_keyword identifier "(" (type_keyword identifier ("," type_keyword identifier)*)? ")" Block
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
+Comparison          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )*
 Expression          -> Term ( ("+" | "-") Term )*
 Term                -> Factor ( ("*" | "/") Factor )*
 Factor              -> Primary
 Primary             -> number 
                     | identifier 
                     | "$" identifier
-                    | "(" Expression ")"
+                    | "(" Comparison ")"
                     | FunctionCall
                     | AttributeAccess
                     | IndexAccess
