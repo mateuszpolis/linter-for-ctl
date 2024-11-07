@@ -2,7 +2,7 @@ import re
 from token_ import Token, TokenKind
 
 KEYWORDS = ['if', 'else', 'while', 'for', 'return', 'break', 'continue', 'true', 'false', 'null']
-TYPE_KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'main', 'dyn_dyn_string']
+TYPE_KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'dyn_dyn_string', 'mapping']
 OPERATORS = ['+', '-', '*', '/', '%', '==', '!=', '>', '>=', '<', '<=', '&&', '||', '!', '=', '+=', '-=', '*=', '/=', '%=', '++', '--']
 SYMBOLS = ['(', ')', '{', '}', '[', ']', ',', ';', ':', '.', '$']
 
@@ -19,6 +19,9 @@ class Tokenizer:
       if keyword := self.__match_keyword():
         token = Token(TokenKind.KEYWORD, keyword, self.line, self.column)
         self.column += len(keyword)
+      elif main_keyword := self.__match_main_keyword():
+        token = Token(TokenKind.MAIN_KEYWORD, main_keyword, self.line, self.column)
+        self.column += len(main_keyword)
       elif type_keyword := self.__match_type_keyword():
         token = Token(TokenKind.TYPE_KEYWORD, type_keyword, self.line, self.column)
         self.column += len(type_keyword)
@@ -46,7 +49,8 @@ class Tokenizer:
       elif whitespace := self.__match_whitespace():
         token = Token(TokenKind.WHITESPACE, whitespace, self.line, self.column)
         self.line += whitespace.count('\n')
-        self.column = 1
+        if '\n' in whitespace:
+          self.column = len(whitespace) - whitespace.rindex('\n')
       else:
         raise SyntaxError(f'Unexpected character {self.code[self.pos]} at line {self.line}, column {self.column}')
       tokens.append(token)
@@ -150,4 +154,10 @@ class Tokenizer:
       while self.pos < len(self.code) and self.code[self.pos] != '\n':
         self.pos += 1
       return self.code[start:self.pos]
+    return None
+  
+  def __match_main_keyword(self):
+    if self.code[self.pos:self.pos + 4] == 'main' and not self.code[self.pos + 4].isalnum():
+      self.pos += 4
+      return 'main'
     return None

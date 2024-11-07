@@ -1,4 +1,4 @@
-from nodes import AssignmentNode, AttributeAccessNode, BinaryExpressionNode, DeclarationNode, FunctionCallNode, FunctionDeclarationNode, GlobalIdentifierNode, IdentifierNode, IndexAccessNode, NumberNode, ProgramNode, StringNode
+from nodes import AssignmentNode, AttributeAccessNode, BinaryExpressionNode, CommentNode, DeclarationNode, DividerNode, FunctionCallNode, FunctionDeclarationNode, GlobalIdentifierNode, IdentifierNode, IndexAccessNode, MainNode, NumberNode, ProgramNode, StringNode
 from token_ import TokenError, TokenKind
 
 
@@ -35,7 +35,7 @@ class Parser:
       token = self.__current()
       self.__advance()
       return token
-    raise SyntaxError(f'Expected {kind} but got {self.__current().kind}. Token: {self.__current()}', self.__current().line, self.__current().column)
+    raise TokenError(SyntaxError(f'Expected {kind} but got {self.__current().kind}. Token: {self.__current()}', self.__current().line, self.__current().column), self.__current())
   
   def parse(self):
     statements = []
@@ -47,32 +47,116 @@ class Parser:
   # Non-terminal parsing functions
 
   def __parse_statement(self):
-    if self.__match(TokenKind.IDENTIFIER) and self.__peek().kind == TokenKind.OPERATOR and self.__peek().value == "=":
+    if self.__detect_assignment():
       return self.__parse_assignment()
     elif self.__match(TokenKind.TYPE_KEYWORD) and self.__peek().kind == TokenKind.IDENTIFIER and (self.__peek(2).value == ";" or self.__peek(2).value == "=" or self.__peek(2).value == ","):
       return self.__parse_declaration()
     elif self.__match(TokenKind.TYPE_KEYWORD) and self.__peek().kind == TokenKind.IDENTIFIER and self.__peek(2).value == "(":
-       return self.__parse_function_declaration()
-    elif self.__match(TokenKind.IDENTIFIER) and self.__peek().kind == TokenKind.SYMBOL and self.__peek().value == "(":
-      function_call = self.__parse_function_call()
-      # Expect a semicolon
+      return self.__parse_function_declaration()
+    elif self.__detect_function_call():
+      function_call = self.__parse_expression()
       self.__consume(TokenKind.SYMBOL)
       return function_call
     elif self.__match(TokenKind.DIVIDER):
-      return self.__consume(TokenKind.DIVIDER)
+      divider_value = self.__consume(TokenKind.DIVIDER).value
+      return DividerNode(divider_value)
     elif self.__match(TokenKind.COMMENT):
-       return self.__consume(TokenKind.COMMENT)
+      comment_value = self.__consume(TokenKind.COMMENT)
+      return CommentNode(comment_value)
+    elif self.__match(TokenKind.MAIN_KEYWORD):
+      return self.__parse_main()
     else:
       raise TokenError(SyntaxError("Unexpected statement. Token: " + str(self.__current()), self.__current().line, self.__current().column), self.__current())
+
+  # Helper functions for detecting specific statement types
+
+  def __detect_assignment(self):
+    # Start by checking if we have an identifier
+    if self.__match(TokenKind.IDENTIFIER):
+        n = 1
+        
+        # Loop to handle attribute and index access on the left side
+        while self.__peek(n).kind == TokenKind.SYMBOL:
+            next_symbol = self.__peek(n).value
+            if next_symbol == ".":
+                # Attribute access expects another identifier after the dot
+                if self.__peek(n + 1).kind == TokenKind.IDENTIFIER:
+                    n += 2
+                else:
+                    return False
+            elif next_symbol == "[":
+                # Index access expects an expression and a closing bracket
+                n += 1  # Move past "["
+                while not (self.__peek(n).kind == TokenKind.SYMBOL and self.__peek(n).value == "]"):
+                    n += 1
+                n += 1  # Move past "]"
+            else:
+                break
+
+        # After parsing the left side, expect an "=" operator for assignment
+        if self.__peek(n).kind == TokenKind.OPERATOR and self.__peek(n).value == "=":
+            return True
+
+    return False
+
+  def __detect_function_call(self):
+    # Start by checking if we have an identifier, which is the root of the potential function call
+    if not self.__match(TokenKind.IDENTIFIER):
+        return False
+
+    n = 1  # Start peeking after the initial identifier
     
+    # Loop to handle attribute and index access, building up the expression chain
+    while self.__peek(n).kind == TokenKind.SYMBOL:
+        next_symbol = self.__peek(n).value
+        
+        if next_symbol == ".":
+            # Attribute access expects another identifier after the dot
+            if self.__peek(n + 1).kind == TokenKind.IDENTIFIER:
+                n += 2
+            else:
+                return False  # Invalid attribute access
+
+        elif next_symbol == "[":
+            # Index access expects an expression and a closing bracket
+            n += 1  # Move past "["
+            # Scan until we find the matching "]"
+            while not (self.__peek(n).kind == TokenKind.SYMBOL and self.__peek(n).value == "]"):
+                n += 1
+                if n >= len(self.tokens):  # Prevent infinite loop if "]" is missing
+                    return False
+            n += 1  # Move past "]"
+
+        else:
+            break
+
+    # After building up the expression chain, check if the next token is "(" for a function call
+    if self.__peek(n).kind == TokenKind.SYMBOL and self.__peek(n).value == "(":
+        return True
+
+    return False
+
+  # Non-terminal parsing functions
+
   def __parse_assignment(self):
-    identifier = self.__consume(TokenKind.IDENTIFIER)
+    # Use parse_factor to parse the left side, allowing for complex access expressions
+    left = self.__parse_factor()
+    
     # Expect "=" operator
-    self.__consume(TokenKind.OPERATOR)
+    if not (self.__match(TokenKind.OPERATOR) and self.__current().value == "="):
+        raise TokenError("Expected '=' in assignment", self.__current())
+    self.__consume(TokenKind.OPERATOR)  # Consume the "="
+
+    # Parse the right side (assignment value) as a full expression
     value = self.__parse_expression()
+    
     # Expect a semicolon
-    self.__consume(TokenKind.SYMBOL) 
-    return AssignmentNode(identifier, value)
+    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
+        raise TokenError("Expected ';' at the end of assignment", self.__current())
+    self.__consume(TokenKind.SYMBOL)  # Consume the ";"
+
+    return AssignmentNode(left, value)
+
   
   def __parse_expression(self):
     # Parse the left side (higher precedence first)
@@ -99,31 +183,36 @@ class Parser:
     return left
   
   def __parse_factor(self):
-    # Start with the primary element (could be a number, identifier, or expression in parentheses)
-    left = self.__parse_primary()
-    
-    # Handle attribute access and indexing (highest precedence)
+    # Start by parsing a primary expression
+    node = self.__parse_primary()
+
+    # Handle attribute access (.) and list indexing ([]), potentially followed by a function call
     while True:
-        if self.__match(TokenKind.SYMBOL) and self.__current().value == '.':
-            # Consume the '.' and parse the attribute name
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == ".":
+            # Consume the dot and parse the attribute name
             self.__consume(TokenKind.SYMBOL)
-            attribute = self.__consume(TokenKind.IDENTIFIER)
-            left = AttributeAccessNode(left, attribute.value)
-        
-        elif self.__match(TokenKind.SYMBOL) and self.__current().value == '[':
-            # Consume the '[' and parse the index expression
+            attribute = self.__consume(TokenKind.IDENTIFIER).value
+            node = AttributeAccessNode(node, attribute)
+            
+        elif self.__match(TokenKind.SYMBOL) and self.__current().value == "[":
+            # Handle list indexing as usual
             self.__consume(TokenKind.SYMBOL)
             index = self.__parse_expression()
-            if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ']'):
+            if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "]"):
                 raise SyntaxError("Expected closing ']' for list access")
             self.__consume(TokenKind.SYMBOL)
-            left = IndexAccessNode(left, index)
-        
+            node = IndexAccessNode(node, index)
+
         else:
-            # No more attribute or index access
+            # No more access chaining, break out of the loop
             break
-    
-    return left
+        
+        # Check if the attribute is followed by a function call
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == "(":
+            node = self.__parse_function_call(node)  # Treat as a function call on the attribute
+
+    return node
+
 
   def __parse_primary(self):   
     if self.__match(TokenKind.NUMBER):
@@ -271,9 +360,11 @@ class Parser:
     # Return a tuple with the type keyword and parameter name
     return (type_keyword.value, parameter_name.value)
   
-  def __parse_function_call(self):
-    # Expect and consume the function name (identifier)
-    function_name = self.__consume(TokenKind.IDENTIFIER).value
+  def __parse_function_call(self, function_expression=None):
+    # If no function expression is provided, assume a standalone function call with an identifier
+    if function_expression is None:
+        # Expect and consume the function name (identifier)
+        function_expression = IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
 
     # Expect and consume the opening parenthesis
     self.__consume(TokenKind.SYMBOL)
@@ -284,7 +375,8 @@ class Parser:
     # Expect and consume the closing parenthesis
     self.__consume(TokenKind.SYMBOL)
     
-    return FunctionCallNode(function_name, arguments)
+    return FunctionCallNode(function_expression, arguments)
+
   
   def __parse_arguments(self):
     # Start with an empty list of arguments
@@ -308,3 +400,39 @@ class Parser:
         arguments.append(argument)
     
     return arguments
+
+  def __parse_main(self):
+    # Expect and consume the "main" keyword
+    self.__consume(TokenKind.MAIN_KEYWORD)
+
+    # Expect and consume the opening parenthesis for the main function parameter list
+    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "("):
+        raise SyntaxError("Expected '(' after 'main'")
+    self.__consume(TokenKind.SYMBOL)
+
+    # Parse the argument list for the main function (should be empty)
+    parameters = self.__parse_parameter_list()      
+
+    # Expect and consume the closing parenthesis for the main function parameter list
+    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ")"):
+        raise SyntaxError("Expected ')' after main function parameter list")
+    self.__consume(TokenKind.SYMBOL)
+
+    # Expect and consume the opening brace for the main function body
+    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "{"):
+        raise SyntaxError("Expected '{' before main function body")
+    self.__consume(TokenKind.SYMBOL)
+
+    # Parse the statements in the main function body
+    statements = []
+    while not (self.__match(TokenKind.SYMBOL) and self.__current().value == "}"):
+        statement = self.__parse_statement()
+        statements.append(statement)
+
+    # Expect and consume the closing brace for the main function body
+    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "}"):
+        raise SyntaxError("Expected '}' after main function body")
+    self.__consume(TokenKind.SYMBOL)
+
+    # Return a FunctionDeclarationNode with the parsed information
+    return MainNode(parameters, statements)

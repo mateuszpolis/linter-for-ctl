@@ -187,3 +187,16 @@ class FunctionCallNode:
         string += f'{indent_str(indent + 1)}]\n'
         string += f'{indent_str(indent)})'
         return string
+    
+class MainNode:
+    def __init__(self, parameters, statements):
+        self.parameters = parameters
+        self.statements = statements
+
+    def __repr__(self, indent=0):
+        string = f'{indent_str(indent)}MainNode(\n'
+        string += f'{indent_str(indent + 1)}parameters: {self.parameters}\n'
+        for statement in self.statements:
+            string += statement.__repr__(indent + 1) + '\n'
+        string += f'{indent_str(indent)})'
+        return string

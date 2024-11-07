@@ -15,19 +15,21 @@ Statement           -> Assignment
                     | FunctionDeclaration 
                     | FunctionCall ";"
                     | DividingLine
-Assignment          -> identifier "=" Expression ";"
+Assignment          -> Expression "=" Expression ";"
 Declaration         -> type_keyword identifier ("=" Expression)? (";" | ("," identifier ("=" Expression)*)? ";")
 FunctionDeclaration -> type_keyword identifier "(" (type_keyword identifier ("," type_keyword identifier)*)? ")" Block
-FunctionCall        -> identifier "(" (Expression ("," Expression)*)? ")"
+FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
 Expression          -> Term ( ("+" | "-") Term )*
 Term                -> Factor ( ("*" | "/") Factor )*
-Factor              -> Primary | AttributeAccess | IndexAccess
+Factor              -> Primary
 Primary             -> number 
                     | identifier 
                     | "$" identifier
                     | "(" Expression ")"
                     | FunctionCall
-AttributeAccess     -> identifier "." identifier
-IndexAccess         -> identifier "[" Expression "]"
+                    | AttributeAccess
+                    | IndexAccess
+AttributeAccess     -> (identifier | IndexAccess) "." identifier
+IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
 ```
