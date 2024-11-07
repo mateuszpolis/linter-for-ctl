@@ -10,10 +10,14 @@ The language is defined by the following grammar:
 
 ```
 Program             -> Statement*
-Statement           -> Assignment | Declaration | FunctionDeclaration
+Statement           -> Assignment 
+                    | Declaration 
+                    | FunctionDeclaration 
+                    | FunctionCall ";"
 Assignment          -> identifier "=" Expression ";"
-Declaration         -> type_keyword identifier ("=" Expression)? (";" | ("," identifier)* ";")
+Declaration         -> type_keyword identifier ("=" Expression)? (";" | ("," identifier ("=" Expression)*)? ";")
 FunctionDeclaration -> type_keyword identifier "(" (type_keyword identifier ("," type_keyword identifier)*)? ")" Block
+FunctionCall        -> identifier "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
 Expression          -> Term ( ("+" | "-") Term )*
 Term                -> Factor ( ("*" | "/") Factor )*
@@ -22,6 +26,7 @@ Primary             -> number
                     | identifier 
                     | "$" identifier
                     | "(" Expression ")"
+                    | FunctionCall
 AttributeAccess     -> identifier "." identifier
 IndexAccess         -> identifier "[" Expression "]"
 ```

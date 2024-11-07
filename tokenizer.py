@@ -1,8 +1,8 @@
 import re
 from token_ import Token, TokenKind
 
-KEYWORDS = ['if', 'else', 'while', 'for', 'return', 'break', 'continue', 'true', 'false', 'null',]
-TYPE_KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'main']
+KEYWORDS = ['if', 'else', 'while', 'for', 'return', 'break', 'continue', 'true', 'false', 'null']
+TYPE_KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'main', 'dyn_dyn_string']
 OPERATORS = ['+', '-', '*', '/', '%', '==', '!=', '>', '>=', '<', '<=', '&&', '||', '!', '=', '+=', '-=', '*=', '/=', '%=', '++', '--']
 SYMBOLS = ['(', ')', '{', '}', '[', ']', ',', ';', ':', '.', '$']
 

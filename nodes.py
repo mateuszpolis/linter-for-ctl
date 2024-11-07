@@ -172,3 +172,18 @@ class FunctionDeclarationNode:
         string += f'{indent_str(indent + 1)}]\n'
         string += f'{indent_str(indent)})'
         return string
+    
+class FunctionCallNode:
+    def __init__(self, identifier, arguments):
+        self.identifier = identifier
+        self.arguments = arguments
+
+    def __repr__(self, indent=0):
+        string = f'{indent_str(indent)}FunctionCallNode(\n'
+        string += f'{indent_str(indent + 1)}identifier: {self.identifier}\n'
+        string += f'{indent_str(indent + 1)}arguments: [\n'
+        for argument in self.arguments:
+            string += argument.__repr__(indent + 2) + '\n'
+        string += f'{indent_str(indent + 1)}]\n'
+        string += f'{indent_str(indent)})'
+        return string

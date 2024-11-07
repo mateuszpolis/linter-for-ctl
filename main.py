@@ -1,6 +1,7 @@
 import re
 import argparse
 from parser_ import Parser
+from token_ import TokenError
 from tokenizer import Tokenizer
 
 def main():
@@ -26,7 +27,7 @@ def main():
     parser = Parser(tokens=tokens)    
     try:
         ast = parser.parse()
-    except SyntaxError as e:
+    except TokenError as e:
         print(e)
         return
     

@@ -1,5 +1,5 @@
-from nodes import AssignmentNode, AttributeAccessNode, BinaryExpressionNode, DeclarationNode, FunctionDeclarationNode, GlobalIdentifierNode, IdentifierNode, IndexAccessNode, NumberNode, ProgramNode, StringNode
-from token_ import TokenKind
+from nodes import AssignmentNode, AttributeAccessNode, BinaryExpressionNode, DeclarationNode, FunctionCallNode, FunctionDeclarationNode, GlobalIdentifierNode, IdentifierNode, IndexAccessNode, NumberNode, ProgramNode, StringNode
+from token_ import TokenError, TokenKind
 
 
 class Parser:
@@ -35,7 +35,7 @@ class Parser:
       token = self.__current()
       self.__advance()
       return token
-    raise SyntaxError(f'Expected {kind} but got {self.__current().kind}')
+    raise SyntaxError(f'Expected {kind} but got {self.__current().kind}. Token: {self.__current()}', self.__current().line, self.__current().column)
   
   def parse(self):
     statements = []
@@ -53,8 +53,13 @@ class Parser:
       return self.__parse_declaration()
     elif self.__match(TokenKind.TYPE_KEYWORD) and self.__peek().kind == TokenKind.IDENTIFIER and self.__peek(2).value == "(":
        return self.__parse_function_declaration()
+    elif self.__match(TokenKind.IDENTIFIER) and self.__peek().kind == TokenKind.SYMBOL and self.__peek().value == "(":
+      function_call = self.__parse_function_call()
+      # Expect a semicolon
+      self.__consume(TokenKind.SYMBOL)
+      return function_call
     else:
-      raise SyntaxError("Unexpected statement. Token: " + str(self.__current()), self.__current().line, self.__current().column)
+      raise TokenError(SyntaxError("Unexpected statement. Token: " + str(self.__current()), self.__current().line, self.__current().column), self.__current())
     
   def __parse_assignment(self):
     identifier = self.__consume(TokenKind.IDENTIFIER)
@@ -121,7 +126,9 @@ class Parser:
         return NumberNode(int(self.__consume(TokenKind.NUMBER).value))
     elif self.__match(TokenKind.STRING_LITERAL):
         return StringNode(self.__consume(TokenKind.STRING_LITERAL).value)
-    elif self.__match(TokenKind.IDENTIFIER):
+    elif self.__match(TokenKind.IDENTIFIER) and self.__peek().kind == TokenKind.SYMBOL and self.__peek().value == "(":
+        return self.__parse_function_call()
+    elif self.__match(TokenKind.IDENTIFIER):  
         return IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
     elif self.__match(TokenKind.SYMBOL) and self.__current().value == "$":
         # Consume the "$" symbol
@@ -259,3 +266,41 @@ class Parser:
 
     # Return a tuple with the type keyword and parameter name
     return (type_keyword.value, parameter_name.value)
+  
+  def __parse_function_call(self):
+    # Expect and consume the function name (identifier)
+    function_name = self.__consume(TokenKind.IDENTIFIER).value
+
+    # Expect and consume the opening parenthesis
+    self.__consume(TokenKind.SYMBOL)
+    
+    # Parse arguments (expressions within parentheses)
+    arguments = self.__parse_arguments()
+    
+    # Expect and consume the closing parenthesis
+    self.__consume(TokenKind.SYMBOL)
+    
+    return FunctionCallNode(function_name, arguments)
+  
+  def __parse_arguments(self):
+    # Start with an empty list of arguments
+    arguments = []
+    
+    # Check for the case where there are no arguments
+    if self.__match(TokenKind.SYMBOL) and self.__current().value == ")":
+        return arguments
+    
+    # Parse the first argument
+    argument = self.__parse_expression()
+    arguments.append(argument)
+    
+    # Parse additional arguments if present
+    while self.__match(TokenKind.SYMBOL) and self.__current().value == ",":
+        # Consume the comma
+        self.__consume(TokenKind.SYMBOL)
+        
+        # Parse the next argument
+        argument = self.__parse_expression()
+        arguments.append(argument)
+    
+    return arguments
