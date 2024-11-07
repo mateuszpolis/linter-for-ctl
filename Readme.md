@@ -14,6 +14,7 @@ Statement           -> Assignment
                     | Declaration 
                     | FunctionDeclaration 
                     | FunctionCall ";"
+                    | DividingLine
 Assignment          -> identifier "=" Expression ";"
 Declaration         -> type_keyword identifier ("=" Expression)? (";" | ("," identifier ("=" Expression)*)? ";")
 FunctionDeclaration -> type_keyword identifier "(" (type_keyword identifier ("," type_keyword identifier)*)? ")" Block

@@ -58,6 +58,10 @@ class Parser:
       # Expect a semicolon
       self.__consume(TokenKind.SYMBOL)
       return function_call
+    elif self.__match(TokenKind.DIVIDER):
+      return self.__consume(TokenKind.DIVIDER)
+    elif self.__match(TokenKind.COMMENT):
+       return self.__consume(TokenKind.COMMENT)
     else:
       raise TokenError(SyntaxError("Unexpected statement. Token: " + str(self.__current()), self.__current().line, self.__current().column), self.__current())
     
