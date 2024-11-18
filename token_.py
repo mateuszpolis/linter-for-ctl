@@ -10,7 +10,7 @@ class Token:
 
     def __str__(self) -> str:
         value = self.value.replace("\n", "\\n").replace("\t", "\\t")
-        return f"{self.kind}({value})"
+        return f"{self.kind}({self.value}) at line {self.line}, column {self.column}"
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -50,3 +50,4 @@ class TokenKind(Enum):
     ELSE = "ELSE"
     ELSE_IF = "ELSE_IF"
     TEMPLATE_TYPE_KEYWORD = "TEMPLATE_TYPE_KEYWORD"
+    CHAR = "CHAR"

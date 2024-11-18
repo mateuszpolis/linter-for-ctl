@@ -332,9 +332,28 @@ class ParameterNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ParameterNode(type={self.type_}, identifier={self.identifier})"
 
+
 class LibraryNode:
     def __init__(self, name):
         self.name = name
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}LibraryNode({self.name})"
+
+
+class CharNode:
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}CharNode({self.value})"
+
+
+class TernaryExpressionNode:
+    def __init__(self, comparison, success_expression, failure_expression):
+        self.comparison = comparison
+        self.success_expression = success_expression
+        self.failure_expression = failure_expression
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}TernaryExpression({self.comparison}, {self.success_expression}, {self.failure_expression})"

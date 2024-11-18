@@ -1,11 +1,12 @@
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
-                   BlockNode, BreakNode, CommentNode, DeclarationNode,
-                   DividerNode, ElseIfClauseNode, FunctionCallNode,
-                   FunctionDeclarationNode, GlobalIdentifierNode,
-                   IdentifierNode, IfStatementNode, IndexAccessNode, LibraryNode, MainNode,
+                   BlockNode, BreakNode, CharNode, CommentNode,
+                   DeclarationNode, DividerNode, ElseIfClauseNode,
+                   FunctionCallNode, FunctionDeclarationNode,
+                   GlobalIdentifierNode, IdentifierNode, IfStatementNode,
+                   IndexAccessNode, LibraryNode, MainNode,
                    MultilineCommentNode, NumberNode, ParameterNode,
                    ProgramNode, ReturnNode, StringNode, TemplateTypeNode,
-                   TypeNode, WhileLoopNode)
+                   TernaryExpressionNode, TypeNode, WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
 
 
@@ -200,6 +201,30 @@ class Parser:
 
     # Non-terminal parsing functions
 
+    def __parse_conditional_expression(self):
+        """ConditionalExpression -> TernaryExpression | Comparison"""
+        # First parse Comparison
+        condition = self.__parse_comparison()
+
+        # Check if the next token is "?" for a ternary expression
+        if not self.__match(TokenKind.SYMBOL) or self.__current().value != "?":
+            return condition
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the true branch
+        true_branch = self.__parse_expression()
+
+        # Expect the ":" operator
+        if not self.__match(TokenKind.SYMBOL) or self.__current().value != ":":
+            raise TokenError("Expected ':' in ternary expression", self.__current())
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the false branch
+        false_branch = self.__parse_expression()
+        print("Parsed false branch")
+
+        return TernaryExpressionNode(condition, true_branch, false_branch)
+
     def __parse_assignment(self):
         # Use parse_factor to parse the left side, allowing for complex access expressions
         left = self.__parse_factor()
@@ -209,8 +234,8 @@ class Parser:
             raise TokenError("Expected '=' in assignment", self.__current())
         self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
 
-        # Parse the right side (assignment value) as a comparison, allowing for complex expressions returning boolean values as well
-        value = self.__parse_comparison()
+        # Parse the right side (assignment value) as a conditional expression, allowing for complex expressions returning boolean values as well
+        value = self.__parse_conditional_expression()
 
         # Expect a semicolon
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
@@ -287,6 +312,8 @@ class Parser:
             return NumberNode(int(self.__consume(TokenKind.NUMBER).value))
         elif self.__match(TokenKind.STRING_LITERAL):
             return StringNode(self.__consume(TokenKind.STRING_LITERAL).value)
+        elif self.__match(TokenKind.CHAR):
+            return CharNode(self.__consume(TokenKind.CHAR).value)
         elif (
             self.__match(TokenKind.IDENTIFIER)
             and self.__peek().kind == TokenKind.SYMBOL
@@ -311,7 +338,7 @@ class Parser:
             self.__consume(TokenKind.SYMBOL)
 
             # Parse the inner expression
-            expression = self.__parse_expression()
+            expression = self.__parse_conditional_expression()
 
             # Expect and __consume the closing parenthesis
             if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ")"):
@@ -369,38 +396,35 @@ class Parser:
 
         # Parse the first identifier
         identifier = self.__consume(TokenKind.IDENTIFIER)
-        identifiers = [
-            (identifier, None)
-        ]  # Start a list to hold identifiers and their initial values
+        identifiers = []  # Start a list to hold identifiers and their initial values
 
-        # Check if there's an initialization (only allowed for a single identifier)
+        # Check if there's an initialization for the first identifier
+        initial_value = None
         if self.__match(TokenKind.ASSIGNMENT_OPERATOR):
             # Consume the "="
             self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+            # Parse the initial value
+            initial_value = self.__parse_conditional_expression()
 
-            # Parse the initial value for the single identifier
-            initial_value = self.__parse_expression()
-            identifiers[0] = (
-                identifier,
-                initial_value,
-            )  # Update the first identifier with its initial value
+        identifiers.append((identifier, initial_value))
 
-            # Ensure there are no more identifiers after initialization
-            if self.__match(TokenKind.SYMBOL) and self.__current().value == ",":
-                raise SyntaxError(
-                    "Cannot initialize multiple variables in a single declaration"
-                )
-
-        # Parse additional identifiers if present (no initialization allowed)
+        # Parse additional identifiers, each optionally initialized
         while self.__match(TokenKind.SYMBOL) and self.__current().value == ",":
             # Consume the comma
             self.__consume(TokenKind.SYMBOL)
 
             # Expect and consume the next identifier
             identifier = self.__consume(TokenKind.IDENTIFIER)
-            identifiers.append(
-                (identifier, None)
-            )  # Add the identifier without initialization
+
+            # Check if there's an initialization for this identifier
+            initial_value = None
+            if self.__match(TokenKind.ASSIGNMENT_OPERATOR):
+                # Consume the "="
+                self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+                # Parse the initial value
+                initial_value = self.__parse_conditional_expression()
+
+            identifiers.append((identifier, initial_value))
 
         # Expect and consume the semicolon at the end of the declaration
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):

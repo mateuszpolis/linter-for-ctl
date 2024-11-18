@@ -2,7 +2,17 @@ import re
 
 from token_ import Token, TokenKind
 
-KEYWORDS = ["while", "for", "return", "break", "continue", "true", "false", "null", "uses"]
+KEYWORDS = [
+    "while",
+    "for",
+    "return",
+    "break",
+    "continue",
+    "true",
+    "false",
+    "null",
+    "uses",
+]
 TYPE_KEYWORDS = [
     "string",
     "dyn_string",
@@ -34,7 +44,7 @@ ARITHMETIC_OPERATORS = [
 ]
 COMPARISON_OPERATORS = ["==", "!=", ">", ">=", "<", "<="]
 LOGICAL_OPERATORS = ["&&", "||", "!"]
-SYMBOLS = ["(", ")", "{", "}", "[", "]", ",", ";", ":", ".", "$", "#"]
+SYMBOLS = ["(", ")", "{", "}", "[", "]", ",", ";", ":", ".", "$", "#", "?", ":"]
 
 
 class Tokenizer:
@@ -92,6 +102,9 @@ class Tokenizer:
             elif string := self.__match_string():
                 token = Token(TokenKind.STRING_LITERAL, string, self.line, self.column)
                 self.column += len(string)
+            elif char := self.__match_char():
+                token = Token(TokenKind.CHAR, char, self.line, self.column)
+                self.column += len(char)
             elif divider := self.__match_divider():
                 token = Token(TokenKind.DIVIDER, divider, self.line, self.column)
                 self.column += len(divider)
@@ -226,6 +239,16 @@ class Tokenizer:
             if self.code[self.pos : self.pos + len(symbol)] == symbol:
                 self.pos += len(symbol)
                 return symbol
+        return None
+
+    def __match_char(self):
+        char_regex = re.compile(r"'.*?'")
+
+        match = char_regex.match(self.code[self.pos :])
+        if match:
+            self.pos += len(match.group())
+            return match.group()
+
         return None
 
     def __match_string(self):

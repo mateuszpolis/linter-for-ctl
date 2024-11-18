@@ -21,15 +21,17 @@ Statement           -> Assignment
                     | ReturnStatement
                     | BreakStatement
                     | WhileLoop       
-                    | LibraryImport          
+                    | LibraryImport    
 IfStatement         -> "if" "(" Comparison ")" Block (ElseIfClause)* (ElseClause)?
 ElseIfClause        -> "else" "if" "(" Comparison ")" Block
 ElseClause          -> "else" Block
-Assignment          -> Expression "=" Comparison ";"
-Declaration         -> Type identifier ("=" Expression)? (";" | ("," identifier ("=" Expression)*)? ";")
+Assignment          -> identifier "=" ConditionalExpression ";"
+Declaration         -> Type identifier ("=" ConditionalExpression)? (";" | ("," identifier ("=" ConditionalExpression)*)? ";")
 FunctionDeclaration -> Type identifier "(" ParameterList? ")" Block
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
+ConditionalExpression -> TernaryExpression | Comparison
+TernaryExpression   -> Comparison "?" Expression ":" Expression
 Comparison          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )*
 Expression          -> Term ( ("+" | "-") Term )*
 Term                -> Factor ( ("*" | "/") Factor )*
@@ -37,11 +39,12 @@ Factor              -> Primary
 Primary             -> number 
                     | identifier 
                     | "$" identifier
-                    | "(" Comparison ")"
+                    | "(" ConditionalExpression ")"
                     | FunctionCall
                     | AttributeAccess
                     | IndexAccess
                     | String
+                    | Character
 AttributeAccess     -> (identifier | IndexAccess) "." identifier
 IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
 Comment             -> "//" (any_character)*
@@ -55,4 +58,5 @@ Parameter           -> Type identifier
 ParameterList       -> Parameter ("," Parameter)*
 LibraryImport       -> "#" "uses" String
 String              -> '"' (any_character)* '"'
+Character           -> "'" any_character "'"
 ```
