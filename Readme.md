@@ -19,13 +19,14 @@ Statement           -> Assignment
                     | Comment
                     | MultiLineComment
                     | ReturnStatement
-                    | BreakStatement                    
+                    | BreakStatement
+                    | WhileLoop                 
 IfStatement         -> "if" "(" Comparison ")" Block (ElseIfClause)* (ElseClause)?
 ElseIfClause        -> "else" "if" "(" Comparison ")" Block
 ElseClause          -> "else" Block
 Assignment          -> Expression "=" Comparison ";"
-Declaration         -> type_keyword identifier ("=" Expression)? (";" | ("," identifier ("=" Expression)*)? ";")
-FunctionDeclaration -> type_keyword identifier "(" (type_keyword identifier ("," type_keyword identifier)*)? ")" Block
+Declaration         -> Type identifier ("=" Expression)? (";" | ("," identifier ("=" Expression)*)? ";")
+FunctionDeclaration -> Type identifier "(" ParameterList? ")" Block
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
 Comparison          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )*
@@ -45,4 +46,9 @@ Comment             -> "//" (any_character)*
 MultiLineComment    -> "/**" (any_character)* "*/"
 ReturnStatement     -> "return" (Expression)? ";"
 BreakStatement      -> "break" ";"
+WhileLoop           -> "while" "(" Comparison ")" Block
+Type                -> type_keyword | TemplateType
+TemplateType        -> template_type_keyword "<" Type ("," Type)* ">"
+Parameter           -> Type identifier
+ParameterList       -> Parameter ("," Parameter)*
 ```
