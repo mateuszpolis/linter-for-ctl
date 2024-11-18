@@ -556,7 +556,12 @@ class Parser:
         # Return a FunctionDeclarationNode with the parsed information
         return MainNode(parameters, block)
 
-    def __parse_if_statement(self):
+    def __parse_if_statement(self) -> IfStatementNode:
+        """IfStatement -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
+
+        Returns:
+            IfStatementNode: The parsed if statement node
+        """
         # Consume the "if" keyword
         self.__consume(TokenKind.IF)
 
@@ -565,8 +570,13 @@ class Parser:
         condition = self.__parse_comparison()
         self.__consume(TokenKind.SYMBOL)
 
-        # Parse the "if" block
-        if_block = self.__parse_block()
+        # Check if there is a block, or a single statement
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == "{":
+            if_block = self.__parse_block()
+            inline_statement = None
+        else:
+            if_block = None
+            inline_statement = self.__parse_statement()
 
         # Parse any "else if" clauses
         else_if_clauses = []
@@ -577,8 +587,18 @@ class Parser:
             else_if_condition = self.__parse_comparison()
             self.__consume(TokenKind.SYMBOL)
 
-            else_if_block = self.__parse_block()
-            else_if_clauses.append(ElseIfClauseNode(else_if_condition, else_if_block))
+            # Check if there is a block, or a single statement
+            if self.__match(TokenKind.SYMBOL) and self.__current().value == "{":
+                else_if_block = self.__parse_block()
+                else_if_inline_statement = None
+            else:
+                else_if_block = None
+                else_if_inline_statement = self.__parse_statement()
+            else_if_clauses.append(
+                ElseIfClauseNode(
+                    else_if_condition, else_if_block, else_if_inline_statement
+                )
+            )
 
         # Parse an optional "else" clause
         else_block = None
@@ -586,7 +606,9 @@ class Parser:
             self.__consume(TokenKind.ELSE)
             else_block = self.__parse_block()
 
-        return IfStatementNode(condition, if_block, else_if_clauses, else_block)
+        return IfStatementNode(
+            condition, if_block, inline_statement, else_if_clauses, else_block
+        )
 
     def __parse_block(self):
         statements = []

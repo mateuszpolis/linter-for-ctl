@@ -233,9 +233,17 @@ class MainNode:
 
 
 class IfStatementNode:
-    def __init__(self, condition, if_block, else_if_clauses=None, else_block=None):
+    def __init__(
+        self,
+        condition,
+        if_block=None,
+        inline_statement=None,
+        else_if_clauses=None,
+        else_block=None,
+    ):
         self.condition = condition
         self.if_block = if_block
+        self.inline_statement = inline_statement
         self.else_if_clauses = else_if_clauses if else_if_clauses is not None else []
         self.else_block = else_block
 
@@ -243,6 +251,7 @@ class IfStatementNode:
         result = f"{indent_str(indent)}IfStatementNode(\n"
         result += f"{indent_str(indent + 1)}condition={self.condition},\n"
         result += f"{indent_str(indent + 1)}if_block={self.if_block},\n"
+        result += f"{indent_str(indent + 1)}inline_statement={self.inline_statement},\n"
         result += f"{indent_str(indent + 1)}else_if_clauses=[\n"
         for clause in self.else_if_clauses:
             result += clause.__repr__(indent + 2) + "\n"
@@ -253,12 +262,13 @@ class IfStatementNode:
 
 
 class ElseIfClauseNode:
-    def __init__(self, condition, block):
+    def __init__(self, condition, block=None, inline_statement=None):
         self.condition = condition
         self.block = block
+        self.inline_statement = inline_statement
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}ElseIfClauseNode(condition={self.condition}, block={self.block})"
+        return f"{indent_str(indent)}ElseIfClauseNode(condition={self.condition}, block={self.block}, inline_statement={self.inline_statement})"
 
 
 class ElseClauseNode:

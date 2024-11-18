@@ -22,9 +22,11 @@ Statement           -> Assignment
                     | BreakStatement
                     | WhileLoop       
                     | LibraryImport    
-IfStatement         -> "if" "(" Comparison ")" Block (ElseIfClause)* (ElseClause)?
-ElseIfClause        -> "else" "if" "(" Comparison ")" Block
-ElseClause          -> "else" Block
+                    | InlineIfStatement
+IfStatement         -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
+InlineStatement     -> Statement
+ElseIfClause        -> "else" "if" "(" Comparison ")" (InlineStatement | Block)
+ElseClause          -> "else" (InlineStatement | Block)
 Assignment          -> identifier "=" ConditionalExpression ";"
 Declaration         -> Type identifier ("=" ConditionalExpression)? (";" | ("," identifier ("=" ConditionalExpression)*)? ";")
 FunctionDeclaration -> Type identifier "(" ParameterList? ")" Block
