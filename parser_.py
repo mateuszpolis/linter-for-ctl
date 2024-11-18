@@ -2,7 +2,7 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    BlockNode, BreakNode, CommentNode, DeclarationNode,
                    DividerNode, ElseIfClauseNode, FunctionCallNode,
                    FunctionDeclarationNode, GlobalIdentifierNode,
-                   IdentifierNode, IfStatementNode, IndexAccessNode, MainNode,
+                   IdentifierNode, IfStatementNode, IndexAccessNode, LibraryNode, MainNode,
                    MultilineCommentNode, NumberNode, ParameterNode,
                    ProgramNode, ReturnNode, StringNode, TemplateTypeNode,
                    TypeNode, WhileLoopNode)
@@ -112,6 +112,8 @@ class Parser:
             return self.__parse_break_statement()
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "while":
             return self.__parse_while_statement()
+        elif self.__match(TokenKind.SYMBOL) and self.__current().value == "#":
+            return self.__parse_library_import()
         else:
             raise TokenError(
                 SyntaxError(
@@ -626,3 +628,15 @@ class Parser:
         block = self.__parse_block()
 
         return WhileLoopNode(condition, block)
+
+    def __parse_library_import(self):
+        # Consume the '#' symbol
+        self.__consume(TokenKind.SYMBOL)
+
+        # Consume the 'uses' keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Consume the library name
+        library_name = self.__consume(TokenKind.STRING_LITERAL)
+
+        return LibraryNode(library_name.value)

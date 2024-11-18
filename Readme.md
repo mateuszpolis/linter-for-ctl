@@ -20,7 +20,8 @@ Statement           -> Assignment
                     | MultiLineComment
                     | ReturnStatement
                     | BreakStatement
-                    | WhileLoop                 
+                    | WhileLoop       
+                    | LibraryImport          
 IfStatement         -> "if" "(" Comparison ")" Block (ElseIfClause)* (ElseClause)?
 ElseIfClause        -> "else" "if" "(" Comparison ")" Block
 ElseClause          -> "else" Block
@@ -40,6 +41,7 @@ Primary             -> number
                     | FunctionCall
                     | AttributeAccess
                     | IndexAccess
+                    | String
 AttributeAccess     -> (identifier | IndexAccess) "." identifier
 IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
 Comment             -> "//" (any_character)*
@@ -51,4 +53,6 @@ Type                -> type_keyword | TemplateType
 TemplateType        -> template_type_keyword "<" Type ("," Type)* ">"
 Parameter           -> Type identifier
 ParameterList       -> Parameter ("," Parameter)*
+LibraryImport       -> "#" "uses" String
+String              -> '"' (any_character)* '"'
 ```

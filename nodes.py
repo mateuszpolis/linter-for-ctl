@@ -331,3 +331,10 @@ class ParameterNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ParameterNode(type={self.type_}, identifier={self.identifier})"
+
+class LibraryNode:
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}LibraryNode({self.name})"

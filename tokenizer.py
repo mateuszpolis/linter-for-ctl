@@ -2,7 +2,7 @@ import re
 
 from token_ import Token, TokenKind
 
-KEYWORDS = ["while", "for", "return", "break", "continue", "true", "false", "null"]
+KEYWORDS = ["while", "for", "return", "break", "continue", "true", "false", "null", "uses"]
 TYPE_KEYWORDS = [
     "string",
     "dyn_string",
@@ -34,7 +34,7 @@ ARITHMETIC_OPERATORS = [
 ]
 COMPARISON_OPERATORS = ["==", "!=", ">", ">=", "<", "<="]
 LOGICAL_OPERATORS = ["&&", "||", "!"]
-SYMBOLS = ["(", ")", "{", "}", "[", "]", ",", ";", ":", ".", "$"]
+SYMBOLS = ["(", ")", "{", "}", "[", "]", ",", ";", ":", ".", "$", "#"]
 
 
 class Tokenizer:
