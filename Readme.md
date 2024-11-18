@@ -16,6 +16,10 @@ Statement           -> Assignment
                     | FunctionCall ";"
                     | IfStatement
                     | DividingLine
+                    | Comment
+                    | MultiLineComment
+                    | ReturnStatement
+                    | BreakStatement                    
 IfStatement         -> "if" "(" Comparison ")" Block (ElseIfClause)* (ElseClause)?
 ElseIfClause        -> "else" "if" "(" Comparison ")" Block
 ElseClause          -> "else" Block
@@ -37,4 +41,8 @@ Primary             -> number
                     | IndexAccess
 AttributeAccess     -> (identifier | IndexAccess) "." identifier
 IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
+Comment             -> "//" (any_character)*
+MultiLineComment    -> "/**" (any_character)* "*/"
+ReturnStatement     -> "return" (Expression)? ";"
+BreakStatement      -> "break" ";"
 ```

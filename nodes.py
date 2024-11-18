@@ -123,6 +123,17 @@ class CommentNode:
     
     def __repr__(self, indent=0):
         return f'{indent_str(indent)}CommentNode({self.value})'
+    
+class MultilineCommentNode:
+    def __init__(self, lines):        
+        self.lines = lines
+        
+    def __repr__(self, indent=0):
+        string = f'{indent_str(indent)}MultilineCommentNode([\n'
+        for line in self.lines:
+            string += f'{indent_str(indent + 1)}{line}\n'
+        string += f'{indent_str(indent)}])'
+        return string
 
 class DividerNode:
     def __init__(self, value):
@@ -243,3 +254,14 @@ class BlockNode:
             result += statement.__repr__(indent + 1) + "\n"
         result += f"{indent_str(indent)}])"
         return result
+    
+class ReturnNode:
+    def __init__(self, expression):
+        self.expression = expression
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}ReturnNode({self.expression})"
+    
+class BreakNode:
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}BreakNode()"

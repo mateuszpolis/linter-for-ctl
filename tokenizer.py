@@ -2,7 +2,7 @@ import re
 from token_ import Token, TokenKind
 
 KEYWORDS = ['while', 'for', 'return', 'break', 'continue', 'true', 'false', 'null']
-TYPE_KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'dyn_dyn_string', 'mapping']
+TYPE_KEYWORDS = ['string', 'dyn_string', 'int', 'dyn_int', 'float', 'dyn_float', 'bool', 'dyn_bool', 'void', 'dyn_dyn_string', 'mapping', 'file']
 ARITHMETIC_OPERATORS = ['+', '-', '*', '/', '%', '+=', '-=', '*=', '/=', '%=', '++', '--']
 COMPARISON_OPERATORS = ['==', '!=', '>', '>=', '<', '<=']
 LOGICAL_OPERATORS = ['&&', '||', '!']
@@ -29,6 +29,9 @@ class Tokenizer:
       elif identifier := self.__match_identifier():
         token = Token(TokenKind.IDENTIFIER, identifier, self.line, self.column)
         self.column += len(identifier)
+      elif multiline_comment := self.__match_multiline_comment():
+        token = Token(TokenKind.MULTI_LINE_COMMENT, multiline_comment, self.line, self.column)
+        self.column += len(multiline_comment)
       elif comment := self.__match_comment():
         token = Token(TokenKind.COMMENT, comment, self.line, self.column)
         self.column += len(comment)
@@ -187,10 +190,10 @@ class Tokenizer:
     
     return None
   
-  def __match_comment(self):
-    start = self.pos
+  def __match_comment(self):    
     if self.code[self.pos] == '/' and self.code[self.pos + 1] == '/':
       self.pos += 2
+      start = self.pos
       while self.pos < len(self.code) and self.code[self.pos] != '\n':
         self.pos += 1
       return self.code[start:self.pos]
@@ -200,4 +203,19 @@ class Tokenizer:
     if self.code[self.pos:self.pos + 4] == 'main' and not self.code[self.pos + 4].isalnum():
       self.pos += 4
       return 'main'
+    return None
+  
+  def __match_multiline_comment(self):
+    if self.code[self.pos:self.pos + 3] == '/**':
+      self.pos += 2
+      start = self.pos
+      while self.pos < len(self.code) and self.code[self.pos:self.pos + 2] != '*/':
+        if self.code[self.pos] == '\n':
+          self.line += 1
+          self.column = 1
+        self.pos += 1
+      if self.pos < len(self.code):
+        end = self.pos
+        self.pos += 2
+        return self.code[start:end]
     return None

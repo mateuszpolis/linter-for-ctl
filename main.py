@@ -25,13 +25,16 @@ def main():
     except SyntaxError as e:
         print(e)
         return
-    
+
     # Initialize parser with tokens
     parser = Parser(tokens=tokens)    
     try:
         ast = parser.parse()
     except TokenError as e:
-        print(e)
+        print("Token error:", e)
+        return
+    except SyntaxError as e:
+        print("Syntax error:", e)
         return
     
     # Determine output file path for formatted code

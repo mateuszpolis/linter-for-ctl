@@ -1,4 +1,4 @@
-from nodes import AssignmentNode, AttributeAccessNode, BinaryExpressionNode, BlockNode, CommentNode, DeclarationNode, DividerNode, ElseIfClauseNode, FunctionCallNode, FunctionDeclarationNode, GlobalIdentifierNode, IdentifierNode, IfStatementNode, IndexAccessNode, MainNode, NumberNode, ProgramNode, StringNode
+from nodes import AssignmentNode, AttributeAccessNode, BinaryExpressionNode, BlockNode, BreakNode, CommentNode, DeclarationNode, DividerNode, ElseIfClauseNode, FunctionCallNode, FunctionDeclarationNode, GlobalIdentifierNode, IdentifierNode, IfStatementNode, IndexAccessNode, MainNode, MultilineCommentNode, NumberNode, ProgramNode, ReturnNode, StringNode
 from token_ import TokenError, TokenKind
 
 
@@ -61,12 +61,19 @@ class Parser:
       divider_value = self.__consume(TokenKind.DIVIDER).value
       return DividerNode(divider_value)
     elif self.__match(TokenKind.COMMENT):
-      comment_value = self.__consume(TokenKind.COMMENT)
-      return CommentNode(comment_value)
+      comment = self.__consume(TokenKind.COMMENT)
+      return CommentNode(comment.value)
     elif self.__match(TokenKind.IF):
       return self.__parse_if_statement()
     elif self.__match(TokenKind.MAIN_KEYWORD):
       return self.__parse_main()
+    elif self.__match(TokenKind.MULTI_LINE_COMMENT):
+      multi_line_comment = self.__consume(TokenKind.MULTI_LINE_COMMENT)
+      return MultilineCommentNode(multi_line_comment.value.split('\n'))
+    elif self.__match(TokenKind.KEYWORD) and self.__current().value == "return":
+      return self.__parse_return_statement()
+    elif self.__match(TokenKind.KEYWORD) and self.__current().value == "break":
+       return self.__parse_break_statement()
     else:
       raise TokenError(SyntaxError("Unexpected statement. Token: " + str(self.__current()), self.__current().line, self.__current().column), self.__current())
 
@@ -250,6 +257,7 @@ class Parser:
         
         return expression
     else:
+        print (self.__current())
         raise SyntaxError("Expected a primary expression")
 
   def __parse_declaration(self):
@@ -462,3 +470,30 @@ class Parser:
         left = BinaryExpressionNode(left, operator.value, right)
     
     return left
+
+  def __parse_return_statement(self):
+      # Consume the "return" keyword
+      self.__consume(TokenKind.KEYWORD)
+
+      # Parse the return value expression if present
+      expression = None
+      if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
+          expression = self.__parse_expression()
+
+      # Expect and consume the semicolon at the end of the return statement
+      if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
+          raise SyntaxError("Expected ';' at the end of return statement")
+      self.__consume(TokenKind.SYMBOL)
+
+      return ReturnNode(expression)
+  
+  def __parse_break_statement(self):
+    # Consume the "break" keyword
+    self.__consume(TokenKind.KEYWORD)
+
+    # Expect and consume the semicolon at the end of the break statement
+    if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
+        raise SyntaxError("Expected ';' at the end of break statement")
+    self.__consume(TokenKind.SYMBOL)
+
+    return BreakNode()
