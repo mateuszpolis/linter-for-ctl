@@ -1,6 +1,8 @@
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/setconfig.ctl
 Output:
-Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(delay) at line 20, column 171 at line 20, column 171
+Parsing statement
+Parsing statement
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 31, column 6
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test_runconfigurations.ctl
@@ -35,7 +37,7 @@ Output:
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fit_watchDog.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 20, column 36
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fcbUpdateScript_new.ctl
@@ -49,6 +51,8 @@ Syntax error: Expected ';' at the end of declaration. Token: TokenKind.IDENTIFIE
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/createDPs.ctl
 Output:
+Parsing statement
+Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 32, column 20 at line 32, column 20
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/testConfDB.ctl
@@ -58,6 +62,8 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_dyn_mixed) at
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/StatusDimService.ctl
 Output:
+Parsing statement
+Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 20, column 11 at line 20, column 11
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test2.ctl
@@ -72,7 +78,7 @@ Unexpected character \ at line 63, column 54
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwWienerCrate2.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 27
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannel_old.ctl
@@ -82,7 +88,7 @@ Unexpected character ~ at line 72, column 31
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwWienerCrate.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 26
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannelA7030UPD.ctl
@@ -97,7 +103,7 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 6, column 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenCrateSY1527.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 30
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/HV.ctl
@@ -107,7 +113,7 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwDevMajority.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 3, column 26
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/lookupTable.ctl
@@ -117,12 +123,12 @@ Unexpected character ' at line 57, column 110
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fitLaser.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 21
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FIT_TCM.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 20
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/WIENER.ctl
@@ -132,17 +138,17 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fitControlServer.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 29
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/AliDcsRun.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 5, column 22
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FIT_PM.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 19
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannel.ctl
@@ -162,12 +168,12 @@ Unexpected character \ at line 155, column 98
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fitAttenuator.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 26
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/AliEmergencyButton_DU.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 34
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_WIENER.ctl
@@ -182,7 +188,7 @@ Unexpected character | at line 7, column 45
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaVLoopDU.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 24
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_FEE_TCM.ctl
@@ -207,7 +213,7 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwDevMode.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 3, column 22
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/INFRA.ctl
@@ -222,12 +228,12 @@ Unexpected character ~ at line 45, column 3
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaVPlantDU.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 25
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannelA7030.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 31
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_DCS_RUN.ctl
@@ -242,7 +248,7 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwFSMConfDBDUT.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 2, column 27
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FEE.ctl
@@ -257,7 +263,7 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_ControlServer.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.ARITHMETIC_OPERATOR(-) at line 20, column 65
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_INFRA.ctl
@@ -341,7 +347,7 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(private) at line 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_timer.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 24, column 64
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_dynDIMdecryptor.ctl
@@ -656,12 +662,12 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 23, column
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 45, column 5
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0FireSafe_definitions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 22, column 6
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_definitions.ctl
@@ -670,17 +676,17 @@ Output:
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goOffInstructions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 34, column 7
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_magnetSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 106, column 8
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goSuperSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 59, column 5
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_restoreSafeInstructions.ctl
@@ -849,27 +855,28 @@ Unexpected character \ at line 115, column 87
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_GoSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 20, column 41
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_definitions.ctl
 Output:
-Syntax error: Expected a primary expression
+Parsing statement
+Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 64, column 22 at line 64, column 22
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_goOffInstructions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 33, column 8
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_magnetSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 82, column 9
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_GoSuperSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 18, column 16
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_restoreSafeInstructions.ctl
@@ -878,12 +885,12 @@ Output:
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwWienerCrate2.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 27
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwWienerCrate.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 26
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenChannelA7030UPD.ctl
@@ -893,37 +900,37 @@ Unexpected character | at line 9, column 45
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenCrateSY1527.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 30
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwDevMajority.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 3, column 26
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/fitLaser.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 21
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FIT_TCM.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 20
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/fitControlServer.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 29
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/AliDcsRun.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 5, column 22
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FIT_PM.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 19
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenChannel.ctl
@@ -933,12 +940,12 @@ Unexpected character ~ at line 66, column 31
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/fitAttenuator.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 26
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/AliEmergencyButton_DU.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 34
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/ControlServer.ctl
@@ -953,27 +960,27 @@ Unexpected character | at line 7, column 45
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaVLoopDU.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 24
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwDevMode.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 3, column 22
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaVPlantDU.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 25
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenChannelA7030.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 1, column 31
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwFSMConfDBDUT.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(string) at line 2, column 27
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationExitSplitMode.ctl
@@ -987,7 +994,7 @@ Output:
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationFakeScript.ctl
 Output:
-Syntax error: Expected a primary expression
+Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 23, column 10
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationGetDpe.ctl
@@ -1012,12 +1019,14 @@ Unexpected character \ at line 275, column 74
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_safe/fv0Safe_EmergencyButton_new.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(i_try) at line 53, column 4 at line 53, column 4
+Parsing statement
+Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 19, column 27 at line 19, column 27
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_safe/fv0Safe_EmergencyButton.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(i_try) at line 45, column 6 at line 45, column 6
+Parsing statement
+Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 22, column 27 at line 22, column 27
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/gedi/fwInstallationGedi_ext.ctl

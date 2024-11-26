@@ -402,7 +402,7 @@ class Parser:
 
             return expression
         else:
-            raise SyntaxError("Expected a primary expression")
+            raise SyntaxError("Expected a primary expression. Token: " + str(self.__current()))
 
     def __parse_type(self):
         # If the current token is a type keyword, consume it and return the value
@@ -721,7 +721,7 @@ class Parser:
         return BreakNode()
 
     def __parse_while_statement(self):
-        #  Consume the "while" keyword
+        # Consume the "while" keyword
         self.__consume(TokenKind.KEYWORD)
 
         # Consume '('
@@ -733,10 +733,15 @@ class Parser:
         # Consume ')'
         self.__consume(TokenKind.SYMBOL)
 
-        # Parse the block
-        block = self.__parse_block()
+        # Peek to determine if the next token starts a block or a single statement
+        if self.__peek().kind == TokenKind.SYMBOL and self.__peek().value == "{":
+            # Parse the block
+            block_or_statement = self.__parse_block()
+        else:
+            # Parse a single statement
+            block_or_statement = self.__parse_statement()
 
-        return WhileLoopNode(condition, block)
+        return WhileLoopNode(condition, block_or_statement)
 
     def __parse_library_import(self):
         # Consume the '#' symbol

@@ -320,13 +320,17 @@ class BreakNode:
 
 
 class WhileLoopNode:
-    def __init__(self, condition, block):
+    def __init__(self, condition, block_or_statement):
         self.condition = condition
-        self.block = block
+        self.block_or_statement = block_or_statement
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}WhileLoopNode(condition={self.condition}, block={self.block})"
-
+        block_type = "Block" if isinstance(self.block_or_statement, list) else "Statement"
+        return (
+            f"{indent_str(indent)}WhileLoopNode("
+            f"condition={self.condition}, "
+            f"{block_type}={self.block_or_statement})"
+        )
 
 class TypeNode:
     def __init__(self, value):

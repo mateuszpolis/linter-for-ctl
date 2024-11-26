@@ -60,7 +60,7 @@ Comment             -> "//" (any_character)*
 MultiLineComment    -> "/**" (any_character)* "*/"
 ReturnStatement     -> "return" (Expression)? ";"
 BreakStatement      -> "break" ";"
-WhileLoop           -> "while" "(" Comparison ")" Block
+WhileLoop           -> "while" "(" Comparison ")" (Block | Statement)
 Type                -> type_keyword | TemplateType
 TemplateType        -> template_type_keyword "<" Type ("," Type)* ">"
 Parameter           -> Type identifier
