@@ -1,0 +1,1027 @@
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/setconfig.ctl
+Output:
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(delay) at line 20, column 171 at line 20, column 171
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test_runconfigurations.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(time) at line 35, column 3 at line 35, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/Testsafe.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_initDCS.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.ARITHMETIC_OPERATOR(/) at line 57, column 3 at line 57, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/testowner.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/temp.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/lumi_archive.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fit_watchDog.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fcbUpdateScript_new.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_channelsList.ctl
+Output:
+Syntax error: Expected ';' at the end of declaration. Token: TokenKind.IDENTIFIER(PM_CH) at line 28, column 25
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/createDPs.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/testConfDB.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_dyn_mixed) at line 25, column 3 at line 25, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/StatusDimService.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test2.ctl
+Output:
+Token error: Expected TokenKind.IDENTIFIER but got TokenKind.NUMBER. Token: TokenKind.NUMBER(450) at line 36, column 33 at line 36, column 33
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/watchDog.ctl
+Output:
+Unexpected character \ at line 63, column 54
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwWienerCrate2.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannel_old.ctl
+Output:
+Unexpected character ~ at line 72, column 31
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwWienerCrate.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannelA7030UPD.ctl
+Output:
+Unexpected character | at line 9, column 45
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_DCS.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 6, column 1 at line 6, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenCrateSY1527.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/HV.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwDevMajority.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/lookupTable.ctl
+Output:
+Unexpected character ' at line 57, column 110
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fitLaser.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FIT_TCM.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/WIENER.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fitControlServer.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/AliDcsRun.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FIT_PM.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannel.ctl
+Output:
+Unexpected character ~ at line 66, column 31
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_FEE.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_common_lib.ctl
+Output:
+Unexpected character \ at line 155, column 98
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fitAttenuator.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/AliEmergencyButton_DU.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_WIENER.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannelA7030UNI.ctl
+Output:
+Unexpected character | at line 7, column 45
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaVLoopDU.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_FEE_TCM.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/includes_legacy.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(private) at line 59, column 1 at line 59, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/SIDE_A.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 6, column 1 at line 6, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_SAFE.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwDevMode.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/INFRA.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_ui.ctl
+Output:
+Unexpected character ~ at line 45, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaVPlantDU.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwCaenChannelA7030.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_DCS_RUN.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_LCS.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FwFSMConfDBDUT.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FEE.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_HV.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_ControlServer.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_INFRA.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/FV0_CONTROL_SERVER.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL(}) at line 7, column 1 at line 7, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/lookUpTable_DI.ctl
+Output:
+Unexpected character ' at line 34, column 110
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_CCDBcom.ctl
+Output:
+Unexpected character \ at line 30, column 90
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_LHCBeamInfoProcessor.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 19, column 1 at line 19, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_dpFunctions.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 20, column 1 at line 20, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_magneticField.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 22, column 1 at line 22, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_configuration.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 19, column 1 at line 19, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_safety.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(private) at line 39, column 1 at line 39, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_constants.ctl
+Output:
+Syntax error: Expected ';' at the end of declaration. Token: TokenKind.IDENTIFIER(xDECU) at line 16, column 28
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_dynBitLogic.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 19, column 1 at line 19, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/xxx_DIMConfiguration.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 54, column 1 at line 54, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_ForceArch.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_pallete.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 40, column 1 at line 40, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_TrendExport.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 18, column 1 at line 18, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_sorConfiguration.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(private) at line 47, column 1 at line 47, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_timer.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_dynDIMdecryptor.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 20, column 1 at line 20, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_functions.ctl
+Output:
+Unexpected character @ at line 106, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_ControlServer.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(private) at line 17, column 1 at line 17, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_customSettingsLog.ctl
+Output:
+Token error: Expected TokenKind.IDENTIFIER but got TokenKind.SYMBOL. Token: TokenKind.SYMBOL(&) at line 24, column 31 at line 24, column 31
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/testRunner.ctl
+Output:
+Unexpected character @ at line 15, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/waitForDbUpdate.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.TYPE_KEYWORD(void) at line 8, column 1 at line 8, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/oaTestParsers/jsonToJUnit.ctl
+Output:
+Unexpected character @ at line 21, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/ascii.ctl
+Output:
+Unexpected character @ at line 2, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/oaUnit.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 20, column 1 at line 20, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/oaUnitFCheck.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 22, column 1 at line 22, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/fileSystem.ctl
+Output:
+Unexpected character \ at line 201, column 31
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/var.ctl
+Output:
+Unexpected character @ at line 2, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/TimeOut.ctl
+Output:
+Unexpected character ~ at line 112, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/projectEnvironment/ProjEnvLogViewer.ctl
+Output:
+Unexpected character @ at line 16, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/projectEnvironment/ProjEnvPmonComponent.ctl
+Output:
+Unexpected character @ at line 16, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/projectEnvironment/ProjEnvProjectConfig.ctl
+Output:
+Unexpected character @ at line 16, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/projectEnvironment/ProjEnvConsole.ctl
+Output:
+Unexpected character @ at line 16, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/projectEnvironment/ProjEnvProject.ctl
+Output:
+Unexpected character \ at line 1445, column 41
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/projectEnvironment/ProjEnvProjectRdbConfig.ctl
+Output:
+Unexpected character @ at line 12, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/projectEnvironment/ProjEnvComponent.ctl
+Output:
+Unexpected character @ at line 16, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/oaTest/OaTestResultEnvironment.ctl
+Output:
+Unexpected character @ at line 13, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/oaTest/OaTestResult.ctl
+Output:
+Unexpected character @ at line 48, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/oaTest/OaTestResultJson.ctl
+Output:
+Unexpected character @ at line 18, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/oaTest/OaTestResultJUnit.ctl
+Output:
+Unexpected character \ at line 332, column 31
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfString.ctl
+Output:
+Unexpected character " at line 206, column 34
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfCommonConfig.ctl
+Output:
+Unexpected character @ at line 27, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfBasic.ctl
+Output:
+Unexpected character @ at line 14, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfCfg.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 35, column 1 at line 35, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfFileSys.ctl
+Output:
+Unexpected character " at line 113, column 25
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfClass.ctl
+Output:
+Unexpected character @ at line 10, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfErrHdl.ctl
+Output:
+Unexpected character @ at line 12, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfTestRunnerRestApi.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 21, column 1 at line 21, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfTestRunner.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 23, column 1 at line 23, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testManager/TfTestManager.ctl
+Output:
+Unexpected character ' at line 764, column 28
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/logAnalyzer/LogReader.ctl
+Output:
+Unexpected character \ at line 338, column 40
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/logAnalyzer/LogParserJSON.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 16, column 1 at line 16, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/logAnalyzer/LogAnalyzer.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 18, column 1 at line 18, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/logAnalyzer/LogEntry.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(struct) at line 16, column 1 at line 16, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/logAnalyzer/LogParserClassic.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 16, column 1 at line 16, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProjectRestApi.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 25, column 1 at line 25, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfProjectGlobal.ctl
+Output:
+Unexpected character @ at line 24, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestSubProject.ctl
+Output:
+Unexpected character @ at line 20, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProjectTemplate.ctl
+Output:
+Unexpected character @ at line 24, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProject.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 40, column 1 at line 40, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProjectTool.ctl
+Output:
+Unexpected character @ at line 22, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProjectStep.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(struct) at line 23, column 1 at line 23, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testSuite/TfTestSuite.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 25, column 1 at line 25, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/userMgm/TfUser.ctl
+Output:
+Unexpected character @ at line 13, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/restApi/TfSystemCmdRestApi.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 24, column 1 at line 24, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/restApi/TfFileSysRestApi.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 24, column 1 at line 24, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/restApi/TfRestApi.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 20, column 1 at line 20, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/http/TfHttpClient.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 26, column 1 at line 26, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testRun/TfTestRun.ctl
+Output:
+Unexpected character @ at line 55, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/notifications/TfNotifierErrClass.ctl
+Output:
+Unexpected character @ at line 10, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/notifications/TfNotifier.ctl
+Output:
+Unexpected character @ at line 18, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/notifications/TfEMailHtmlMaker.ctl
+Output:
+Unexpected character @ at line 10, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/notifications/TfEMail.ctl
+Output:
+Unexpected character @ at line 11, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/examples/libs/classes/oaTest/OaTestResult.ctl
+Output:
+Unexpected character @ at line 303, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/examples/libs/classes/testFramework/logAnalyzer/LogReader.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(LogReader) at line 22, column 3 at line 22, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/examples/libs/classes/testFramework/logAnalyzer/LogAnalyzer.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.TYPE_KEYWORD(void) at line 20, column 1 at line 20, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/examples/libs/classes/testFramework/testProject/HookTfTestProject.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.ARITHMETIC_OPERATOR(/) at line 14, column 1 at line 14, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/examples/libs/classes/testFramework/restApi/TfSystemCmdRestApi.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 23, column 3 at line 23, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goSafeInstructions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0FireSafe_definitions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_definitions.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goOffInstructions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_magnetSafeInstructions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goSuperSafeInstructions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_restoreSafeInstructions.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_HVfunctions.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 19, column 1 at line 19, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_BadChannelMap.ctl
+Output:
+Unexpected character \ at line 142, column 90
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fwConfigurationDB_Recipes_test.ctl
+Output:
+Unexpected character \ at line 719, column 71
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_DIMaux.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 14, column 1 at line 14, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/ft0_BadChannelMap.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_uint) at line 25, column 1 at line 25, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fcbStatus_update_new.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_errClass) at line 21, column 3 at line 21, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_systemDefinition.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 16, column 1 at line 16, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_constants.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 15, column 1 at line 15, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0DIMListsConfiguration.ctl
+Output:
+Token error: Expected TokenKind.IDENTIFIER but got TokenKind.COMMENT. Token: TokenKind.COMMENT(Name of status GBT parameters) at line 31, column 1 at line 31, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_PMT_resistance.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_errClass) at line 18, column 1 at line 18, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_LUTFunctions.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_anytype) at line 14, column 1 at line 14, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/intilial_DPconnectionsl.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 13, column 1 at line 13, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fit_DIMConfiguration.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.ARITHMETIC_OPERATOR(/) at line 20, column 1 at line 20, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0Configuration_lib.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 24, column 1 at line 24, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_nominal_voltages.ctl
+Output:
+Token error: Expected TokenKind.IDENTIFIER but got TokenKind.SYMBOL. Token: TokenKind.SYMBOL(,) at line 16, column 13 at line 16, column 13
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_palette.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.ARITHMETIC_OPERATOR(/) at line 21, column 1 at line 21, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/HV_libs/CAEN_constants.ctl
+Output:
+Syntax error: Expected ';' at the end of declaration. Token: TokenKind.IDENTIFIER(CAEN_CHANNEL_ISON) at line 15, column 11
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/utilities/HexToDec.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 20, column 1 at line 20, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationDBUpgrade.ctl
+Output:
+Syntax error: Expected ')' after parameter list
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationXml.ctl
+Output:
+Unexpected character | at line 197, column 20
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationManager.ctl
+Output:
+Unexpected character \ at line 710, column 97
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationProjParam.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(private) at line 80, column 1 at line 80, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationUpgrade.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_dyn_mixed) at line 21, column 1 at line 21, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationDB.ctl
+Output:
+Unexpected character @ at line 285, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationDBCache.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(global) at line 46, column 1 at line 46, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationQtHelp.ctl
+Output:
+Unexpected character \ at line 185, column 68
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationRedu.ctl
+Output:
+Unexpected character @ at line 987, column 4
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationInit.ctl
+Output:
+Unexpected character \ at line 155, column 36
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationDeprecated.ctl
+Output:
+Unexpected character \ at line 981, column 55
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallation.ctl
+Output:
+Unexpected character " at line 928, column 50
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationPackager.ctl
+Output:
+Unexpected character \ at line 82, column 35
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fwInstallation/fwInstallationDBAgent.ctl
+Output:
+Unexpected character \ at line 115, column 87
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_GoSafeInstructions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_definitions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_goOffInstructions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_magnetSafeInstructions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_GoSuperSafeInstructions.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_restoreSafeInstructions.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwWienerCrate2.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwWienerCrate.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenChannelA7030UPD.ctl
+Output:
+Unexpected character | at line 9, column 45
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenCrateSY1527.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwDevMajority.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/fitLaser.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FIT_TCM.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/fitControlServer.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/AliDcsRun.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FIT_PM.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenChannel.ctl
+Output:
+Unexpected character ~ at line 66, column 31
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/fitAttenuator.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/AliEmergencyButton_DU.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/ControlServer.ctl
+Output:
+Unexpected character \ at line 31, column 37
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenChannelA7030UNI.ctl
+Output:
+Unexpected character | at line 7, column 45
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaVLoopDU.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwDevMode.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaVPlantDU.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwCaenChannelA7030.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs_back/FwFSMConfDBDUT.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationExitSplitMode.ctl
+Output:
+Syntax error: Expected ')' after main function parameter list
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallation_projectRegistration.ctl
+Output:
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationFakeScript.ctl
+Output:
+Syntax error: Expected a primary expression
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationGetDpe.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.TYPE_KEYWORD(void) at line 1, column 1 at line 1, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationAgentDBConsistencyChecker.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(do) at line 44, column 3 at line 44, column 3
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallation_generateQtHelp.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.TYPE_KEYWORD(int) at line 1, column 1 at line 1, column 1
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallation_buildLegacyLibrary.ctl
+Output:
+Unexpected character \ at line 275, column 74
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_safe/fv0Safe_EmergencyButton_new.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(i_try) at line 53, column 4 at line 53, column 4
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_safe/fv0Safe_EmergencyButton.ctl
+Output:
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(i_try) at line 45, column 6 at line 45, column 6
+
+========================================
+File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/gedi/fwInstallationGedi_ext.ctl
+Output:
+Unexpected character \ at line 58, column 50
+
+========================================

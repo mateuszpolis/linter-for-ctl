@@ -12,6 +12,7 @@ KEYWORDS = [
     "false",
     "null",
     "uses",
+    "const",
 ]
 TYPE_KEYWORDS = [
     "string",
@@ -45,7 +46,7 @@ ARITHMETIC_OPERATORS = [
 ]
 COMPARISON_OPERATORS = ["==", "!=", ">", ">=", "<", "<="]
 LOGICAL_OPERATORS = ["&&", "||", "!"]
-SYMBOLS = ["(", ")", "{", "}", "[", "]", ",", ";", ":", ".", "$", "#", "?", ":"]
+SYMBOLS = ["(", ")", "{", "}", "[", "]", ",", ";", ":", ".", "$", "#", "?", ":", "&"]
 
 
 class Tokenizer:

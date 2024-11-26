@@ -33,7 +33,7 @@ class AssignmentNode:
 
 
 class DeclarationNode:
-    def __init__(self, type_, identifiers):
+    def __init__(self, type_, identifiers, is_const=False):
         """
         :param type_keyword: The data type of the declaration (e.g., 'int' or 'string')
         :param identifiers: A list of tuples where each tuple contains:
@@ -42,10 +42,11 @@ class DeclarationNode:
         """
         self.type = type_
         self.identifiers = identifiers
+        self.is_const = is_const
 
     def __repr__(self, indent=0):
         # Start the string with the type keyword
-        string = f"{indent_str(indent)}DeclarationNode(type={self.type.__repr__(indent+1)}, identifiers=[\n"
+        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const} type={self.type.__repr__(indent+1)}, identifiers=[\n"
 
         # Add each identifier with its optional initial value
         for identifier, value in self.identifiers:
@@ -89,12 +90,26 @@ class GlobalIdentifierNode:
         return f"{indent_str(indent)}GlobalIdentifierNode({self.value})"
 
 
+class PointerNode:
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}PointerNode({self.value})"
+
 class NumberNode:
     def __init__(self, value):
         self.value = value
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}NumberNode({self.value})"
+    
+class BooleanNode:
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}BooleanNode({self.value})"
 
 
 class StringNode:

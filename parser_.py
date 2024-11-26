@@ -1,10 +1,10 @@
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
-                   BlockNode, BreakNode, CharNode, CommentNode, CompoundAssignmentNode,
+                   BlockNode, BooleanNode, BreakNode, CharNode, CommentNode, CompoundAssignmentNode,
                    DeclarationNode, DividerNode, ElseIfClauseNode, ForLoopNode,
                    FunctionCallNode, FunctionDeclarationNode,
                    GlobalIdentifierNode, IdentifierNode, IfStatementNode, IncrementAssignmentNode,
                    IndexAccessNode, LibraryNode, MainNode,
-                   MultilineCommentNode, NumberNode, ParameterNode,
+                   MultilineCommentNode, NumberNode, ParameterNode, PointerNode,
                    ProgramNode, ReturnNode, StringNode, TemplateTypeNode,
                    TernaryExpressionNode, TypeNode, WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
@@ -82,6 +82,8 @@ class Parser:
             )
         ) or (
             self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD) and self.__peek().value == "<"
+        ) or (
+            self.__match(TokenKind.KEYWORD) and self.__current().value == "const"
         ):
             return self.__parse_declaration()
         elif (
@@ -354,6 +356,8 @@ class Parser:
             return StringNode(self.__consume(TokenKind.STRING_LITERAL).value)
         elif self.__match(TokenKind.CHAR):
             return CharNode(self.__consume(TokenKind.CHAR).value)
+        elif self.__match(TokenKind.KEYWORD) and (self.__current().value == "true" or self.__current().value == "false"):
+            return BooleanNode(self.__consume(TokenKind.KEYWORD).value)
         elif (
             self.__match(TokenKind.IDENTIFIER)
             and self.__peek().kind == TokenKind.SYMBOL
@@ -373,6 +377,17 @@ class Parser:
             # Parse the identifier as a global variable
             identifier = self.__consume(TokenKind.IDENTIFIER)
             return GlobalIdentifierNode(identifier.value)
+        elif self.__match(TokenKind.SYMBOL) and self.__current().value == "&":
+            # Consume the "&" symbol
+            self.__consume(TokenKind.SYMBOL)
+
+            # Expect an identifier immediately following the "&"
+            if not self.__match(TokenKind.IDENTIFIER):
+                raise SyntaxError("Expected identifier after '&")
+
+            # Parse the identifier as a pointer
+            identifier = self.__consume(TokenKind.IDENTIFIER)
+            return PointerNode(identifier.value)
         elif self.__match(TokenKind.SYMBOL) and self.__current().value == "(":
             # __Consume the opening parenthesis
             self.__consume(TokenKind.SYMBOL)
@@ -387,7 +402,6 @@ class Parser:
 
             return expression
         else:
-            print(self.__current())
             raise SyntaxError("Expected a primary expression")
 
     def __parse_type(self):
@@ -431,8 +445,16 @@ class Parser:
         return TemplateTypeNode(keyword, inner_types)
 
     def __parse_declaration(self, parse_semicolon=True):
-        # Parse Type
-        type_ = self.__parse_type()
+        # Check if the declaration starts with "const"
+        is_const = False
+        if self.__match(TokenKind.KEYWORD) and self.__current().value == "const":
+            is_const = True
+            self.__consume(TokenKind.KEYWORD)  # Consume "const"
+
+        # Parse Type if present (Type is optional if "const" is present)
+        type_ = None
+        if not is_const or ((self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD) or self.__match(TokenKind.TYPE_KEYWORD)) and not self.__peek().value == "="):
+            type_ = self.__parse_type()
 
         # Parse the first identifier
         identifier = self.__consume(TokenKind.IDENTIFIER)
@@ -468,12 +490,12 @@ class Parser:
 
         # Expect and consume the semicolon at the end of the declaration
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
-            raise SyntaxError("Expected ';' at the end of declaration")
+            raise SyntaxError("Expected ';' at the end of declaration. Token: " + str(self.__current()))
         if parse_semicolon:
             self.__consume(TokenKind.SYMBOL)
 
-        # Return a DeclarationNode with the type and list of identifiers
-        return DeclarationNode(type_, identifiers)
+        # Return a DeclarationNode with the type, list of identifiers, and const flag
+        return DeclarationNode(type_, identifiers, is_const)
 
     def __parse_function_declaration(self):
         # Parse Type
@@ -731,36 +753,30 @@ class Parser:
     def __parse_for_loop(self):
         """ForLoop -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block
         """
-        print("Parsing for loop")
         # Consume the "for" keyword
         self.__consume(TokenKind.KEYWORD)
 
         # Consume '('
         self.__consume(TokenKind.SYMBOL)
 
-        print("Parsing initialization")
         # Parse the initialization statement
         initialization = self.__parse_declaration(parse_semicolon=False)
-        print(initialization)
 
         # Consume the semicolon
         self.__consume(TokenKind.SYMBOL)
 
-        print("Parsing condition")
         # Parse the condition
         condition = self.__parse_comparison()
 
         # Consume the semicolon
         self.__consume(TokenKind.SYMBOL)
 
-        print("Parsing increment")
         # Parse the increment statement
         increment = self.__parse_assignment(parse_semicolon=False)
 
         # Consume ')'
         self.__consume(TokenKind.SYMBOL)
 
-        print("Parsing block")
         # Parse the block
         block = self.__parse_block()
 

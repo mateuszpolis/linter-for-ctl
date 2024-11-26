@@ -34,7 +34,7 @@ Assignment          -> Identifier "=" ConditionalExpression ";"
 IncrementAssignment -> Identifier ("++" | "--") ";"
                      | ("++" | "--") Identifier ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
-Declaration         -> Type identifier ("=" ConditionalExpression)? (";" | ("," identifier ("=" ConditionalExpression)*)? ";")
+Declaration         -> Declaration -> ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
 FunctionDeclaration -> Type identifier "(" ParameterList? ")" Block
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
@@ -47,6 +47,7 @@ Factor              -> Primary
 Primary             -> number 
                     | identifier 
                     | "$" identifier
+                    | "&" identifier
                     | "(" ConditionalExpression ")"
                     | FunctionCall
                     | AttributeAccess
