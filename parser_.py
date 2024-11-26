@@ -1,8 +1,8 @@
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
-                   BlockNode, BreakNode, CharNode, CommentNode,
-                   DeclarationNode, DividerNode, ElseIfClauseNode,
+                   BlockNode, BreakNode, CharNode, CommentNode, CompoundAssignmentNode,
+                   DeclarationNode, DividerNode, ElseIfClauseNode, ForLoopNode,
                    FunctionCallNode, FunctionDeclarationNode,
-                   GlobalIdentifierNode, IdentifierNode, IfStatementNode,
+                   GlobalIdentifierNode, IdentifierNode, IfStatementNode, IncrementAssignmentNode,
                    IndexAccessNode, LibraryNode, MainNode,
                    MultilineCommentNode, NumberNode, ParameterNode,
                    ProgramNode, ReturnNode, StringNode, TemplateTypeNode,
@@ -115,6 +115,8 @@ class Parser:
             return self.__parse_while_statement()
         elif self.__match(TokenKind.SYMBOL) and self.__current().value == "#":
             return self.__parse_library_import()
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "for":
+            return self.__parse_for_loop()
         else:
             raise TokenError(
                 SyntaxError(
@@ -221,28 +223,66 @@ class Parser:
 
         # Parse the false branch
         false_branch = self.__parse_expression()
-        print("Parsed false branch")
 
         return TernaryExpressionNode(condition, true_branch, false_branch)
 
-    def __parse_assignment(self):
-        # Use parse_factor to parse the left side, allowing for complex access expressions
+    def __parse_assignment(self, parse_semicolon=True):
+        # Check if the assignment is a increment or decrement operation of kind ++i or --i
+        if self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in ["++", "--"]:
+            operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
+            left = self.__parse_factor()
+            if parse_semicolon:
+                if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
+                    raise TokenError("Expected ';' at the end of increment/decrement", self.__current())
+                self.__consume(TokenKind.SYMBOL)
+            return IncrementAssignmentNode(left, operator.value)
+
+        # Parse the left-hand side
         left = self.__parse_factor()
 
-        # Expect "=" operator
-        if not self.__match(TokenKind.ASSIGNMENT_OPERATOR):
-            raise TokenError("Expected '=' in assignment", self.__current())
-        self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+        # Determine the type of assignment
+        if self.__match(TokenKind.ASSIGNMENT_OPERATOR):
+            operator = self.__current().value
 
-        # Parse the right side (assignment value) as a conditional expression, allowing for complex expressions returning boolean values as well
-        value = self.__parse_conditional_expression()
+            if operator == "=":
+                self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+                value = self.__parse_conditional_expression()
 
-        # Expect a semicolon
-        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
-            raise TokenError("Expected ';' at the end of assignment", self.__current())
-        self.__consume(TokenKind.SYMBOL)
+                # Expect a semicolon
+                if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
+                    raise TokenError("Expected ';' at the end of assignment", self.__current())
+                if parse_semicolon:
+                    self.__consume(TokenKind.SYMBOL)
 
-        return AssignmentNode(left, value)
+                return AssignmentNode(left, value)
+
+            elif operator in ["+=", "-=", "*=", "/=", "%="]:
+                self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+                value = self.__parse_conditional_expression()
+
+                # Expect a semicolon
+                if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
+                    raise TokenError("Expected ';' at the end of compound assignment", self.__current())
+                if parse_semicolon:
+                    self.__consume(TokenKind.SYMBOL)
+
+                return CompoundAssignmentNode(left, operator, value)
+
+        elif self.__match(TokenKind.ARITHMETIC_OPERATOR):
+            operator = self.__current().value
+
+            if operator in ["++", "--"]:
+                self.__consume(TokenKind.ARITHMETIC_OPERATOR)
+
+                # Expect a semicolon
+                if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
+                    raise TokenError("Expected ';' at the end of increment/decrement", self.__current())
+                if parse_semicolon:
+                    self.__consume(TokenKind.SYMBOL)
+
+                return IncrementAssignmentNode(left, operator)
+
+        raise TokenError("Invalid assignment statement", self.__current())
 
     def __parse_expression(self):
         # Parse the left side (higher precedence first)
@@ -390,7 +430,7 @@ class Parser:
         # Return the template node
         return TemplateTypeNode(keyword, inner_types)
 
-    def __parse_declaration(self):
+    def __parse_declaration(self, parse_semicolon=True):
         # Parse Type
         type_ = self.__parse_type()
 
@@ -427,9 +467,10 @@ class Parser:
             identifiers.append((identifier, initial_value))
 
         # Expect and consume the semicolon at the end of the declaration
-        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
+        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
             raise SyntaxError("Expected ';' at the end of declaration")
-        self.__consume(TokenKind.SYMBOL)
+        if parse_semicolon:
+            self.__consume(TokenKind.SYMBOL)
 
         # Return a DeclarationNode with the type and list of identifiers
         return DeclarationNode(type_, identifiers)
@@ -686,3 +727,41 @@ class Parser:
         library_name = self.__consume(TokenKind.STRING_LITERAL)
 
         return LibraryNode(library_name.value)
+
+    def __parse_for_loop(self):
+        """ForLoop -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block
+        """
+        print("Parsing for loop")
+        # Consume the "for" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Consume '('
+        self.__consume(TokenKind.SYMBOL)
+
+        print("Parsing initialization")
+        # Parse the initialization statement
+        initialization = self.__parse_declaration(parse_semicolon=False)
+        print(initialization)
+
+        # Consume the semicolon
+        self.__consume(TokenKind.SYMBOL)
+
+        print("Parsing condition")
+        # Parse the condition
+        condition = self.__parse_comparison()
+
+        # Consume the semicolon
+        self.__consume(TokenKind.SYMBOL)
+
+        print("Parsing increment")
+        # Parse the increment statement
+        increment = self.__parse_assignment(parse_semicolon=False)
+
+        # Consume ')'
+        self.__consume(TokenKind.SYMBOL)
+
+        print("Parsing block")
+        # Parse the block
+        block = self.__parse_block()
+
+        return ForLoopNode(initialization, condition, increment, block)

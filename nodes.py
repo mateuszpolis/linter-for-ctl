@@ -367,3 +367,30 @@ class TernaryExpressionNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}TernaryExpression({self.comparison}, {self.success_expression}, {self.failure_expression})"
+
+class ForLoopNode:
+    def __init__(self, initialization, condition, increment, block):
+        self.initialization = initialization
+        self.condition = condition
+        self.increment = increment
+        self.block = block
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}ForLoopNode(initialization={self.initialization}, condition={self.condition}, increment={self.increment}, block={self.block})"
+
+class IncrementAssignmentNode:
+    def __init__(self, identifier, operator):
+        self.identifier = identifier
+        self.operator = operator
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}IncrementAssignmentNode(identifier={self.identifier}, operator={self.operator})"
+    
+class CompoundAssignmentNode:
+    def __init__(self, identifier, operator, value):
+        self.identifier = identifier
+        self.operator = operator
+        self.value = value
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}CompundAssignmentNode(identifier={self.identifier}, operator={self.operator}, value={self.value})"

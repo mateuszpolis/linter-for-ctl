@@ -26,6 +26,7 @@ TYPE_KEYWORDS = [
     "dyn_dyn_string",
     "mapping",
     "file",
+    "uint",
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
@@ -172,8 +173,17 @@ class Tokenizer:
         return None
 
     def __match_operator(self):
+        # Helper function to sort operators by length in descending order
+        def sort_operators_by_length(operators):
+            return sorted(operators, key=len, reverse=True)
+
+        # Sort operators by length (longer operators first)
+        sorted_comparison_operators = sort_operators_by_length(COMPARISON_OPERATORS)
+        sorted_arithmetic_operators = sort_operators_by_length(ARITHMETIC_OPERATORS)
+        sorted_logical_operators = sort_operators_by_length(LOGICAL_OPERATORS)
+
         # Check for comparison operators first
-        for operator in COMPARISON_OPERATORS:
+        for operator in sorted_comparison_operators:
             if self.code[self.pos : self.pos + len(operator)] == operator:
                 self.pos += len(operator)
                 return Token(
@@ -188,15 +198,15 @@ class Tokenizer:
             return Token(TokenKind.ASSIGNMENT_OPERATOR, "=", self.line, self.column)
 
         # Check for arithmetic operators
-        for operator in ARITHMETIC_OPERATORS:
+        for operator in sorted_arithmetic_operators:
             if self.code[self.pos : self.pos + len(operator)] == operator:
                 self.pos += len(operator)
                 return Token(
                     TokenKind.ARITHMETIC_OPERATOR, operator, self.line, self.column
                 )
 
-        # Optionally, handle logical operators if needed
-        for operator in LOGICAL_OPERATORS:
+        # Check for logical operators
+        for operator in sorted_logical_operators:
             if self.code[self.pos : self.pos + len(operator)] == operator:
                 self.pos += len(operator)
                 return Token(

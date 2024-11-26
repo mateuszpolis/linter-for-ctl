@@ -23,11 +23,17 @@ Statement           -> Assignment
                     | WhileLoop       
                     | LibraryImport    
                     | InlineIfStatement
+                    | ForLoop
 IfStatement         -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 InlineStatement     -> Statement
 ElseIfClause        -> "else" "if" "(" Comparison ")" (InlineStatement | Block)
 ElseClause          -> "else" (InlineStatement | Block)
-Assignment          -> identifier "=" ConditionalExpression ";"
+Assignment          -> Identifier "=" ConditionalExpression ";"
+                     | IncrementAssignment
+                     | CompoundAssignment
+IncrementAssignment -> Identifier ("++" | "--") ";"
+                     | ("++" | "--") Identifier ";"
+CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
 Declaration         -> Type identifier ("=" ConditionalExpression)? (";" | ("," identifier ("=" ConditionalExpression)*)? ";")
 FunctionDeclaration -> Type identifier "(" ParameterList? ")" Block
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
@@ -61,4 +67,5 @@ ParameterList       -> Parameter ("," Parameter)*
 LibraryImport       -> "#" "uses" String
 String              -> '"' (any_character)* '"'
 Character           -> "'" any_character "'"
+ForLoop             -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block
 ```
