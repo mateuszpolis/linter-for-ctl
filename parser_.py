@@ -4,7 +4,7 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    FunctionCallNode, FunctionDeclarationNode,
                    GlobalIdentifierNode, IdentifierNode, IfStatementNode, IncrementAssignmentNode,
                    IndexAccessNode, LibraryNode, MainNode,
-                   MultilineCommentNode, NumberNode, ParameterNode, PointerNode,
+                   MultilineCommentNode, NegationNode, NumberNode, ParameterNode, PointerNode,
                    ProgramNode, ReturnNode, StringNode, TemplateTypeNode,
                    TernaryExpressionNode, TypeNode, WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
@@ -682,6 +682,13 @@ class Parser:
         return BlockNode(statements)
 
     def __parse_comparison(self):
+        # Check for optional negation
+        if self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "!":
+            self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume the '!'
+            # Parse the comparison after the negation
+            expression = self.__parse_comparison()
+            return NegationNode(expression)
+
         # Parse the left side of the comparison
         left = self.__parse_expression()
 

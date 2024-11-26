@@ -1,8 +1,6 @@
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/setconfig.ctl
 Output:
-Parsing statement
-Parsing statement
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 31, column 6
+Token error: Expected TokenKind.IDENTIFIER but got TokenKind.SYMBOL. Token: TokenKind.SYMBOL()) at line 35, column 26 at line 35, column 26
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test_runconfigurations.ctl
@@ -51,7 +49,6 @@ Syntax error: Expected ';' at the end of declaration. Token: TokenKind.IDENTIFIE
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/createDPs.ctl
 Output:
-Parsing statement
 Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 32, column 20 at line 32, column 20
 
 ========================================
@@ -62,7 +59,6 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_dyn_mixed) at
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/StatusDimService.ctl
 Output:
-Parsing statement
 Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 20, column 11 at line 20, column 11
 
 ========================================
@@ -662,12 +658,11 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 23, column
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 45, column 5
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0FireSafe_definitions.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 22, column 6
+Syntax error: Expected a primary expression. Token: TokenKind.ARITHMETIC_OPERATOR(-) at line 24, column 39
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_definitions.ctl
@@ -676,17 +671,16 @@ Output:
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goOffInstructions.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 34, column 7
+Syntax error: Expected closing parenthesis
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_magnetSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 106, column 8
+Syntax error: Expected closing parenthesis
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goSuperSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 59, column 5
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_restoreSafeInstructions.ctl
@@ -860,23 +854,22 @@ Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(strin
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_definitions.ctl
 Output:
-Parsing statement
 Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 64, column 22 at line 64, column 22
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_goOffInstructions.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 33, column 8
+Syntax error: Expected closing parenthesis
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_magnetSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 82, column 9
+Syntax error: Expected closing parenthesis
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_GoSuperSafeInstructions.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 18, column 16
+Syntax error: Expected closing parenthesis
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_restoreSafeInstructions.ctl
@@ -994,7 +987,7 @@ Output:
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationFakeScript.ctl
 Output:
-Syntax error: Expected a primary expression. Token: TokenKind.LOGICAL_OPERATOR(!) at line 23, column 10
+Token error: Expected TokenKind.SYMBOL but got TokenKind.LOGICAL_OPERATOR. Token: TokenKind.LOGICAL_OPERATOR(||) at line 23, column 22 at line 23, column 22
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationGetDpe.ctl
@@ -1019,13 +1012,11 @@ Unexpected character \ at line 275, column 74
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_safe/fv0Safe_EmergencyButton_new.ctl
 Output:
-Parsing statement
 Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 19, column 27 at line 19, column 27
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_safe/fv0Safe_EmergencyButton.ctl
 Output:
-Parsing statement
 Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 22, column 27 at line 22, column 27
 
 ========================================

@@ -319,6 +319,13 @@ class BreakNode:
         return f"{indent_str(indent)}BreakNode()"
 
 
+class NegationNode:
+    def __init__(self, expression):
+        self.expression = expression
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}NegationNode(expression={self.expression})"
+
 class WhileLoopNode:
     def __init__(self, condition, block_or_statement):
         self.condition = condition

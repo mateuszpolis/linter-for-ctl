@@ -40,7 +40,7 @@ FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Express
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
 TernaryExpression   -> Comparison "?" Expression ":" Expression
-Comparison          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )*
+Comparison          -> "!"? Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )?
 Expression          -> Term ( ("+" | "-") Term )*
 Term                -> Factor ( ("*" | "/") Factor )*
 Factor              -> Primary
