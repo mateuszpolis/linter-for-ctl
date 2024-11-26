@@ -13,19 +13,9 @@ Output:
 Syntax error: Expected ';' at the end of declaration. Token: TokenKind.IDENTIFIER(PM_CH) at line 28, column 25
 
 ========================================
-File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/createDPs.ctl
-Output:
-Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 32, column 20 at line 32, column 20
-
-========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/testConfDB.ctl
 Output:
 Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(dyn_dyn_mixed) at line 25, column 3 at line 25, column 3
-
-========================================
-File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/StatusDimService.ctl
-Output:
-Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 20, column 11 at line 20, column 11
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test2.ctl
@@ -330,7 +320,7 @@ Token error: Expected TokenKind.IDENTIFIER but got TokenKind.SYMBOL. Token: Toke
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/testRunner.ctl
 Output:
-Syntax error: Expected ')' after main function parameter list
+Token error: Expected ';' at the end of assignment at line 65, column 23
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/waitForDbUpdate.ctl
@@ -812,7 +802,7 @@ Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(strin
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_definitions.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 64, column 22 at line 64, column 22
+Syntax error: Expected a primary expression. Token: TokenKind.SYMBOL(.) at line 65, column 15
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_goOffInstructions.ctl
@@ -927,12 +917,12 @@ Syntax error: Expected a primary expression. Token: TokenKind.TYPE_KEYWORD(strin
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationExitSplitMode.ctl
 Output:
-Syntax error: Expected ')' after main function parameter list
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(count) at line 32, column 7 at line 32, column 7
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationFakeScript.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 31, column 49 at line 31, column 49
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(component2PostInstallStatus) at line 104, column 9 at line 104, column 9
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationGetDpe.ctl
@@ -957,12 +947,12 @@ Unexpected character \ at line 275, column 74
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_safe/fv0Safe_EmergencyButton_new.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 19, column 27 at line 19, column 27
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(i_try) at line 53, column 4 at line 53, column 4
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fv0_safe/fv0Safe_EmergencyButton.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 22, column 27 at line 22, column 27
+Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(i_try) at line 45, column 6 at line 45, column 6
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/gedi/fwInstallationGedi_ext.ctl

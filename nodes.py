@@ -362,12 +362,13 @@ class TemplateTypeNode:
 
 
 class ParameterNode:
-    def __init__(self, type_, identifier):
+    def __init__(self, type_, identifier, default_value=None):
         self.type_ = type_
         self.identifier = identifier
+        self.default_value = default_value
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}ParameterNode(type={self.type_}, identifier={self.identifier})"
+        return f"{indent_str(indent)}ParameterNode(type={self.type_}, identifier={self.identifier}, default_value={self.default_value})"
 
 
 class LibraryNode:

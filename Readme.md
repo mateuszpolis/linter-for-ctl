@@ -24,6 +24,7 @@ Statement           -> Assignment
                     | LibraryImport    
                     | InlineIfStatement
                     | ForLoop
+                    | MainFunction
 IfStatement         -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 InlineStatement     -> Statement
 ElseIfClause        -> "else" "if" "(" Comparison ")" (InlineStatement | Block)
@@ -73,4 +74,5 @@ LibraryImport       -> "#" "uses" String
 String              -> '"' (any_character)* '"'
 Character           -> "'" any_character "'"
 ForLoop             -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block
+MainFunction        -> Type? "main" "(" ")" Block
 ```

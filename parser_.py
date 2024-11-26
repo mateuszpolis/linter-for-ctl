@@ -552,8 +552,16 @@ class Parser:
         # Expect and consume the parameter name (identifier)
         parameter_name = self.__consume(TokenKind.IDENTIFIER)
 
+        # Check if there is a '=' sign for default parameter value
+        default_value = None
+        if self.__match(TokenKind.ASSIGNMENT_OPERATOR):
+            # Consume the '='
+            self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+            # Parse the default value
+            default_value = self.__parse_conditional_expression()
+            
         # Return a tuple with the type keyword and parameter name
-        return ParameterNode(type_, parameter_name.value)
+        return ParameterNode(type_, parameter_name.value, default_value)
 
     def __parse_function_call(self, function_expression=None):
         # If no function expression is provided, assume a standalone function call with an identifier
@@ -611,7 +619,7 @@ class Parser:
 
         # Expect and consume the closing parenthesis for the main function parameter list
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ")"):
-            raise SyntaxError("Expected ')' after main function parameter list")
+            raise SyntaxError("Expected ')' after main function parameter list. Token: " + str(self.__current()))
         self.__consume(TokenKind.SYMBOL)
 
         block = self.__parse_block()
@@ -763,7 +771,7 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         # Peek to determine if the next token starts a block or a single statement
-        if self.__peek().kind == TokenKind.SYMBOL and self.__peek().value == "{":
+        if self.__current().kind == TokenKind.SYMBOL and self.__current().value == "{":
             # Parse the block
             block_or_statement = self.__parse_block()
         else:
