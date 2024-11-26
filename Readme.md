@@ -40,15 +40,19 @@ FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Express
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
 TernaryExpression   -> Comparison "?" Expression ":" Expression
-Comparison          -> "!"? Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )?
+Comparison          -> LogicalOr
+LogicalOr           -> LogicalAnd ("||" LogicalAnd)*
+LogicalAnd          -> Negation ("&&" Negation)*
+Negation            -> "!"? Relational
+Relational          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )?
 Expression          -> Term ( ("+" | "-") Term )*
 Term                -> Factor ( ("*" | "/") Factor )*
 Factor              -> Primary
-Primary             -> number 
+Primary             -> number "."?
                     | identifier 
                     | "$" identifier
                     | "&" identifier
-                    | "(" ConditionalExpression ")"
+                    | "(" Comparison ")"
                     | FunctionCall
                     | AttributeAccess
                     | IndexAccess

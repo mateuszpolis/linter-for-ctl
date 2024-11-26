@@ -3,9 +3,9 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    DeclarationNode, DividerNode, ElseIfClauseNode, ForLoopNode,
                    FunctionCallNode, FunctionDeclarationNode,
                    GlobalIdentifierNode, IdentifierNode, IfStatementNode, IncrementAssignmentNode,
-                   IndexAccessNode, LibraryNode, MainNode,
+                   IndexAccessNode, LibraryNode, LogicalAndNode, LogicalOrNode, MainNode,
                    MultilineCommentNode, NegationNode, NumberNode, ParameterNode, PointerNode,
-                   ProgramNode, ReturnNode, StringNode, TemplateTypeNode,
+                   ProgramNode, RelationalNode, ReturnNode, StringNode, TemplateTypeNode,
                    TernaryExpressionNode, TypeNode, WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
 
@@ -287,13 +287,9 @@ class Parser:
         raise TokenError("Invalid assignment statement", self.__current())
 
     def __parse_expression(self):
-        # Parse the left side (higher precedence first)
         left = self.__parse_term()
 
-        # Handle addition and subtraction (lower precedence)
-        while self.__match(
-            TokenKind.ARITHMETIC_OPERATOR
-        ) and self.__current().value in ["+", "-"]:
+        while self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in ["+", "-"]:
             operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
             right = self.__parse_term()
             left = BinaryExpressionNode(left, operator.value, right)
@@ -351,7 +347,11 @@ class Parser:
 
     def __parse_primary(self):
         if self.__match(TokenKind.NUMBER):
-            return NumberNode(int(self.__consume(TokenKind.NUMBER).value))
+            value = int(self.__consume(TokenKind.NUMBER).value)
+            if self.__current().kind == TokenKind.SYMBOL and self.__current().value == ".":
+                self.__consume(TokenKind.SYMBOL)
+                return NumberNode(value, is_float=True)
+            return NumberNode(value)
         elif self.__match(TokenKind.STRING_LITERAL):
             return StringNode(self.__consume(TokenKind.STRING_LITERAL).value)
         elif self.__match(TokenKind.CHAR):
@@ -682,21 +682,43 @@ class Parser:
         return BlockNode(statements)
 
     def __parse_comparison(self):
-        # Check for optional negation
+        return self.__parse_logical_or()
+
+    def __parse_logical_or(self):
+        left = self.__parse_logical_and()
+
+        while self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "||":
+            operator = self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '||'
+            right = self.__parse_logical_and()
+            left = LogicalOrNode(left, right)
+
+        return left
+    
+    def __parse_logical_and(self):
+        left = self.__parse_negation()
+
+        while self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "&&":
+            operator = self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '&&'
+            right = self.__parse_negation()
+            left = LogicalAndNode(left, right)
+
+        return left
+
+    def __parse_negation(self):
         if self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "!":
-            self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume the '!'
-            # Parse the comparison after the negation
-            expression = self.__parse_comparison()
+            self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '!'
+            expression = self.__parse_negation()  # Parse the negated expression
             return NegationNode(expression)
 
-        # Parse the left side of the comparison
+        return self.__parse_relational()
+    
+    def __parse_relational(self):
         left = self.__parse_expression()
 
-        # Check for comparison operators
-        while self.__match(TokenKind.COMPARISON_OPERATOR):
-            operator = self.__consume(TokenKind.COMPARISON_OPERATOR)
+        if self.__match(TokenKind.COMPARISON_OPERATOR):
+            operator = self.__consume(TokenKind.COMPARISON_OPERATOR).value
             right = self.__parse_expression()
-            left = BinaryExpressionNode(left, operator.value, right)
+            return RelationalNode(left, operator, right)
 
         return left
 

@@ -1,6 +1,5 @@
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/setconfig.ctl
 Output:
-Token error: Expected TokenKind.IDENTIFIER but got TokenKind.SYMBOL. Token: TokenKind.SYMBOL()) at line 35, column 26 at line 35, column 26
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test_runconfigurations.ctl
@@ -64,7 +63,7 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 20, column
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/test2.ctl
 Output:
-Token error: Expected TokenKind.IDENTIFIER but got TokenKind.NUMBER. Token: TokenKind.NUMBER(450) at line 36, column 33 at line 36, column 33
+Token error: Expected TokenKind.SYMBOL but got TokenKind.NUMBER. Token: TokenKind.NUMBER(450) at line 36, column 33 at line 36, column 33
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/watchDog.ctl
@@ -671,12 +670,12 @@ Output:
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goOffInstructions.ctl
 Output:
-Syntax error: Expected closing parenthesis
+Token error: Unexpected statement. Token: TokenKind.ARITHMETIC_OPERATOR(/) at line 47, column 2 at line 47, column 2
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_magnetSafeInstructions.ctl
 Output:
-Syntax error: Expected closing parenthesis
+Token error: Expected TokenKind.SYMBOL but got TokenKind.KEYWORD. Token: TokenKind.KEYWORD(return) at line 129, column 6 at line 129, column 6
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe_new/fv0Safe_goSuperSafeInstructions.ctl
@@ -759,7 +758,7 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 2
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_nominal_voltages.ctl
 Output:
-Token error: Expected TokenKind.IDENTIFIER but got TokenKind.SYMBOL. Token: TokenKind.SYMBOL(,) at line 16, column 13 at line 16, column 13
+Syntax error: Expected a primary expression. Token: TokenKind.COMMENT(SA) at line 16, column 44
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_libs/fv0_palette.ctl
@@ -859,17 +858,16 @@ Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 64, column
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_goOffInstructions.ctl
 Output:
-Syntax error: Expected closing parenthesis
+Token error: Unexpected statement. Token: TokenKind.ARITHMETIC_OPERATOR(/) at line 46, column 3 at line 46, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_magnetSafeInstructions.ctl
 Output:
-Syntax error: Expected closing parenthesis
+Token error: Expected TokenKind.SYMBOL but got TokenKind.KEYWORD. Token: TokenKind.KEYWORD(return) at line 105, column 7 at line 105, column 7
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_GoSuperSafeInstructions.ctl
 Output:
-Syntax error: Expected closing parenthesis
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fv0_safe/fv0Safe_restoreSafeInstructions.ctl
@@ -987,7 +985,7 @@ Output:
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationFakeScript.ctl
 Output:
-Token error: Expected TokenKind.SYMBOL but got TokenKind.LOGICAL_OPERATOR. Token: TokenKind.LOGICAL_OPERATOR(||) at line 23, column 22 at line 23, column 22
+Token error: Unexpected statement. Token: TokenKind.SYMBOL({) at line 31, column 49 at line 31, column 49
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/fwInstallation/fwInstallationGetDpe.ctl

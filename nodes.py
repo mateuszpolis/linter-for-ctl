@@ -98,11 +98,12 @@ class PointerNode:
         return f"{indent_str(indent)}PointerNode({self.value})"
 
 class NumberNode:
-    def __init__(self, value):
+    def __init__(self, value, is_float=False):
         self.value = value
+        self.is_float = is_float
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}NumberNode({self.value})"
+        return f"{indent_str(indent)}NumberNode(is_float={self.is_float}, value={self.value})"
     
 class BooleanNode:
     def __init__(self, value):
@@ -420,3 +421,36 @@ class CompoundAssignmentNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}CompundAssignmentNode(identifier={self.identifier}, operator={self.operator}, value={self.value})"
+    
+
+class LogicalOrNode:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}LogicalOrNode(left={self.left}, right={self.right})"
+    
+class LogicalAndNode:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}LogicalAndNode(left={self.left}, right={self.right})"
+    
+class NegationNode:
+    def __init__(self, expression):
+        self.expression = expression
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}NegationNode(expression={self.expression})"
+    
+class RelationalNode:
+    def __init__(self, left, operator, right):
+        self.left = left
+        self.operator = operator
+        self.right = right
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}RelationalNode(left={self.left}, operator='{self.operator}', right={self.right})"
