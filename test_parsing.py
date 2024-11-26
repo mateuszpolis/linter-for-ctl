@@ -16,10 +16,11 @@ def run_main_for_ctl_files(base_directory, output_file):
                         command = ["python", "main.py", ctl_file_path]
                         output = subprocess.check_output(command, text=True, stderr=subprocess.STDOUT)
                         
-                        # Write the result to the output file
-                        result_file.write(f"File: {ctl_file_path}\n")
-                        result_file.write(f"Output:\n{output}\n")
-                        result_file.write("="*40 + "\n")  # Separator for readability
+                        # Write the result to the output file if it's not empty
+                        if output:
+                            result_file.write(f"File: {ctl_file_path}\n")
+                            result_file.write(f"Output:\n{output}\n")
+                            result_file.write("="*40 + "\n")  # Separator for readability
                         
                     except subprocess.CalledProcessError as e:
                         # Handle errors gracefully and log them

@@ -28,6 +28,7 @@ TYPE_KEYWORDS = [
     "mapping",
     "file",
     "uint",
+    "time",
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
@@ -313,20 +314,25 @@ class Tokenizer:
         return None
 
     def __match_multiline_comment(self):
-        if self.code[self.pos : self.pos + 3] == "/**":
-            self.pos += 2
+        if self.code[self.pos : self.pos + 2] == "/*":
+            is_doc_comment = self.code[self.pos : self.pos + 3] == "/**"
+            self.pos += 2 if not is_doc_comment else 3  # Skip '/*' or '/**'
             start = self.pos
+
             while (
                 self.pos < len(self.code) and self.code[self.pos : self.pos + 2] != "*/"
             ):
                 if self.code[self.pos] == "\n":
                     self.line += 1
                     self.column = 1
+                else:
+                    self.column += 1
                 self.pos += 1
+
             if self.pos < len(self.code):
                 end = self.pos
-                self.pos += 2
-                return self.code[start:end]
+                self.pos += 2  # Skip '*/'
+                return self.code[start:end]  # Return the content of the comment
         return None
 
     def __match_template_type_keyword(self):

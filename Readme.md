@@ -61,7 +61,7 @@ Primary             -> number "."?
 AttributeAccess     -> (identifier | IndexAccess) "." identifier
 IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
 Comment             -> "//" (any_character)*
-MultiLineComment    -> "/**" (any_character)* "*/"
+MultiLineComment    -> "/**" (any_character)* "*/" | "/*" (any_character)* "*/"
 ReturnStatement     -> "return" (Expression)? ";"
 BreakStatement      -> "break" ";"
 WhileLoop           -> "while" "(" Comparison ")" (Block | Statement)
