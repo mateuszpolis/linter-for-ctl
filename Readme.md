@@ -38,7 +38,7 @@ IncrementAssignment -> Identifier ("++" | "--") ";"
                      | ("++" | "--") Identifier ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
 Declaration         -> ("public")? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
-FunctionDeclaration -> ("public")? Type identifier "(" ParameterList? ")" Block
+FunctionDeclaration -> ("public")? (Type)? identifier "(" ParameterList? ")" Block
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
@@ -46,7 +46,7 @@ TernaryExpression   -> Comparison "?" Expression ":" Expression
 Comparison          -> LogicalOr
 LogicalOr           -> LogicalAnd ("||" LogicalAnd)*
 LogicalAnd          -> Negation ("&&" Negation)*
-Negation            -> "!"? BitwiseOr
+Negation            -> ("!" | "~")? BitwiseOr
 BitwiseOr           -> BitwiseXor ("|" BitwiseXor)*
 BitwiseXor          -> BitwiseAnd ("^" BitwiseAnd)*
 BitwiseAnd          -> Shift ("&" Shift)*

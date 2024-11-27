@@ -154,15 +154,22 @@ class Parser:
             self.__current().kind == TokenKind.KEYWORD
             and self.__current().value == "public"
         ):
-            # Peek ahead to ensure the rest matches a function declaration
+            # Peek ahead for either "Type IDENTIFIER (" or "IDENTIFIER ("
             if (
                 self.__peek().kind == TokenKind.TYPE_KEYWORD
                 and self.__peek(2).kind == TokenKind.IDENTIFIER
                 and self.__peek(3).value == "("
             ):
                 return True
+            if (
+                self.__peek().kind == TokenKind.IDENTIFIER
+                and self.__peek(2).value == "("
+            ):
+                # Check the first element after '(' in arguments
+                if self.__peek(3).value == "(" and self.__detect_type(self.__peek(4)):
+                    return True
 
-        # Check for the "Type IDENTIFIER (" pattern without "public"
+        # Check for "Type IDENTIFIER (" without "public"
         if (
             self.__current().kind == TokenKind.TYPE_KEYWORD
             and self.__peek().kind == TokenKind.IDENTIFIER
@@ -170,8 +177,74 @@ class Parser:
         ):
             return True
 
-        # If neither pattern matches, it's not a function declaration
+        # Check for "IDENTIFIER (" without a type or "public"
+        if self.__current().kind == TokenKind.IDENTIFIER and self.__peek().value == "(":
+            # Check the first element after '(' in arguments
+            if self.__detect_type(self.__peek(2)):
+                return True
+
+        # If none of the patterns match, it's not a function declaration
         return False
+
+    def __detect_type(self, token):
+        if token.kind == TokenKind.TYPE_KEYWORD:
+            return True
+        if token.kind == TokenKind.TEMPLATE_TYPE_KEYWORD:
+            return True
+
+        # Check if the token is a dynamically created type (enum, struct, class)
+        if token.kind == TokenKind.IDENTIFIER:
+            if token.value in self.symbol_table["enums"]:
+                return True
+            if token.value in self.symbol_table["structs"]:
+                return True
+            if token.value in self.symbol_table["classes"]:
+                return True
+
+        return False
+
+    def __parse_function_declaration(self):
+        # Check if the function declaration starts with "public"
+        is_public = False
+        if (
+            self.__current().kind == TokenKind.KEYWORD
+            and self.__current().value == "public"
+        ):
+            is_public = True
+            self.__consume(TokenKind.KEYWORD)
+
+        # Check if the next token is a type or skip it
+        type_ = None
+        if self.__current().kind == TokenKind.TYPE_KEYWORD:
+            type_ = self.__parse_type()
+
+        # Expect and consume the function name (identifier)
+        function_name = self.__consume(TokenKind.IDENTIFIER)
+
+        # Expect and consume the opening parenthesis for the parameter list
+        if not (
+            self.__current().kind == TokenKind.SYMBOL and self.__current().value == "("
+        ):
+            raise SyntaxError("Expected '(' after function name")
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the parameter list
+        parameters = self.__parse_parameter_list()
+
+        # Expect and consume the closing parenthesis for the parameter list
+        if not (
+            self.__current().kind == TokenKind.SYMBOL and self.__current().value == ")"
+        ):
+            raise SyntaxError("Expected ')' after parameter list")
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the block
+        block = self.__parse_block()
+
+        # Return a FunctionDeclarationNode with the parsed information
+        return FunctionDeclarationNode(
+            type_, function_name.value, parameters, block, is_public
+        )
 
     def __detect_assignment(self):
         # Start by checking if we have an identifier
@@ -631,39 +704,6 @@ class Parser:
         # Return a DeclarationNode with the public flag, type, list of identifiers, and const flag
         return DeclarationNode(type_, identifiers, is_const, is_public)
 
-    def __parse_function_declaration(self):
-        # Check if the function declaration starts with "public"
-        is_public = False
-        if self.__match(TokenKind.KEYWORD) and self.__current().value == "public":
-            is_public = True
-            self.__consume(TokenKind.KEYWORD)
-
-        # Parse Type
-        type_ = self.__parse_type()
-
-        # Expect and consume the function name (identifier)
-        function_name = self.__consume(TokenKind.IDENTIFIER)
-
-        # Expect and consume the opening parenthesis for the parameter list
-        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "("):
-            raise SyntaxError("Expected '(' after function name")
-        self.__consume(TokenKind.SYMBOL)
-
-        # Parse the parameter list
-        parameters = self.__parse_parameter_list()
-
-        # Expect and consume the closing parenthesis for the parameter list
-        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ")"):
-            raise SyntaxError("Expected ')' after parameter list")
-        self.__consume(TokenKind.SYMBOL)
-
-        block = self.__parse_block()
-
-        # Return a FunctionDeclarationNode with the parsed information
-        return FunctionDeclarationNode(
-            type_, function_name.value, parameters, block, is_public
-        )
-
     def __parse_parameter_list(self):
         # Start with an empty list of parameters
         parameters = []
@@ -691,6 +731,12 @@ class Parser:
         # Parse Type
         type_ = self.__parse_type()
 
+        # Check if the parameter is a pointer
+        is_pointer = False
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == "&":
+            is_pointer = True
+            self.__consume(TokenKind.SYMBOL)
+
         # Expect and consume the parameter name (identifier)
         parameter_name = self.__consume(TokenKind.IDENTIFIER)
 
@@ -703,7 +749,7 @@ class Parser:
             default_value = self.__parse_conditional_expression()
 
         # Return a tuple with the type keyword and parameter name
-        return ParameterNode(type_, parameter_name.value, default_value)
+        return ParameterNode(type_, parameter_name.value, default_value, is_pointer)
 
     def __parse_function_call(self, function_expression=None):
         # If no function expression is provided, assume a standalone function call with an identifier
@@ -862,19 +908,22 @@ class Parser:
         return left
 
     def __parse_negation(self):
-        if self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "!":
-            self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '!'
+        if (
+            self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "!"
+        ) or (self.__match(TokenKind.SYMBOL) and self.__current().value == "~"):
+            operator = self.__current().value  # Capture the operator ('!' or '~')
+            self.__consume(
+                self.__current().kind
+            )  # Consume the operator based on its kind
             expression = self.__parse_negation()  # Parse the negated expression
-            return NegationNode(expression)
+            return NegationNode(operator, expression)  # Pass the operator to the node
 
         return self.__parse_bitwise_or()
 
     def __parse_bitwise_or(self):
         left = self.__parse_bitwise_xor()
 
-        while (
-            self.__match(TokenKind.SYMBOL) and self.__current().value == "|"
-        ):
+        while self.__match(TokenKind.SYMBOL) and self.__current().value == "|":
             operator = self.__consume(TokenKind.SYMBOL)  # Consume '|'
             right = self.__parse_bitwise_xor()
             left = BitwiseOrNode(left, right)
@@ -884,9 +933,7 @@ class Parser:
     def __parse_bitwise_xor(self):
         left = self.__parse_bitwise_and()
 
-        while (
-            self.__match(TokenKind.SYMBOL) and self.__current().value == "^"
-        ):
+        while self.__match(TokenKind.SYMBOL) and self.__current().value == "^":
             operator = self.__consume(TokenKind.SYMBOL)  # Consume '^'
             right = self.__parse_bitwise_and()
             left = BitwiseXorNode(left, right)
@@ -896,9 +943,7 @@ class Parser:
     def __parse_bitwise_and(self):
         left = self.__parse_shift()
 
-        while (
-            self.__match(TokenKind.SYMBOL) and self.__current().value == "&"
-        ):
+        while self.__match(TokenKind.SYMBOL) and self.__current().value == "&":
             operator = self.__consume(TokenKind.SYMBOL)  # Consume '&'
             right = self.__parse_shift()
             left = BitwiseAndNode(left, right)
@@ -908,12 +953,8 @@ class Parser:
     def __parse_shift(self):
         left = self.__parse_relational()
 
-        while self.__match(
-            TokenKind.SYMBOL
-        ) and self.__current().value in ("<<", ">>"):
-            operator = self.__consume(
-                TokenKind.SYMBOL
-            )  # Consume '<<' or '>>'
+        while self.__match(TokenKind.SYMBOL) and self.__current().value in ("<<", ">>"):
+            operator = self.__consume(TokenKind.SYMBOL)  # Consume '<<' or '>>'
             right = self.__parse_relational()
             left = ShiftNode(left, operator, right)
 
@@ -940,7 +981,10 @@ class Parser:
 
         # Expect and consume the semicolon at the end of the return statement
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
-            raise SyntaxError("Expected ';' at the end of return statement. Token: " + str(self.__current()))
+            raise SyntaxError(
+                "Expected ';' at the end of return statement. Token: "
+                + str(self.__current())
+            )
         self.__consume(TokenKind.SYMBOL)
 
         return ReturnNode(expression)
@@ -951,7 +995,10 @@ class Parser:
 
         # Expect and consume the semicolon at the end of the break statement
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
-            raise SyntaxError("Expected ';' at the end of break statement. Token: " + str(self.__current()))
+            raise SyntaxError(
+                "Expected ';' at the end of break statement. Token: "
+                + str(self.__current())
+            )
         self.__consume(TokenKind.SYMBOL)
 
         return BreakNode()

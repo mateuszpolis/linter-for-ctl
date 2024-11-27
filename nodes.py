@@ -376,13 +376,14 @@ class TemplateTypeNode:
 
 
 class ParameterNode:
-    def __init__(self, type_, identifier, default_value=None):
+    def __init__(self, type_, identifier, default_value=None, is_pointer=False):
         self.type_ = type_
         self.identifier = identifier
         self.default_value = default_value
+        self.is_pointer = is_pointer
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}ParameterNode(type={self.type_}, identifier={self.identifier}, default_value={self.default_value})"
+        return f"{indent_str(indent)}ParameterNode(type={self.type_}, identifier={self.identifier}, default_value={self.default_value}, is_pointer={self.is_pointer})"
 
 
 class LibraryNode:
@@ -464,11 +465,12 @@ class LogicalAndNode:
 
 
 class NegationNode:
-    def __init__(self, expression):
+    def __init__(self, operator, expression):
+        self.operator = operator
         self.expression = expression
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}NegationNode(expression={self.expression})"
+        return f"{indent_str(indent)}NegationNode(operator={self.operator}, expression={self.expression})"
 
 
 class RelationalNode:

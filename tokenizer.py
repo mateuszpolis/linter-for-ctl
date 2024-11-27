@@ -35,6 +35,7 @@ TYPE_KEYWORDS = [
     "uint",
     "time",
     "dyn_anytype",
+    "dyn_dyn_mixed",
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
@@ -269,7 +270,10 @@ class Tokenizer:
         # Hexadecimal: starts with '0x' or '0X'
         if self.code[self.pos : self.pos + 2].lower() == "0x":
             self.pos += 2
-            while self.pos < len(self.code) and self.code[self.pos] in "0123456789abcdefABCDEF":
+            while (
+                self.pos < len(self.code)
+                and self.code[self.pos] in "0123456789abcdefABCDEF"
+            ):
                 self.pos += 1
             # Check for unsigned suffix 'U'
             if self.pos < len(self.code) and self.code[self.pos] in "uU":
