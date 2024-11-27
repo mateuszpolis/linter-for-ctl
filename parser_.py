@@ -181,7 +181,7 @@ class Parser:
         if self.__current().kind == TokenKind.IDENTIFIER and self.__peek().value == "(":
             # Check if the first element after the ')' is '{'
             peek_index = 2
-            while self.__peek(peek_index).kind != TokenKind.SYMBOL:
+            while self.__peek(peek_index).value != ")":
                 peek_index += 1
             if self.__peek(peek_index + 1).value == "{":
                 return True
