@@ -70,6 +70,12 @@ SYMBOLS = [
     ":",
     "&",
     "::",
+    "&",
+    "|",
+    "^",
+    "~",
+    "<<",
+    ">>",
 ]
 
 
@@ -210,6 +216,12 @@ class Tokenizer:
         # Check for comparison operators first
         for operator in sorted_comparison_operators:
             if self.code[self.pos : self.pos + len(operator)] == operator:
+                # Special handling for '<' and '>'
+                if operator in {"<", ">"}:
+                    # Ensure it's not part of '<<' or '>>'
+                    next_pos = self.pos + len(operator)
+                    if next_pos < len(self.code) and self.code[next_pos] in {"<", ">"}:
+                        continue  # Skip this match and let '<<' or '>>' handle it
                 self.pos += len(operator)
                 return Token(
                     TokenKind.COMPARISON_OPERATOR, operator, self.line, self.column
@@ -252,12 +264,47 @@ class Tokenizer:
         return None
 
     def __match_number(self):
-        if self.code[self.pos].isdigit():
-            start = self.pos
-            self.pos += 1
-            while self.pos < len(self.code) and self.code[self.pos].isdigit():
+        start = self.pos
+
+        # Hexadecimal: starts with '0x' or '0X'
+        if self.code[self.pos : self.pos + 2].lower() == "0x":
+            self.pos += 2
+            while self.pos < len(self.code) and self.code[self.pos] in "0123456789abcdefABCDEF":
+                self.pos += 1
+            # Check for unsigned suffix 'U'
+            if self.pos < len(self.code) and self.code[self.pos] in "uU":
                 self.pos += 1
             return self.code[start : self.pos]
+
+        # Binary: starts with '0b' or '0B'
+        if self.code[self.pos : self.pos + 2].lower() == "0b":
+            self.pos += 2
+            while self.pos < len(self.code) and self.code[self.pos] in "01":
+                self.pos += 1
+            # Check for unsigned suffix 'U'
+            if self.pos < len(self.code) and self.code[self.pos] in "uU":
+                self.pos += 1
+            return self.code[start : self.pos]
+
+        # Octal: starts with '0o' or '0O'
+        if self.code[self.pos : self.pos + 2].lower() == "0o":
+            self.pos += 2
+            while self.pos < len(self.code) and self.code[self.pos] in "01234567":
+                self.pos += 1
+            # Check for unsigned suffix 'U'
+            if self.pos < len(self.code) and self.code[self.pos] in "uU":
+                self.pos += 1
+            return self.code[start : self.pos]
+
+        # Decimal: digits only, optionally followed by 'U'
+        if self.code[self.pos].isdigit():
+            while self.pos < len(self.code) and self.code[self.pos].isdigit():
+                self.pos += 1
+            # Check for unsigned suffix 'U'
+            if self.pos < len(self.code) and self.code[self.pos] in "uU":
+                self.pos += 1
+            return self.code[start : self.pos]
+
         return None
 
     def __match_whitespace(self):

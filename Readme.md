@@ -46,7 +46,11 @@ TernaryExpression   -> Comparison "?" Expression ":" Expression
 Comparison          -> LogicalOr
 LogicalOr           -> LogicalAnd ("||" LogicalAnd)*
 LogicalAnd          -> Negation ("&&" Negation)*
-Negation            -> "!"? Relational
+Negation            -> "!"? BitwiseOr
+BitwiseOr           -> BitwiseXor ("|" BitwiseXor)*
+BitwiseXor          -> BitwiseAnd ("^" BitwiseAnd)*
+BitwiseAnd          -> Shift ("&" Shift)*
+Shift               -> Relational (("<<" | ">>") Relational)*
 Relational          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )?
 Expression          -> Term ( ("+" | "-") Term )*
 Term                -> Factor ( ("*" | "/") Factor )*
@@ -66,7 +70,7 @@ AttributeAccess     -> (identifier | IndexAccess) "." identifier
 IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
 Comment             -> "//" (any_character)*
 MultiLineComment    -> "/**" (any_character)* "*/" | "/*" (any_character)* "*/"
-ReturnStatement     -> "return" (Expression)? ";"
+ReturnStatement     -> "return" (ConditionalExpression)? ";"
 BreakStatement      -> "break" ";"
 WhileLoop           -> "while" "(" Comparison ")" (Block | Statement)
 TemplateType        -> template_type_keyword "<" Type ("," Type)* ">"

@@ -1,17 +1,20 @@
 from typing import Tuple
 
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
-                   BlockNode, BooleanNode, BreakNode, CaseStatementNode, CharNode, CommentNode,
-                   CompoundAssignmentNode, DeclarationNode, DividerNode,
-                   ElseIfClauseNode, EnumAccessNode, EnumDeclarationNode,
-                   EnumValueNode, ForLoopNode, FunctionCallNode,
-                   FunctionDeclarationNode, GlobalIdentifierNode,
-                   IdentifierNode, IfStatementNode, IncrementAssignmentNode,
-                   IndexAccessNode, LibraryNode, LogicalAndNode, LogicalOrNode,
-                   MainNode, MultilineCommentNode, NegationNode, NumberNode,
+                   BitwiseAndNode, BitwiseOrNode, BitwiseXorNode, BlockNode,
+                   BooleanNode, BreakNode, CaseStatementNode, CharNode,
+                   CommentNode, CompoundAssignmentNode, DeclarationNode,
+                   DividerNode, ElseIfClauseNode, EnumAccessNode,
+                   EnumDeclarationNode, EnumValueNode, ForLoopNode,
+                   FunctionCallNode, FunctionDeclarationNode,
+                   GlobalIdentifierNode, IdentifierNode, IfStatementNode,
+                   IncrementAssignmentNode, IndexAccessNode, LibraryNode,
+                   LogicalAndNode, LogicalOrNode, MainNode,
+                   MultilineCommentNode, NegationNode, NumberNode,
                    ParameterNode, PointerNode, ProgramNode, RelationalNode,
-                   ReturnNode, StringNode, SwitchStatementNode, TemplateTypeNode,
-                   TernaryExpressionNode, TypeNode, WhileLoopNode)
+                   ReturnNode, ShiftNode, StringNode, SwitchStatementNode,
+                   TemplateTypeNode, TernaryExpressionNode, TypeNode,
+                   WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
 
 
@@ -419,7 +422,7 @@ class Parser:
 
     def __parse_primary(self):
         if self.__match(TokenKind.NUMBER):
-            value = int(self.__consume(TokenKind.NUMBER).value)
+            value = self.__consume(TokenKind.NUMBER).value
             if (
                 self.__current().kind == TokenKind.SYMBOL
                 and self.__current().value == "."
@@ -493,10 +496,10 @@ class Parser:
         # If the current token is a template type keyword, parse the template type
         if self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD):
             return self.__parse_template_type()
-        
+
         if self.__match(TokenKind.IDENTIFIER):
             return self.__parse_dynamic_type()
-        
+
     def __parse_dynamic_type(self):
         identifier = self.__consume(TokenKind.IDENTIFIER).value
 
@@ -509,10 +512,11 @@ class Parser:
             dyn_type = "class_type"
 
         if dyn_type is None:
-            raise SyntaxError(f"Type '{identifier}' is not defined. Token: {self.__current()}")
-        
-        return TypeNode(identifier, dyn_type)
+            raise SyntaxError(
+                f"Type '{identifier}' is not defined. Token: {self.__current()}"
+            )
 
+        return TypeNode(identifier, dyn_type)
 
     def __parse_template_type(self):
         # Consume the template type keyword
@@ -633,7 +637,7 @@ class Parser:
         if self.__match(TokenKind.KEYWORD) and self.__current().value == "public":
             is_public = True
             self.__consume(TokenKind.KEYWORD)
-        
+
         # Parse Type
         type_ = self.__parse_type()
 
@@ -656,7 +660,9 @@ class Parser:
         block = self.__parse_block()
 
         # Return a FunctionDeclarationNode with the parsed information
-        return FunctionDeclarationNode(type_, function_name.value, parameters, block, is_public)
+        return FunctionDeclarationNode(
+            type_, function_name.value, parameters, block, is_public
+        )
 
     def __parse_parameter_list(self):
         # Start with an empty list of parameters
@@ -697,7 +703,7 @@ class Parser:
             default_value = self.__parse_conditional_expression()
 
         # Return a tuple with the type keyword and parameter name
-        return ParameterNode(type_, parameter_name.value, default_value)    
+        return ParameterNode(type_, parameter_name.value, default_value)
 
     def __parse_function_call(self, function_expression=None):
         # If no function expression is provided, assume a standalone function call with an identifier
@@ -861,7 +867,57 @@ class Parser:
             expression = self.__parse_negation()  # Parse the negated expression
             return NegationNode(expression)
 
-        return self.__parse_relational()
+        return self.__parse_bitwise_or()
+
+    def __parse_bitwise_or(self):
+        left = self.__parse_bitwise_xor()
+
+        while (
+            self.__match(TokenKind.SYMBOL) and self.__current().value == "|"
+        ):
+            operator = self.__consume(TokenKind.SYMBOL)  # Consume '|'
+            right = self.__parse_bitwise_xor()
+            left = BitwiseOrNode(left, right)
+
+        return left
+
+    def __parse_bitwise_xor(self):
+        left = self.__parse_bitwise_and()
+
+        while (
+            self.__match(TokenKind.SYMBOL) and self.__current().value == "^"
+        ):
+            operator = self.__consume(TokenKind.SYMBOL)  # Consume '^'
+            right = self.__parse_bitwise_and()
+            left = BitwiseXorNode(left, right)
+
+        return left
+
+    def __parse_bitwise_and(self):
+        left = self.__parse_shift()
+
+        while (
+            self.__match(TokenKind.SYMBOL) and self.__current().value == "&"
+        ):
+            operator = self.__consume(TokenKind.SYMBOL)  # Consume '&'
+            right = self.__parse_shift()
+            left = BitwiseAndNode(left, right)
+
+        return left
+
+    def __parse_shift(self):
+        left = self.__parse_relational()
+
+        while self.__match(
+            TokenKind.SYMBOL
+        ) and self.__current().value in ("<<", ">>"):
+            operator = self.__consume(
+                TokenKind.SYMBOL
+            )  # Consume '<<' or '>>'
+            right = self.__parse_relational()
+            left = ShiftNode(left, operator, right)
+
+        return left
 
     def __parse_relational(self):
         left = self.__parse_expression()
@@ -880,11 +936,11 @@ class Parser:
         # Parse the return value expression if present
         expression = None
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
-            expression = self.__parse_expression()
+            expression = self.__parse_conditional_expression()
 
         # Expect and consume the semicolon at the end of the return statement
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
-            raise SyntaxError("Expected ';' at the end of return statement")
+            raise SyntaxError("Expected ';' at the end of return statement. Token: " + str(self.__current()))
         self.__consume(TokenKind.SYMBOL)
 
         return ReturnNode(expression)
@@ -895,7 +951,7 @@ class Parser:
 
         # Expect and consume the semicolon at the end of the break statement
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
-            raise SyntaxError("Expected ';' at the end of break statement")
+            raise SyntaxError("Expected ';' at the end of break statement. Token: " + str(self.__current()))
         self.__consume(TokenKind.SYMBOL)
 
         return BreakNode()
@@ -977,7 +1033,10 @@ class Parser:
         self.__consume(TokenKind.KEYWORD)
 
         # Check if the symbol is already in the symbol table
-        if self.__match(TokenKind.IDENTIFIER) and self.__current().value in self.symbol_table["enums"]:
+        if (
+            self.__match(TokenKind.IDENTIFIER)
+            and self.__current().value in self.symbol_table["enums"]
+        ):
             raise SyntaxError(
                 f"Enum '{self.__current().value}' is already defined. Token: {self.__current()}"
             )
@@ -1072,14 +1131,16 @@ class Parser:
 
         # Parse the switch cases
         cases = []
-        while self.__match(TokenKind.KEYWORD) and (self.__current().value == "case" or self.__current().value == "default"):
+        while self.__match(TokenKind.KEYWORD) and (
+            self.__current().value == "case" or self.__current().value == "default"
+        ):
             cases.append(self.__parse_case_statement())
 
         # Consume '}'
         self.__consume(TokenKind.SYMBOL)
 
         return SwitchStatementNode(switch_expression, cases)
-    
+
     def __parse_case_statement(self) -> CaseStatementNode:
         """SwitchCase -> "case" Expression ":" ReturnStatement | "default" ":" ReturnStatement
 

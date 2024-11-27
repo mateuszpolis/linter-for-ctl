@@ -511,6 +511,7 @@ class EnumAccessNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}EnumAccessNode(identifier={self.identifier}, value={self.value})"
 
+
 class CaseStatementNode:
     def __init__(self, value, block, is_default=False):
         self.value = value
@@ -519,7 +520,8 @@ class CaseStatementNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}CaseStatementNode(is_default={self.is_default}, value={self.value}, block={self.block})"
-    
+
+
 class SwitchStatementNode:
     def __init__(self, expression, case_statements):
         self.expression = expression
@@ -534,3 +536,46 @@ class SwitchStatementNode:
         string += f"{indent_str(indent + 1)}]\n"
         string += f"{indent_str(indent)})"
         return string
+
+
+class BitwiseOrNode:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def __repr__(self, indent=0):
+        return (
+            f"{indent_str(indent)}BitwiseOrNode(left={self.left}, right={self.right})"
+        )
+
+
+class BitwiseXorNode:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def __repr__(self, indent=0):
+        return (
+            f"{indent_str(indent)}BitwiseXorNode(left={self.left}, right={self.right})"
+        )
+
+
+class BitwiseAndNode:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def __repr__(self, indent=0):
+        return (
+            f"{indent_str(indent)}BitwiseAndNode(left={self.left}, right={self.right})"
+        )
+
+
+class ShiftNode:
+    def __init__(self, left, operator, right):
+        self.left = left
+        self.operator = operator
+        self.right = right
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}ShiftNode(left={self.left}, operator={self.operator}, right={self.right})"
