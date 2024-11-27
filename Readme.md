@@ -26,6 +26,7 @@ Statement           -> Assignment
                     | ForLoop
                     | MainFunction
                     | EnumDeclaration
+                    | SwitchStatement
 IfStatement         -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 InlineStatement     -> Statement
 ElseIfClause        -> "else" "if" "(" Comparison ")" (InlineStatement | Block)
@@ -81,4 +82,7 @@ MainFunction        -> Type? "main" "(" ")" Block
 EnumDeclaration     -> "enum" identifier "{" EnumValue ("," EnumValue)* "}"
 EnumAccess          -> identifier "::" identifier
 EnumValue           -> identifier "=" number
+SwitchStatement     -> "switch" "(" Expression ")" "{" SwitchCase* "}"
+SwitchCase          -> "case" Expression ":" ReturnStatement
+                    | "default" ":" ReturnStatement
 ```

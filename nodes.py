@@ -510,3 +510,27 @@ class EnumAccessNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}EnumAccessNode(identifier={self.identifier}, value={self.value})"
+
+class CaseStatementNode:
+    def __init__(self, value, block, is_default=False):
+        self.value = value
+        self.block = block
+        self.is_default = is_default
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}CaseStatementNode(is_default={self.is_default}, value={self.value}, block={self.block})"
+    
+class SwitchStatementNode:
+    def __init__(self, expression, case_statements):
+        self.expression = expression
+        self.case_statements = case_statements
+
+    def __repr__(self, indent=0):
+        string = f"{indent_str(indent)}SwitchStatementNode(\n"
+        string += f"{indent_str(indent + 1)}expression: {self.expression}\n"
+        string += f"{indent_str(indent + 1)}case_statements: [\n"
+        for case_statement in self.case_statements:
+            string += case_statement.__repr__(indent + 2) + "\n"
+        string += f"{indent_str(indent + 1)}]\n"
+        string += f"{indent_str(indent)})"
+        return string

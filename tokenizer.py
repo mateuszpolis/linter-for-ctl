@@ -15,6 +15,9 @@ KEYWORDS = [
     "const",
     "enum",
     "public",
+    "switch",
+    "case",
+    "default",
 ]
 TYPE_KEYWORDS = [
     "string",

@@ -1,7 +1,7 @@
 from typing import Tuple
 
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
-                   BlockNode, BooleanNode, BreakNode, CharNode, CommentNode,
+                   BlockNode, BooleanNode, BreakNode, CaseStatementNode, CharNode, CommentNode,
                    CompoundAssignmentNode, DeclarationNode, DividerNode,
                    ElseIfClauseNode, EnumAccessNode, EnumDeclarationNode,
                    EnumValueNode, ForLoopNode, FunctionCallNode,
@@ -10,7 +10,7 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    IndexAccessNode, LibraryNode, LogicalAndNode, LogicalOrNode,
                    MainNode, MultilineCommentNode, NegationNode, NumberNode,
                    ParameterNode, PointerNode, ProgramNode, RelationalNode,
-                   ReturnNode, StringNode, TemplateTypeNode,
+                   ReturnNode, StringNode, SwitchStatementNode, TemplateTypeNode,
                    TernaryExpressionNode, TypeNode, WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
 
@@ -131,6 +131,8 @@ class Parser:
             return self.__parse_for_loop()
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "enum":
             return self.__parse_enum_declaration()
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "switch":
+            return self.__parse_switch_statement()
         else:
             raise TokenError(
                 SyntaxError(
@@ -1046,3 +1048,68 @@ class Parser:
         enum_value_name = self.__consume(TokenKind.IDENTIFIER).value
 
         return EnumAccessNode(enum_name, enum_value_name)
+
+    def __parse_switch_statement(self) -> SwitchStatementNode:
+        """SwitchStatement -> "switch" "(" Expression ")" "{" SwitchCase* "}"_summary_
+
+        Returns:
+            SwitchStatementNode: The parsed switch statement node
+        """
+        # Consume the "switch" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Consume '('
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the switch expression
+        switch_expression = self.__parse_expression()
+
+        # Consume ')'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Consume '{'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the switch cases
+        cases = []
+        while self.__match(TokenKind.KEYWORD) and (self.__current().value == "case" or self.__current().value == "default"):
+            cases.append(self.__parse_case_statement())
+
+        # Consume '}'
+        self.__consume(TokenKind.SYMBOL)
+
+        return SwitchStatementNode(switch_expression, cases)
+    
+    def __parse_case_statement(self) -> CaseStatementNode:
+        """SwitchCase -> "case" Expression ":" ReturnStatement | "default" ":" ReturnStatement
+
+        Returns:
+            CaseStatementNode: The parsed case statement node
+        """
+
+        # Check if the case is the default case
+        if self.__match(TokenKind.KEYWORD) and self.__current().value == "default":
+            # Consume the "default" keyword
+            self.__consume(TokenKind.KEYWORD)
+
+            # Consume ':'
+            self.__consume(TokenKind.SYMBOL)
+
+            # Parse the return statement
+            return_statement = self.__parse_statement()
+
+            return CaseStatementNode(None, return_statement, is_default=True)
+
+        # Consume the "case" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Parse the case expression
+        case_expression = self.__parse_expression()
+
+        # Consume ':'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the return statement
+        return_statement = self.__parse_statement()
+
+        return CaseStatementNode(case_expression, return_statement)
