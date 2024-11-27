@@ -13,6 +13,8 @@ KEYWORDS = [
     "null",
     "uses",
     "const",
+    "enum",
+    "public",
 ]
 TYPE_KEYWORDS = [
     "string",
@@ -29,6 +31,7 @@ TYPE_KEYWORDS = [
     "file",
     "uint",
     "time",
+    "dyn_anytype",
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
@@ -47,7 +50,24 @@ ARITHMETIC_OPERATORS = [
 ]
 COMPARISON_OPERATORS = ["==", "!=", ">", ">=", "<", "<="]
 LOGICAL_OPERATORS = ["&&", "||", "!"]
-SYMBOLS = ["(", ")", "{", "}", "[", "]", ",", ";", ":", ".", "$", "#", "?", ":", "&"]
+SYMBOLS = [
+    "(",
+    ")",
+    "{",
+    "}",
+    "[",
+    "]",
+    ",",
+    ";",
+    ":",
+    ".",
+    "$",
+    "#",
+    "?",
+    ":",
+    "&",
+    "::",
+]
 
 
 class Tokenizer:
@@ -247,7 +267,9 @@ class Tokenizer:
         return None
 
     def __match_symbol(self):
-        for symbol in SYMBOLS:
+        sorted_symbols = sorted(SYMBOLS, key=len, reverse=True)
+
+        for symbol in sorted_symbols:
             if self.code[self.pos : self.pos + len(symbol)] == symbol:
                 self.pos += len(symbol)
                 return symbol

@@ -33,7 +33,7 @@ class AssignmentNode:
 
 
 class DeclarationNode:
-    def __init__(self, type_, identifiers, is_const=False):
+    def __init__(self, type_, identifiers, is_const=False, is_public=False):
         """
         :param type_keyword: The data type of the declaration (e.g., 'int' or 'string')
         :param identifiers: A list of tuples where each tuple contains:
@@ -43,10 +43,11 @@ class DeclarationNode:
         self.type = type_
         self.identifiers = identifiers
         self.is_const = is_const
+        self.is_public = is_public
 
     def __repr__(self, indent=0):
         # Start the string with the type keyword
-        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const} type={self.type.__repr__(indent+1)}, identifiers=[\n"
+        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, is_public={self.is_public}, type={self.type.__repr__(indent+1)}, identifiers=[\n"
 
         # Add each identifier with its optional initial value
         for identifier, value in self.identifiers:
@@ -97,6 +98,7 @@ class PointerNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}PointerNode({self.value})"
 
+
 class NumberNode:
     def __init__(self, value, is_float=False):
         self.value = value
@@ -104,7 +106,8 @@ class NumberNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}NumberNode(is_float={self.is_float}, value={self.value})"
-    
+
+
 class BooleanNode:
     def __init__(self, value):
         self.value = value
@@ -200,17 +203,19 @@ class IndexAccessNode:
 
 
 class FunctionDeclarationNode:
-    def __init__(self, return_type, identifier, parameters, block):
+    def __init__(self, return_type, identifier, parameters, block, is_public=False):
         self.return_type = return_type
         self.identifier = identifier
         self.parameters = parameters
         self.block = block
+        self.is_public = is_public
 
     def __repr__(self, indent=0):
         string = f"{indent_str(indent)}FunctionDeclarationNode(\n"
         string += (
             f"{indent_str(indent + 1)}return_type: {self.return_type.__repr__()}\n"
         )
+        string += f"{indent_str(indent + 1)}is_public: {self.is_public}\n"
         string += f"{indent_str(indent + 1)}identifier: {self.identifier}\n"
         string += f"{indent_str(indent + 1)}parameters: {self.parameters}\n"
         string += f"{indent_str(indent + 1)}block: {self.block}\n"
@@ -327,25 +332,34 @@ class NegationNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}NegationNode(expression={self.expression})"
 
+
 class WhileLoopNode:
     def __init__(self, condition, block_or_statement):
         self.condition = condition
         self.block_or_statement = block_or_statement
 
     def __repr__(self, indent=0):
-        block_type = "Block" if isinstance(self.block_or_statement, list) else "Statement"
+        block_type = (
+            "Block" if isinstance(self.block_or_statement, list) else "Statement"
+        )
         return (
             f"{indent_str(indent)}WhileLoopNode("
             f"condition={self.condition}, "
             f"{block_type}={self.block_or_statement})"
         )
 
+
 class TypeNode:
-    def __init__(self, value):
+    def __init__(self, value, dyn_type=None):
         self.value = value
+        self.dyn_type = dyn_type
 
     def __repr__(self, indent=0):
-        return f"TypeNode({self.value})"
+        string = f"{indent_str(indent)}TypeNode({self.value}"
+        if self.dyn_type is not None:
+            string += f", dyn_type={self.dyn_type}"
+        string += ")"
+        return string
 
 
 class TemplateTypeNode:
@@ -396,6 +410,7 @@ class TernaryExpressionNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}TernaryExpression({self.comparison}, {self.success_expression}, {self.failure_expression})"
 
+
 class ForLoopNode:
     def __init__(self, initialization, condition, increment, block):
         self.initialization = initialization
@@ -406,6 +421,7 @@ class ForLoopNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ForLoopNode(initialization={self.initialization}, condition={self.condition}, increment={self.increment}, block={self.block})"
 
+
 class IncrementAssignmentNode:
     def __init__(self, identifier, operator):
         self.identifier = identifier
@@ -413,7 +429,8 @@ class IncrementAssignmentNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}IncrementAssignmentNode(identifier={self.identifier}, operator={self.operator})"
-    
+
+
 class CompoundAssignmentNode:
     def __init__(self, identifier, operator, value):
         self.identifier = identifier
@@ -422,7 +439,7 @@ class CompoundAssignmentNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}CompundAssignmentNode(identifier={self.identifier}, operator={self.operator}, value={self.value})"
-    
+
 
 class LogicalOrNode:
     def __init__(self, left, right):
@@ -430,23 +447,30 @@ class LogicalOrNode:
         self.right = right
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}LogicalOrNode(left={self.left}, right={self.right})"
-    
+        return (
+            f"{indent_str(indent)}LogicalOrNode(left={self.left}, right={self.right})"
+        )
+
+
 class LogicalAndNode:
     def __init__(self, left, right):
         self.left = left
         self.right = right
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}LogicalAndNode(left={self.left}, right={self.right})"
-    
+        return (
+            f"{indent_str(indent)}LogicalAndNode(left={self.left}, right={self.right})"
+        )
+
+
 class NegationNode:
     def __init__(self, expression):
         self.expression = expression
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}NegationNode(expression={self.expression})"
-    
+
+
 class RelationalNode:
     def __init__(self, left, operator, right):
         self.left = left
@@ -455,3 +479,34 @@ class RelationalNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}RelationalNode(left={self.left}, operator='{self.operator}', right={self.right})"
+
+
+class EnumDeclarationNode:
+    def __init__(self, identifier, values):
+        self.identifier = identifier
+        self.values = values
+
+    def __repr__(self, indent=0):
+        string = f"{indent_str(indent)}EnumDeclarationNode(identifier={self.identifier}, values=[\n"
+        for value in self.values:
+            string += value.__repr__(indent + 1) + "\n"
+        string += f"{indent_str(indent)}])"
+        return string
+
+
+class EnumValueNode:
+    def __init__(self, identifier, value):
+        self.identifier = identifier
+        self.value = value
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}EnumValueNode(identifier={self.identifier}, value={self.value})"
+
+
+class EnumAccessNode:
+    def __init__(self, identifier, value):
+        self.identifier = identifier
+        self.value = value
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}EnumAccessNode(identifier={self.identifier}, value={self.value})"

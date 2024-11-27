@@ -1,11 +1,16 @@
+from typing import Tuple
+
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
-                   BlockNode, BooleanNode, BreakNode, CharNode, CommentNode, CompoundAssignmentNode,
-                   DeclarationNode, DividerNode, ElseIfClauseNode, ForLoopNode,
-                   FunctionCallNode, FunctionDeclarationNode,
-                   GlobalIdentifierNode, IdentifierNode, IfStatementNode, IncrementAssignmentNode,
-                   IndexAccessNode, LibraryNode, LogicalAndNode, LogicalOrNode, MainNode,
-                   MultilineCommentNode, NegationNode, NumberNode, ParameterNode, PointerNode,
-                   ProgramNode, RelationalNode, ReturnNode, StringNode, TemplateTypeNode,
+                   BlockNode, BooleanNode, BreakNode, CharNode, CommentNode,
+                   CompoundAssignmentNode, DeclarationNode, DividerNode,
+                   ElseIfClauseNode, EnumAccessNode, EnumDeclarationNode,
+                   EnumValueNode, ForLoopNode, FunctionCallNode,
+                   FunctionDeclarationNode, GlobalIdentifierNode,
+                   IdentifierNode, IfStatementNode, IncrementAssignmentNode,
+                   IndexAccessNode, LibraryNode, LogicalAndNode, LogicalOrNode,
+                   MainNode, MultilineCommentNode, NegationNode, NumberNode,
+                   ParameterNode, PointerNode, ProgramNode, RelationalNode,
+                   ReturnNode, StringNode, TemplateTypeNode,
                    TernaryExpressionNode, TypeNode, WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
 
@@ -14,6 +19,11 @@ class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
         self.pos = 0
+        self.symbol_table = {
+            "enums": {},  # Maps enum names to their values
+            "structs": {},  # Maps struct names to their fields
+            "classes": {},  # Maps class names to their fields
+        }
 
     def __current(self):
         while (
@@ -72,26 +82,26 @@ class Parser:
     def __parse_statement(self):
         if self.__detect_assignment():
             return self.__parse_assignment()
+        elif self.__detect_function_declaration():
+            return self.__parse_function_declaration()
         elif (
-            self.__match(TokenKind.TYPE_KEYWORD)
-            and self.__peek().kind == TokenKind.IDENTIFIER
-            and (
-                self.__peek(2).value == ";"
-                or self.__peek(2).value == "="
-                or self.__peek(2).value == ","
+            (
+                self.__match(TokenKind.TYPE_KEYWORD)
+                and self.__peek().kind == TokenKind.IDENTIFIER
+                and (
+                    self.__peek(2).value == ";"
+                    or self.__peek(2).value == "="
+                    or self.__peek(2).value == ","
+                )
             )
-        ) or (
-            self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD) and self.__peek().value == "<"
-        ) or (
-            self.__match(TokenKind.KEYWORD) and self.__current().value == "const"
+            or (
+                self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD)
+                and self.__peek().value == "<"
+            )
+            or (self.__match(TokenKind.KEYWORD) and self.__current().value == "const")
+            or (self.__match(TokenKind.KEYWORD) and self.__current().value == "public")
         ):
             return self.__parse_declaration()
-        elif (
-            self.__match(TokenKind.TYPE_KEYWORD)
-            and self.__peek().kind == TokenKind.IDENTIFIER
-            and self.__peek(2).value == "("
-        ):
-            return self.__parse_function_declaration()
         elif self.__detect_function_call():
             function_call = self.__parse_expression()
             self.__consume(TokenKind.SYMBOL)
@@ -119,6 +129,8 @@ class Parser:
             return self.__parse_library_import()
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "for":
             return self.__parse_for_loop()
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "enum":
+            return self.__parse_enum_declaration()
         else:
             raise TokenError(
                 SyntaxError(
@@ -130,6 +142,31 @@ class Parser:
             )
 
     # Helper functions for detecting specific statement types
+
+    def __detect_function_declaration(self):
+        # Check for optional "public" keyword
+        if (
+            self.__current().kind == TokenKind.KEYWORD
+            and self.__current().value == "public"
+        ):
+            # Peek ahead to ensure the rest matches a function declaration
+            if (
+                self.__peek().kind == TokenKind.TYPE_KEYWORD
+                and self.__peek(2).kind == TokenKind.IDENTIFIER
+                and self.__peek(3).value == "("
+            ):
+                return True
+
+        # Check for the "Type IDENTIFIER (" pattern without "public"
+        if (
+            self.__current().kind == TokenKind.TYPE_KEYWORD
+            and self.__peek().kind == TokenKind.IDENTIFIER
+            and self.__peek(2).value == "("
+        ):
+            return True
+
+        # If neither pattern matches, it's not a function declaration
+        return False
 
     def __detect_assignment(self):
         # Start by checking if we have an identifier
@@ -230,12 +267,20 @@ class Parser:
 
     def __parse_assignment(self, parse_semicolon=True):
         # Check if the assignment is a increment or decrement operation of kind ++i or --i
-        if self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in ["++", "--"]:
+        if self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in [
+            "++",
+            "--",
+        ]:
             operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
             left = self.__parse_factor()
             if parse_semicolon:
-                if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
-                    raise TokenError("Expected ';' at the end of increment/decrement", self.__current())
+                if not (
+                    self.__match(TokenKind.SYMBOL) and self.__current().value == ";"
+                ):
+                    raise TokenError(
+                        "Expected ';' at the end of increment/decrement",
+                        self.__current(),
+                    )
                 self.__consume(TokenKind.SYMBOL)
             return IncrementAssignmentNode(left, operator.value)
 
@@ -251,8 +296,15 @@ class Parser:
                 value = self.__parse_conditional_expression()
 
                 # Expect a semicolon
-                if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
-                    raise TokenError("Expected ';' at the end of assignment", self.__current())
+                if (
+                    not (
+                        self.__match(TokenKind.SYMBOL) and self.__current().value == ";"
+                    )
+                    and parse_semicolon
+                ):
+                    raise TokenError(
+                        "Expected ';' at the end of assignment", self.__current()
+                    )
                 if parse_semicolon:
                     self.__consume(TokenKind.SYMBOL)
 
@@ -263,8 +315,16 @@ class Parser:
                 value = self.__parse_conditional_expression()
 
                 # Expect a semicolon
-                if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
-                    raise TokenError("Expected ';' at the end of compound assignment", self.__current())
+                if (
+                    not (
+                        self.__match(TokenKind.SYMBOL) and self.__current().value == ";"
+                    )
+                    and parse_semicolon
+                ):
+                    raise TokenError(
+                        "Expected ';' at the end of compound assignment",
+                        self.__current(),
+                    )
                 if parse_semicolon:
                     self.__consume(TokenKind.SYMBOL)
 
@@ -277,8 +337,16 @@ class Parser:
                 self.__consume(TokenKind.ARITHMETIC_OPERATOR)
 
                 # Expect a semicolon
-                if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
-                    raise TokenError("Expected ';' at the end of increment/decrement", self.__current())
+                if (
+                    not (
+                        self.__match(TokenKind.SYMBOL) and self.__current().value == ";"
+                    )
+                    and parse_semicolon
+                ):
+                    raise TokenError(
+                        "Expected ';' at the end of increment/decrement",
+                        self.__current(),
+                    )
                 if parse_semicolon:
                     self.__consume(TokenKind.SYMBOL)
 
@@ -289,7 +357,9 @@ class Parser:
     def __parse_expression(self):
         left = self.__parse_term()
 
-        while self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in ["+", "-"]:
+        while self.__match(
+            TokenKind.ARITHMETIC_OPERATOR
+        ) and self.__current().value in ["+", "-"]:
             operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
             right = self.__parse_term()
             left = BinaryExpressionNode(left, operator.value, right)
@@ -348,7 +418,10 @@ class Parser:
     def __parse_primary(self):
         if self.__match(TokenKind.NUMBER):
             value = int(self.__consume(TokenKind.NUMBER).value)
-            if self.__current().kind == TokenKind.SYMBOL and self.__current().value == ".":
+            if (
+                self.__current().kind == TokenKind.SYMBOL
+                and self.__current().value == "."
+            ):
                 self.__consume(TokenKind.SYMBOL)
                 return NumberNode(value, is_float=True)
             return NumberNode(value)
@@ -356,7 +429,9 @@ class Parser:
             return StringNode(self.__consume(TokenKind.STRING_LITERAL).value)
         elif self.__match(TokenKind.CHAR):
             return CharNode(self.__consume(TokenKind.CHAR).value)
-        elif self.__match(TokenKind.KEYWORD) and (self.__current().value == "true" or self.__current().value == "false"):
+        elif self.__match(TokenKind.KEYWORD) and (
+            self.__current().value == "true" or self.__current().value == "false"
+        ):
             return BooleanNode(self.__consume(TokenKind.KEYWORD).value)
         elif (
             self.__match(TokenKind.IDENTIFIER)
@@ -364,6 +439,8 @@ class Parser:
             and self.__peek().value == "("
         ):
             return self.__parse_function_call()
+        elif self.__match(TokenKind.IDENTIFIER) and self.__peek().value == "::":
+            return self.__parse_enum_access()
         elif self.__match(TokenKind.IDENTIFIER):
             return IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
         elif self.__match(TokenKind.SYMBOL) and self.__current().value == "$":
@@ -402,7 +479,9 @@ class Parser:
 
             return expression
         else:
-            raise SyntaxError("Expected a primary expression. Token: " + str(self.__current()))
+            raise SyntaxError(
+                "Expected a primary expression. Token: " + str(self.__current())
+            )
 
     def __parse_type(self):
         # If the current token is a type keyword, consume it and return the value
@@ -412,6 +491,26 @@ class Parser:
         # If the current token is a template type keyword, parse the template type
         if self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD):
             return self.__parse_template_type()
+        
+        if self.__match(TokenKind.IDENTIFIER):
+            return self.__parse_dynamic_type()
+        
+    def __parse_dynamic_type(self):
+        identifier = self.__consume(TokenKind.IDENTIFIER).value
+
+        dyn_type = None
+        if identifier in self.symbol_table["enums"]:
+            dyn_type = "enum_type"
+        if identifier in self.symbol_table["structs"]:
+            dyn_type = "struct_type"
+        if identifier in self.symbol_table["classes"]:
+            dyn_type = "class_type"
+
+        if dyn_type is None:
+            raise SyntaxError(f"Type '{identifier}' is not defined. Token: {self.__current()}")
+        
+        return TypeNode(identifier, dyn_type)
+
 
     def __parse_template_type(self):
         # Consume the template type keyword
@@ -444,7 +543,24 @@ class Parser:
         # Return the template node
         return TemplateTypeNode(keyword, inner_types)
 
-    def __parse_declaration(self, parse_semicolon=True):
+    def __parse_declaration(self, parse_semicolon: bool = True) -> DeclarationNode:
+        """Declaration -> ("public")? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
+
+        Args:
+            parse_semicolon (bool, optional): Whether to parse the semicolon at the end of the declaration. Defaults to True.
+
+        Raises:
+            SyntaxError: If the declaration is missing a semicolon at the end
+
+        Returns:
+            DeclarationNode: The parsed declaration node
+        """
+        # Check if the declaration starts with "public"
+        is_public = False
+        if self.__match(TokenKind.KEYWORD) and self.__current().value == "public":
+            is_public = True
+            self.__consume(TokenKind.KEYWORD)  # Consume "public"
+
         # Check if the declaration starts with "const"
         is_const = False
         if self.__match(TokenKind.KEYWORD) and self.__current().value == "const":
@@ -453,7 +569,13 @@ class Parser:
 
         # Parse Type if present (Type is optional if "const" is present)
         type_ = None
-        if not is_const or ((self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD) or self.__match(TokenKind.TYPE_KEYWORD)) and not self.__peek().value == "="):
+        if not is_const or (
+            (
+                self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD)
+                or self.__match(TokenKind.TYPE_KEYWORD)
+            )
+            and not self.__peek().value == "="
+        ):
             type_ = self.__parse_type()
 
         # Parse the first identifier
@@ -489,15 +611,27 @@ class Parser:
             identifiers.append((identifier, initial_value))
 
         # Expect and consume the semicolon at the end of the declaration
-        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";") and parse_semicolon:
-            raise SyntaxError("Expected ';' at the end of declaration. Token: " + str(self.__current()))
+        if (
+            not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";")
+            and parse_semicolon
+        ):
+            raise SyntaxError(
+                "Expected ';' at the end of declaration. Token: "
+                + str(self.__current())
+            )
         if parse_semicolon:
             self.__consume(TokenKind.SYMBOL)
 
-        # Return a DeclarationNode with the type, list of identifiers, and const flag
-        return DeclarationNode(type_, identifiers, is_const)
+        # Return a DeclarationNode with the public flag, type, list of identifiers, and const flag
+        return DeclarationNode(type_, identifiers, is_const, is_public)
 
     def __parse_function_declaration(self):
+        # Check if the function declaration starts with "public"
+        is_public = False
+        if self.__match(TokenKind.KEYWORD) and self.__current().value == "public":
+            is_public = True
+            self.__consume(TokenKind.KEYWORD)
+        
         # Parse Type
         type_ = self.__parse_type()
 
@@ -520,7 +654,7 @@ class Parser:
         block = self.__parse_block()
 
         # Return a FunctionDeclarationNode with the parsed information
-        return FunctionDeclarationNode(type_, function_name.value, parameters, block)
+        return FunctionDeclarationNode(type_, function_name.value, parameters, block, is_public)
 
     def __parse_parameter_list(self):
         # Start with an empty list of parameters
@@ -559,9 +693,9 @@ class Parser:
             self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
             # Parse the default value
             default_value = self.__parse_conditional_expression()
-            
+
         # Return a tuple with the type keyword and parameter name
-        return ParameterNode(type_, parameter_name.value, default_value)
+        return ParameterNode(type_, parameter_name.value, default_value)    
 
     def __parse_function_call(self, function_expression=None):
         # If no function expression is provided, assume a standalone function call with an identifier
@@ -619,7 +753,10 @@ class Parser:
 
         # Expect and consume the closing parenthesis for the main function parameter list
         if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ")"):
-            raise SyntaxError("Expected ')' after main function parameter list. Token: " + str(self.__current()))
+            raise SyntaxError(
+                "Expected ')' after main function parameter list. Token: "
+                + str(self.__current())
+            )
         self.__consume(TokenKind.SYMBOL)
 
         block = self.__parse_block()
@@ -695,17 +832,21 @@ class Parser:
     def __parse_logical_or(self):
         left = self.__parse_logical_and()
 
-        while self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "||":
+        while (
+            self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "||"
+        ):
             operator = self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '||'
             right = self.__parse_logical_and()
             left = LogicalOrNode(left, right)
 
         return left
-    
+
     def __parse_logical_and(self):
         left = self.__parse_negation()
 
-        while self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "&&":
+        while (
+            self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "&&"
+        ):
             operator = self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '&&'
             right = self.__parse_negation()
             left = LogicalAndNode(left, right)
@@ -719,7 +860,7 @@ class Parser:
             return NegationNode(expression)
 
         return self.__parse_relational()
-    
+
     def __parse_relational(self):
         left = self.__parse_expression()
 
@@ -793,8 +934,7 @@ class Parser:
         return LibraryNode(library_name.value)
 
     def __parse_for_loop(self):
-        """ForLoop -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block
-        """
+        """ForLoop -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block"""
         # Consume the "for" keyword
         self.__consume(TokenKind.KEYWORD)
 
@@ -823,3 +963,86 @@ class Parser:
         block = self.__parse_block()
 
         return ForLoopNode(initialization, condition, increment, block)
+
+    def __parse_enum_declaration(self) -> EnumDeclarationNode:
+        """EnumDeclaration -> "enum" identifier "{" EnumValue ("," EnumValue)* "}"
+
+        Returns:
+            EnumDeclarationNode: The parsed enum declaration node
+        """
+
+        # Consume the "enum" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Check if the symbol is already in the symbol table
+        if self.__match(TokenKind.IDENTIFIER) and self.__current().value in self.symbol_table["enums"]:
+            raise SyntaxError(
+                f"Enum '{self.__current().value}' is already defined. Token: {self.__current()}"
+            )
+
+        # Parse the enum name
+        enum_name = self.__consume(TokenKind.IDENTIFIER).value
+
+        # Consume '{'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the first enum value
+        enum_values = []
+
+        # Parse additional enum values if present
+        while self.__match(TokenKind.IDENTIFIER):
+            # Consume the EnumValue
+            enum_values.append(self.__parse_enum_value())
+
+            # Check if there are more enum values to parse
+            if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ","):
+                break
+
+            # Consume the ','
+            self.__consume(TokenKind.SYMBOL)
+
+        # Consume '}'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Consume the ';'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Add the enum to the symbol table
+        self.symbol_table["enums"][enum_name] = enum_values
+
+        return EnumDeclarationNode(enum_name, enum_values)
+
+    def __parse_enum_value(self) -> EnumValueNode:
+        """EnumValue -> identifier "=" number
+
+        Returns:
+            EnumValueNode: The parsed enum value node
+        """
+        # Parse the enum value name
+        enum_value_name = self.__consume(TokenKind.IDENTIFIER).value
+
+        # Consume the '='
+        self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+
+        # Parse the enum value
+        enum_value = self.__consume(TokenKind.NUMBER).value
+
+        return EnumValueNode(enum_value_name, enum_value)
+
+    def __parse_enum_access(self) -> EnumAccessNode:
+        """EnumAccess -> identifier "::" identifier
+
+        Returns:
+            EnumAccessNode: The parsed enum access node
+        """
+
+        # Parse the enum name
+        enum_name = self.__consume(TokenKind.IDENTIFIER).value
+
+        # Consume the '::'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the enum value name
+        enum_value_name = self.__consume(TokenKind.IDENTIFIER).value
+
+        return EnumAccessNode(enum_name, enum_value_name)

@@ -280,7 +280,7 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 5
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_pallete.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 40, column 1 at line 40, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(p_kBird) at line 41, column 3 at line 41, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/fit_libs/fit_TrendExport.ctl
@@ -320,7 +320,7 @@ Token error: Expected TokenKind.IDENTIFIER but got TokenKind.SYMBOL. Token: Toke
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/testRunner.ctl
 Output:
-Token error: Expected ';' at the end of assignment at line 65, column 23
+Token error: Expected ';' at the end of assignment at line 65, column 44
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/waitForDbUpdate.ctl
@@ -330,7 +330,7 @@ Token error: Unexpected statement. Token: TokenKind.TYPE_KEYWORD(void) at line 8
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/oaTestParsers/jsonToJUnit.ctl
 Output:
-Syntax error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(:) at line 40, column 25
+Syntax error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(() at line 40, column 45
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/ascii.ctl
@@ -340,12 +340,12 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(public) at line 3
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/oaUnit.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 20, column 1 at line 20, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(VariableTypesMismatch) at line 22, column 3 at line 22, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/oaUnitFCheck.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 22, column 1 at line 22, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(PlainText) at line 24, column 3 at line 24, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/fileSystem.ctl
@@ -425,7 +425,7 @@ Unexpected character " at line 206, column 34
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfCommonConfig.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 16, column 1 at line 16, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(None) at line 18, column 3 at line 18, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfBasic.ctl
@@ -460,7 +460,7 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 21
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/TfTestRunner.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 23, column 1 at line 23, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(OnExitSuccess) at line 25, column 3 at line 25, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testManager/TfTestManager.ctl
@@ -480,7 +480,7 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 16
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/logAnalyzer/LogAnalyzer.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 18, column 1 at line 18, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(OK) at line 20, column 3 at line 20, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/logAnalyzer/LogEntry.ctl
@@ -500,27 +500,27 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 25
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfProjectGlobal.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 15, column 1 at line 15, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(MissingDir) at line 17, column 3 at line 17, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestSubProject.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 12, column 1 at line 12, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(None) at line 14, column 3 at line 14, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProjectTemplate.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 16, column 1 at line 16, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(None) at line 18, column 3 at line 18, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProject.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 40, column 1 at line 40, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(disabled) at line 42, column 3 at line 42, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProjectTool.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 15, column 1 at line 15, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(None) at line 17, column 3 at line 17, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testProject/TfTestProjectStep.ctl
@@ -530,7 +530,7 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(struct) at line 2
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testSuite/TfTestSuite.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 25, column 1 at line 25, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(Unknown) at line 27, column 3 at line 27, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/userMgm/TfUser.ctl
@@ -560,7 +560,7 @@ Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(class) at line 26
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/testRun/TfTestRun.ctl
 Output:
-Token error: Unexpected statement. Token: TokenKind.IDENTIFIER(enum) at line 17, column 1 at line 17, column 1
+Token error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(Unknown) at line 19, column 3 at line 19, column 3
 
 ========================================
 File: /Users/mateuszpolis/Documents/Cern/FV0_WinCC/libs/TestFramework_3.19/scripts/libs/classes/testFramework/notifications/TfNotifierErrClass.ctl
@@ -636,10 +636,10 @@ Traceback (most recent call last):
   File "/Users/mateuszpolis/Documents/Cern/CtlLint/main.py", line 33, in main
     tokens = tokenizer.tokenize()
              ^^^^^^^^^^^^^^^^^^^^
-  File "/Users/mateuszpolis/Documents/Cern/CtlLint/tokenizer.py", line 94, in tokenize
+  File "/Users/mateuszpolis/Documents/Cern/CtlLint/tokenizer.py", line 95, in tokenize
     elif comment := self.__match_comment():
                     ^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/mateuszpolis/Documents/Cern/CtlLint/tokenizer.py", line 299, in __match_comment
+  File "/Users/mateuszpolis/Documents/Cern/CtlLint/tokenizer.py", line 302, in __match_comment
     if self.code[self.pos] == "/" and self.code[self.pos + 1] == "/":
        ~~~~~~~~~^^^^^^^^^^
 IndexError: string index out of range

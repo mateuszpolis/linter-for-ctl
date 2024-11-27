@@ -25,6 +25,7 @@ Statement           -> Assignment
                     | InlineIfStatement
                     | ForLoop
                     | MainFunction
+                    | EnumDeclaration
 IfStatement         -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 InlineStatement     -> Statement
 ElseIfClause        -> "else" "if" "(" Comparison ")" (InlineStatement | Block)
@@ -35,8 +36,8 @@ Assignment          -> Identifier "=" ConditionalExpression ";"
 IncrementAssignment -> Identifier ("++" | "--") ";"
                      | ("++" | "--") Identifier ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
-Declaration         -> Declaration -> ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
-FunctionDeclaration -> Type identifier "(" ParameterList? ")" Block
+Declaration         -> ("public")? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
+FunctionDeclaration -> ("public")? Type identifier "(" ParameterList? ")" Block
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
@@ -59,6 +60,7 @@ Primary             -> number "."?
                     | IndexAccess
                     | String
                     | Character
+                    | EnumAccess
 AttributeAccess     -> (identifier | IndexAccess) "." identifier
 IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
 Comment             -> "//" (any_character)*
@@ -66,13 +68,17 @@ MultiLineComment    -> "/**" (any_character)* "*/" | "/*" (any_character)* "*/"
 ReturnStatement     -> "return" (Expression)? ";"
 BreakStatement      -> "break" ";"
 WhileLoop           -> "while" "(" Comparison ")" (Block | Statement)
-Type                -> type_keyword | TemplateType
 TemplateType        -> template_type_keyword "<" Type ("," Type)* ">"
-Parameter           -> Type identifier
 ParameterList       -> Parameter ("," Parameter)*
+Parameter           -> Type identifier
+Type                -> type_keyword | TemplateType | DynamicType
+DynamicType         -> identifier
 LibraryImport       -> "#" "uses" String
 String              -> '"' (any_character)* '"'
 Character           -> "'" any_character "'"
 ForLoop             -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block
 MainFunction        -> Type? "main" "(" ")" Block
+EnumDeclaration     -> "enum" identifier "{" EnumValue ("," EnumValue)* "}"
+EnumAccess          -> identifier "::" identifier
+EnumValue           -> identifier "=" number
 ```
