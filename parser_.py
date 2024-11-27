@@ -179,8 +179,11 @@ class Parser:
 
         # Check for "IDENTIFIER (" without a type or "public"
         if self.__current().kind == TokenKind.IDENTIFIER and self.__peek().value == "(":
-            # Check the first element after '(' in arguments
-            if self.__detect_type(self.__peek(2)):
+            # Check if the first element after the ')' is '{'
+            peek_index = 2
+            while self.__peek(peek_index).kind != TokenKind.SYMBOL:
+                peek_index += 1
+            if self.__peek(peek_index + 1).value == "{":
                 return True
 
         # If none of the patterns match, it's not a function declaration
