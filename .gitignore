@@ -6,3 +6,5 @@ __pycache__/
 *.ast
 
 .DS_Store
+
+results.txt
