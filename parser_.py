@@ -102,7 +102,7 @@ class Parser:
                 and self.__peek().value == "<"
             )
             or (self.__match(TokenKind.KEYWORD) and self.__current().value == "const")
-            or (self.__match(TokenKind.KEYWORD) and self.__current().value == "public")
+            or (self.__match(TokenKind.ACCESS_MODIFIER))
         ):
             return self.__parse_declaration()
         elif self.__detect_function_call():
@@ -149,10 +149,9 @@ class Parser:
     # Helper functions for detecting specific statement types
 
     def __detect_function_declaration(self):
-        # Check for optional "public" keyword
+        # Check for optional access modifier
         if (
-            self.__current().kind == TokenKind.KEYWORD
-            and self.__current().value == "public"
+            self.__current().kind == TokenKind.ACCESS_MODIFIER
         ):
             # Peek ahead for either "Type IDENTIFIER (" or "IDENTIFIER ("
             if (
@@ -169,7 +168,7 @@ class Parser:
                 if self.__peek(3).value == "(" and self.__detect_type(self.__peek(4)):
                     return True
 
-        # Check for "Type IDENTIFIER (" without "public"
+        # Check for "Type IDENTIFIER (" without access modifier
         if (
             self.__current().kind == TokenKind.TYPE_KEYWORD
             and self.__peek().kind == TokenKind.IDENTIFIER
@@ -177,7 +176,7 @@ class Parser:
         ):
             return True
 
-        # Check for "IDENTIFIER (" without a type or "public"
+        # Check for "IDENTIFIER (" without a type or access_modifier
         if self.__current().kind == TokenKind.IDENTIFIER and self.__peek().value == "(":
             # Check if the first element after the ')' is '{'
             peek_index = 2
@@ -207,14 +206,12 @@ class Parser:
         return False
 
     def __parse_function_declaration(self):
-        # Check if the function declaration starts with "public"
-        is_public = False
+        # Check if the function declaration starts with an access modifier
+        access_modifier = None
         if (
-            self.__current().kind == TokenKind.KEYWORD
-            and self.__current().value == "public"
+            self.__current().kind == TokenKind.ACCESS_MODIFIER
         ):
-            is_public = True
-            self.__consume(TokenKind.KEYWORD)
+            access_modifier = self.__consume(TokenKind.ACCESS_MODIFIER).value
 
         # Check if the next token is a type or skip it
         type_ = None
@@ -246,7 +243,7 @@ class Parser:
 
         # Return a FunctionDeclarationNode with the parsed information
         return FunctionDeclarationNode(
-            type_, function_name.value, parameters, block, is_public
+            type_, function_name.value, parameters, block, access_modifier
         )
 
     def __detect_assignment(self):
@@ -497,7 +494,11 @@ class Parser:
         return node
 
     def __parse_primary(self):
-        if self.__match(TokenKind.NUMBER):
+        if self.__match(TokenKind.NUMBER) or (self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value == "-" and self.__peek().kind == TokenKind.NUMBER):
+            if self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value == "-":
+                self.__consume(TokenKind.ARITHMETIC_OPERATOR)
+                return NumberNode(self.__consume(TokenKind.NUMBER).value, is_negative=True)
+            
             value = self.__consume(TokenKind.NUMBER).value
             if (
                 self.__current().kind == TokenKind.SYMBOL
@@ -626,7 +627,7 @@ class Parser:
         return TemplateTypeNode(keyword, inner_types)
 
     def __parse_declaration(self, parse_semicolon: bool = True) -> DeclarationNode:
-        """Declaration -> ("public")? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
+        """Declaration -> AccessModifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
 
         Args:
             parse_semicolon (bool, optional): Whether to parse the semicolon at the end of the declaration. Defaults to True.
@@ -637,11 +638,10 @@ class Parser:
         Returns:
             DeclarationNode: The parsed declaration node
         """
-        # Check if the declaration starts with "public"
-        is_public = False
-        if self.__match(TokenKind.KEYWORD) and self.__current().value == "public":
-            is_public = True
-            self.__consume(TokenKind.KEYWORD)  # Consume "public"
+        # Check if the declaration starts with an access modifier
+        access_modifier = None
+        if self.__match(TokenKind.ACCESS_MODIFIER):            
+            access_modifier = self.__consume(TokenKind.ACCESS_MODIFIER).value
 
         # Check if the declaration starts with "const"
         is_const = False
@@ -704,8 +704,8 @@ class Parser:
         if parse_semicolon:
             self.__consume(TokenKind.SYMBOL)
 
-        # Return a DeclarationNode with the public flag, type, list of identifiers, and const flag
-        return DeclarationNode(type_, identifiers, is_const, is_public)
+        # Return a DeclarationNode with the access_modifier, type, list of identifiers, and const flag
+        return DeclarationNode(type_, identifiers, is_const, access_modifier)
 
     def __parse_parameter_list(self):
         # Start with an empty list of parameters

@@ -14,11 +14,11 @@ KEYWORDS = [
     "uses",
     "const",
     "enum",
-    "public",
     "switch",
     "case",
     "default",
 ]
+ACCESS_MODIFIERS = ["public", "private", "protected"]
 TYPE_KEYWORDS = [
     "string",
     "dyn_string",
@@ -36,6 +36,7 @@ TYPE_KEYWORDS = [
     "time",
     "dyn_anytype",
     "dyn_dyn_mixed",
+    "anytype",
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
@@ -110,6 +111,13 @@ class Tokenizer:
                     self.column,
                 )
                 self.column += len(template_type_keyword)
+            elif access_modifier := self.__match_access_identifier():
+                token = Token(
+                    TokenKind.ACCESS_MODIFIER,
+                    access_modifier,
+                    self.line,
+                    self.column,
+                )
             elif identifier := self.__match_identifier():
                 token = Token(TokenKind.IDENTIFIER, identifier, self.line, self.column)
                 self.column += len(identifier)
@@ -413,6 +421,16 @@ class Tokenizer:
 
     def __match_template_type_keyword(self):
         for keyword in TEMPLATE_TYPE_KEYWORDS:
+            if (
+                self.code[self.pos : self.pos + len(keyword)] == keyword
+                and not self.code[self.pos + len(keyword)].isalnum()
+            ):
+                self.pos += len(keyword)
+                return keyword
+        return None
+    
+    def __match_access_identifier(self):
+        for keyword in ACCESS_MODIFIERS:
             if (
                 self.code[self.pos : self.pos + len(keyword)] == keyword
                 and not self.code[self.pos + len(keyword)].isalnum()

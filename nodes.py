@@ -33,7 +33,7 @@ class AssignmentNode:
 
 
 class DeclarationNode:
-    def __init__(self, type_, identifiers, is_const=False, is_public=False):
+    def __init__(self, type_, identifiers, is_const=False, access_modifier=None):
         """
         :param type_keyword: The data type of the declaration (e.g., 'int' or 'string')
         :param identifiers: A list of tuples where each tuple contains:
@@ -43,11 +43,11 @@ class DeclarationNode:
         self.type = type_
         self.identifiers = identifiers
         self.is_const = is_const
-        self.is_public = is_public
+        self.access_modifier = access_modifier
 
     def __repr__(self, indent=0):
         # Start the string with the type keyword
-        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, is_public={self.is_public}, type={self.type.__repr__(indent+1)}, identifiers=[\n"
+        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, access_modifier={self.access_modifier}, type={self.type.__repr__(indent+1)}, identifiers=[\n"
 
         # Add each identifier with its optional initial value
         for identifier, value in self.identifiers:
@@ -100,12 +100,13 @@ class PointerNode:
 
 
 class NumberNode:
-    def __init__(self, value, is_float=False):
+    def __init__(self, value, is_float=False, is_negative=False):
         self.value = value
         self.is_float = is_float
+        self.is_negative = is_negative
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}NumberNode(is_float={self.is_float}, value={self.value})"
+        return f"{indent_str(indent)}NumberNode(is_float={self.is_float}, is_negative={self.is_negative}, value={self.value})"
 
 
 class BooleanNode:
@@ -203,19 +204,19 @@ class IndexAccessNode:
 
 
 class FunctionDeclarationNode:
-    def __init__(self, return_type, identifier, parameters, block, is_public=False):
+    def __init__(self, return_type, identifier, parameters, block, access_modifier=None):
         self.return_type = return_type
         self.identifier = identifier
         self.parameters = parameters
         self.block = block
-        self.is_public = is_public
+        self.access_modifier = access_modifier
 
     def __repr__(self, indent=0):
         string = f"{indent_str(indent)}FunctionDeclarationNode(\n"
         string += (
             f"{indent_str(indent + 1)}return_type: {self.return_type.__repr__()}\n"
         )
-        string += f"{indent_str(indent + 1)}is_public: {self.is_public}\n"
+        string += f"{indent_str(indent + 1)}access_modifier: {self.access_modifier}\n"
         string += f"{indent_str(indent + 1)}identifier: {self.identifier}\n"
         string += f"{indent_str(indent + 1)}parameters: {self.parameters}\n"
         string += f"{indent_str(indent + 1)}block: {self.block}\n"
