@@ -76,7 +76,7 @@ BreakStatement      -> "break" ";"
 WhileLoop           -> "while" "(" Comparison ")" (Block | Statement)
 TemplateType        -> template_type_keyword "<" Type ("," Type)* ">"
 ParameterList       -> Parameter ("," Parameter)*
-Parameter           -> Type identifier
+Parameter           -> ("const")? Type identifier
 Type                -> type_keyword | TemplateType | DynamicType
 DynamicType         -> identifier
 LibraryImport       -> "#" "uses" String
@@ -90,4 +90,6 @@ EnumValue           -> identifier "=" number
 SwitchStatement     -> "switch" "(" Expression ")" "{" SwitchCase* "}"
 SwitchCase          -> "case" Expression ":" ReturnStatement
                     | "default" ":" ReturnStatement
+StructDeclaration   -> "struct" identifier Block ";"
+ClassDeclaration    -> "class" identifier Block ";"
 ```

@@ -17,6 +17,8 @@ KEYWORDS = [
     "switch",
     "case",
     "default",
+    "struct",
+    "class",
 ]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
 TYPE_KEYWORDS = [
@@ -38,6 +40,7 @@ TYPE_KEYWORDS = [
     "dyn_dyn_mixed",
     "anytype",
 ]
+LIBRARY_TYPE_KEYWORDS = ["OaTestResultEnvironment", "OaTestResultStatistic"]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
     "+",
@@ -203,7 +206,8 @@ class Tokenizer:
         return None
 
     def __match_type_keyword(self):
-        for keyword in TYPE_KEYWORDS:
+        kewyrodArr = TYPE_KEYWORDS + LIBRARY_TYPE_KEYWORDS
+        for keyword in kewyrodArr:
             if (
                 self.code[self.pos : self.pos + len(keyword)] == keyword
                 and not self.code[self.pos + len(keyword)].isalnum()
@@ -283,8 +287,8 @@ class Tokenizer:
                 and self.code[self.pos] in "0123456789abcdefABCDEF"
             ):
                 self.pos += 1
-            # Check for unsigned suffix 'U'
-            if self.pos < len(self.code) and self.code[self.pos] in "uU":
+            # Check for unsigned suffix 'U' or long suffix 'L'
+            if self.pos < len(self.code) and self.code[self.pos] in "uUlL":
                 self.pos += 1
             return self.code[start : self.pos]
 
@@ -293,8 +297,8 @@ class Tokenizer:
             self.pos += 2
             while self.pos < len(self.code) and self.code[self.pos] in "01":
                 self.pos += 1
-            # Check for unsigned suffix 'U'
-            if self.pos < len(self.code) and self.code[self.pos] in "uU":
+            # Check for unsigned suffix 'U' or long suffix 'L'
+            if self.pos < len(self.code) and self.code[self.pos] in "uUlL":
                 self.pos += 1
             return self.code[start : self.pos]
 
@@ -303,21 +307,42 @@ class Tokenizer:
             self.pos += 2
             while self.pos < len(self.code) and self.code[self.pos] in "01234567":
                 self.pos += 1
-            # Check for unsigned suffix 'U'
-            if self.pos < len(self.code) and self.code[self.pos] in "uU":
+            # Check for unsigned suffix 'U' or long suffix 'L'
+            if self.pos < len(self.code) and self.code[self.pos] in "uUlL":
                 self.pos += 1
             return self.code[start : self.pos]
 
-        # Decimal: digits only, optionally followed by 'U'
+        # Floating-point: must have '.' or suffix 'f'/'F'
+        if self.code[self.pos].isdigit() or (
+            self.pos + 1 < len(self.code) and self.code[self.pos] == "." and self.code[self.pos + 1].isdigit()
+        ):
+            has_dot = False
+            while self.pos < len(self.code) and (self.code[self.pos].isdigit() or self.code[self.pos] == "."):
+                if self.code[self.pos] == ".":
+                    if has_dot:  # Second dot in number is invalid
+                        break
+                    has_dot = True
+                self.pos += 1
+            # Check for optional floating-point suffix 'f' or 'F'
+            if self.pos < len(self.code) and self.code[self.pos] in "fF":
+                self.pos += 1
+            # If no dot and no 'f'/'F', this is not a float
+            if not has_dot and not (self.code[self.pos - 1] in "fF"):
+                self.pos = start  # Reset position and fall through to decimal
+            else:
+                return self.code[start : self.pos]
+
+        # Decimal: digits only, optionally followed by 'U' or 'L'
         if self.code[self.pos].isdigit():
             while self.pos < len(self.code) and self.code[self.pos].isdigit():
                 self.pos += 1
-            # Check for unsigned suffix 'U'
-            if self.pos < len(self.code) and self.code[self.pos] in "uU":
+            # Check for unsigned suffix 'U' or long suffix 'L'
+            if self.pos < len(self.code) and self.code[self.pos] in "uUlL":
                 self.pos += 1
             return self.code[start : self.pos]
 
         return None
+        
 
     def __match_whitespace(self):
         if self.code[self.pos].isspace():

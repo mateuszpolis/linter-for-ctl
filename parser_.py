@@ -2,7 +2,7 @@ from typing import Tuple
 
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    BitwiseAndNode, BitwiseOrNode, BitwiseXorNode, BlockNode,
-                   BooleanNode, BreakNode, CaseStatementNode, CharNode,
+                   BooleanNode, BreakNode, CaseStatementNode, CharNode, ClassDeclarationNode,
                    CommentNode, CompoundAssignmentNode, DeclarationNode,
                    DividerNode, ElseIfClauseNode, EnumAccessNode,
                    EnumDeclarationNode, EnumValueNode, ForLoopNode,
@@ -12,7 +12,7 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    LogicalAndNode, LogicalOrNode, MainNode,
                    MultilineCommentNode, NegationNode, NumberNode,
                    ParameterNode, PointerNode, ProgramNode, RelationalNode,
-                   ReturnNode, ShiftNode, StringNode, SwitchStatementNode,
+                   ReturnNode, ShiftNode, StringNode, StructDeclarationNode, SwitchStatementNode,
                    TemplateTypeNode, TernaryExpressionNode, TypeNode,
                    WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
@@ -136,6 +136,10 @@ class Parser:
             return self.__parse_enum_declaration()
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "switch":
             return self.__parse_switch_statement()
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "struct":
+            return self.__parse_struct_declaration()
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "class":
+            return self.__parse_class_declaration()
         else:
             raise TokenError(
                 SyntaxError(
@@ -155,7 +159,7 @@ class Parser:
         ):
             # Peek ahead for either "Type IDENTIFIER (" or "IDENTIFIER ("
             if (
-                self.__peek().kind == TokenKind.TYPE_KEYWORD
+                self.__detect_type(self.__peek())
                 and self.__peek(2).kind == TokenKind.IDENTIFIER
                 and self.__peek(3).value == "("
             ):
@@ -164,13 +168,16 @@ class Parser:
                 self.__peek().kind == TokenKind.IDENTIFIER
                 and self.__peek(2).value == "("
             ):
-                # Check the first element after '(' in arguments
-                if self.__peek(3).value == "(" and self.__detect_type(self.__peek(4)):
+                # Check if the first element after the ')' is '{'
+                peek_index = 3
+                while self.__peek(peek_index).value != ")":
+                    peek_index += 1
+                if self.__peek(peek_index + 1).value == "{":
                     return True
 
         # Check for "Type IDENTIFIER (" without access modifier
         if (
-            self.__current().kind == TokenKind.TYPE_KEYWORD
+            self.__detect_type(self.__current())
             and self.__peek().kind == TokenKind.IDENTIFIER
             and self.__peek(2).value == "("
         ):
@@ -215,16 +222,24 @@ class Parser:
 
         # Check if the next token is a type or skip it
         type_ = None
-        if self.__current().kind == TokenKind.TYPE_KEYWORD:
+        if self.__detect_type(self.__current()):
             type_ = self.__parse_type()
 
-        # Expect and consume the function name (identifier)
-        function_name = self.__consume(TokenKind.IDENTIFIER)
+
+        function_name = None
+        is_constructor = False
+        # If the next token is '(' this function is a constructor and we skip the identifier parsing
+        if self.__match(TokenKind.IDENTIFIER) and self.__peek().value == "(":
+            # Expect and consume the function name (identifier)
+            function_name = self.__consume(TokenKind.IDENTIFIER)
+        elif self.__match(TokenKind.SYMBOL) and self.__current().value == "(":
+            function_name = type_
+            is_constructor = True
 
         # Expect and consume the opening parenthesis for the parameter list
         if not (
             self.__current().kind == TokenKind.SYMBOL and self.__current().value == "("
-        ):
+        ):                                    
             raise SyntaxError("Expected '(' after function name")
         self.__consume(TokenKind.SYMBOL)
 
@@ -243,7 +258,7 @@ class Parser:
 
         # Return a FunctionDeclarationNode with the parsed information
         return FunctionDeclarationNode(
-            type_, function_name.value, parameters, block, access_modifier
+            type_, function_name.value, parameters, block, access_modifier, is_constructor
         )
 
     def __detect_assignment(self):
@@ -576,8 +591,20 @@ class Parser:
 
         if self.__match(TokenKind.IDENTIFIER):
             return self.__parse_dynamic_type()
+        
+        raise SyntaxError(
+            "Expected a type keyword or identifier. Token: " + str(self.__current())
+        )
 
-    def __parse_dynamic_type(self):
+    def __parse_dynamic_type(self) -> TypeNode:
+        """Parse a dynamically created type (enum, struct, class)
+
+        Raises:
+            SyntaxError: If the type is not defined
+
+        Returns:
+            TypeNode: The parsed type node
+        """
         identifier = self.__consume(TokenKind.IDENTIFIER).value
 
         dyn_type = None
@@ -731,6 +758,12 @@ class Parser:
         return parameters
 
     def __parse_parameter(self):
+        # Check if there is a 'const' keyword
+        is_const = False
+        if self.__match(TokenKind.KEYWORD) and self.__current().value == "const":
+            is_const = True
+            self.__consume(TokenKind.KEYWORD)
+
         # Parse Type
         type_ = self.__parse_type()
 
@@ -752,7 +785,7 @@ class Parser:
             default_value = self.__parse_conditional_expression()
 
         # Return a tuple with the type keyword and parameter name
-        return ParameterNode(type_, parameter_name.value, default_value, is_pointer)
+        return ParameterNode(type_, parameter_name.value, default_value, is_pointer, is_const)
 
     def __parse_function_call(self, function_expression=None):
         # If no function expression is provided, assume a standalone function call with an identifier
@@ -1224,3 +1257,54 @@ class Parser:
         return_statement = self.__parse_statement()
 
         return CaseStatementNode(case_expression, return_statement)
+
+    def __parse_struct_declaration(self) -> StructDeclarationNode:
+        """StructDeclaration -> "struct" identifier Block ";"
+
+        Returns:
+            StructDeclarationNode: The parsed struct declaration node
+        """
+
+        # Consume the "struct" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Parse the struct name
+        struct_name = self.__consume(TokenKind.IDENTIFIER).value
+
+        # Parse the struct block
+        block = self.__parse_block()
+
+        # Add the struct to the symbol table
+        self.symbol_table["structs"][struct_name] = block
+
+        # Parse the semicolon
+        self.__consume(TokenKind.SYMBOL)
+
+        return StructDeclarationNode(struct_name, block)
+    
+    def __parse_class_declaration(self) -> ClassDeclarationNode:
+        """ClassDeclaration -> "class" identifier Block ";"
+
+        Returns:
+            ClassDeclarationNode: The parsed class declaration
+        """
+
+        # Consume the "class" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Parse the class name
+        class_name = self.__consume(TokenKind.IDENTIFIER).value
+
+        # Add the class name to the symbol table before parsing the block, since the block functions may reference the class
+        self.symbol_table["classes"][class_name] = {}
+
+        # Parse the class block
+        block = self.__parse_block()
+
+        # Add the class block to the symbol table
+        self.symbol_table["classes"][class_name] = block
+
+        # Parse the semicolon
+        self.__consume(TokenKind.SYMBOL)
+
+        return ClassDeclarationNode(class_name, block)
