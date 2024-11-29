@@ -45,7 +45,7 @@ FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Express
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
 TernaryExpression   -> Comparison "?" Expression ":" Expression
-Comparison          -> LogicalOr
+Comparison          -> LogicalOr | Declaration | Assignment
 LogicalOr           -> LogicalAnd ("||" LogicalAnd)*
 LogicalAnd          -> Negation ("&&" Negation)*
 Negation            -> ("!" | "~")? BitwiseOr
@@ -84,7 +84,8 @@ DynamicType         -> identifier
 LibraryImport       -> "#" "uses" String
 String              -> '"' (any_character)* '"'
 Character           -> "'" any_character "'"
-ForLoop             -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block
+ForLoop             -> "for" "(" ForInitialization ";" Comparison ";" Assignment? ")" (Block | Statement)
+ForInitialization   -> Declaration | Assignment | identifier
 MainFunction        -> Type? "main" "(" ")" Block
 EnumDeclaration     -> "enum" identifier "{" EnumValue ("," EnumValue)* "}"
 EnumAccess          -> identifier "::" identifier

@@ -431,14 +431,15 @@ class TernaryExpressionNode:
 
 
 class ForLoopNode:
-    def __init__(self, initialization, condition, increment, block):
+    def __init__(self, initialization, condition, increment, block, statement):
         self.initialization = initialization
         self.condition = condition
         self.increment = increment
         self.block = block
+        self.statement = statement
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}ForLoopNode(initialization={self.initialization}, condition={self.condition}, increment={self.increment}, block={self.block})"
+        return f"{indent_str(indent)}ForLoopNode(initialization={self.initialization}, condition={self.condition}, increment={self.increment}, block={self.block}), statement={self.statement}"
 
 
 class IncrementAssignmentNode:

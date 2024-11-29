@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Any, Tuple
 
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    BitwiseAndNode, BitwiseOrNode, BitwiseXorNode, BlockNode,
@@ -87,23 +87,7 @@ class Parser:
             return self.__parse_assignment()
         elif self.__detect_function_declaration():
             return self.__parse_function_declaration()
-        elif (
-            (
-                self.__match(TokenKind.TYPE_KEYWORD)
-                and self.__peek().kind == TokenKind.IDENTIFIER
-                and (
-                    self.__peek(2).value == ";"
-                    or self.__peek(2).value == "="
-                    or self.__peek(2).value == ","
-                )
-            )
-            or (
-                self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD)
-                and self.__peek().value == "<"
-            )
-            or (self.__match(TokenKind.KEYWORD) and self.__current().value == "const")
-            or (self.__match(TokenKind.ACCESS_MODIFIER))
-        ):
+        elif self.__detect_declaration():
             return self.__parse_declaration()
         elif self.__detect_function_call():
             function_call = self.__parse_expression()
@@ -151,6 +135,23 @@ class Parser:
             )
 
     # Helper functions for detecting specific statement types
+
+    def __detect_declaration(self) -> bool:
+        """Detect declaration
+
+        Returns:
+            bool: Wheter declaration is detected or not
+        """
+        if self.__match(TokenKind.TYPE_KEYWORD) and self.__peek().kind == TokenKind.IDENTIFIER and (self.__peek(2).value == ";" or self.__peek(2).value == "=" or self.__peek(2).value == ","):
+            return True            
+        elif self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD) and self._:
+            return True
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "const":
+            return True
+        elif self.__match(TokenKind.ACCESS_MODIFIER):
+            return True
+        else:
+            return False
 
     def __detect_function_declaration(self):
         peek_index = 0
@@ -937,7 +938,12 @@ class Parser:
         return BlockNode(statements)
 
     def __parse_comparison(self):
-        return self.__parse_logical_or()
+        if self.__detect_declaration():
+            return self.__parse_declaration(parse_semicolon=False)
+        elif self.__detect_assignment():
+            return self.__parse_assignment(parse_semicolon=False)
+        else:
+            return self.__parse_logical_or()
 
     def __parse_logical_or(self):
         left = self.__parse_logical_and()
@@ -1094,8 +1100,12 @@ class Parser:
 
         return LibraryNode(library_name.value)
 
-    def __parse_for_loop(self):
-        """ForLoop -> "for" "(" Declaration ";" Comparison ";" Assignment ")" Block"""
+    def __parse_for_loop(self) -> ForLoopNode:
+        """ForLoop -> "for" "(" ForInitialization ";" Comparison ";" Assignment? ")" (Block | Statement)
+
+        Returns:
+            ForLoopNode: The ForLoopNode
+        """
         # Consume the "for" keyword
         self.__consume(TokenKind.KEYWORD)
 
@@ -1103,7 +1113,7 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         # Parse the initialization statement
-        initialization = self.__parse_declaration(parse_semicolon=False)
+        initialization = self.__parse_for_loop_initialization()
 
         # Consume the semicolon
         self.__consume(TokenKind.SYMBOL)
@@ -1114,16 +1124,26 @@ class Parser:
         # Consume the semicolon
         self.__consume(TokenKind.SYMBOL)
 
-        # Parse the increment statement
-        increment = self.__parse_assignment(parse_semicolon=False)
+        increment = None
+        # The increment statement is not necessary
+        if not self.__match(TokenKind.SYMBOL):
+            # Parse the increment statement
+            increment = self.__parse_assignment(parse_semicolon=False)
 
         # Consume ')'
         self.__consume(TokenKind.SYMBOL)
 
-        # Parse the block
-        block = self.__parse_block()
+        block = None
+        statement = None
+        # Check if the next symbol is '{'
+        if self.__match(TokenKind.SYMBOL):
+            # Parse the block
+            block = self.__parse_block()
+        # Otherwise parse the signle statement
+        else:
+            statement = self.__parse_statement()
 
-        return ForLoopNode(initialization, condition, increment, block)
+        return ForLoopNode(initialization, condition, increment, block, statement)
 
     def __parse_enum_declaration(self) -> EnumDeclarationNode:
         """EnumDeclaration -> "enum" identifier "{" EnumValue ("," EnumValue)* "}"
@@ -1348,3 +1368,17 @@ class Parser:
         identifier = self.__consume(TokenKind.IDENTIFIER).value
 
         return IdentifierNode(identifier, type_)
+
+    def __parse_for_loop_initialization(self) -> Any:
+        """ForInitialization -> Declaration | Assignment | identifier
+
+        Returns:
+            Any: The appropriate Node.
+        """
+        # Check for declaration
+        if self.__detect_declaration():
+            return self.__parse_declaration(parse_semicolon=False)
+        elif self.__detect_assignment():
+            return self.__parse_assignment(parse_semicolon=False)
+        else:
+            return IdentifierNode(self.__consume(TokenKind.IDENTIFIER))
