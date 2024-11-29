@@ -562,6 +562,8 @@ class Parser:
             # Parse the identifier as a pointer
             identifier = self.__consume(TokenKind.IDENTIFIER)
             return PointerNode(identifier.value)
+        elif self.__match(TokenKind.SYMBOL) and self.__current().value == "(" and self.__detect_type(self.__peek()):
+            return self.__parse_type_cast()
         elif self.__match(TokenKind.SYMBOL) and self.__current().value == "(":
             # __Consume the opening parenthesis
             self.__consume(TokenKind.SYMBOL)
@@ -1308,3 +1310,23 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         return ClassDeclarationNode(class_name, block)
+    
+    def __parse_type_cast(self) -> IdentifierNode:
+        """TypeCast -> "(" Type ")" identifier
+
+        Returns:
+            IdentifierNode: The parsed identifier node
+        """
+        # Parse "("
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the type
+        type_ = self.__parse_type()
+
+        # Parse ")"
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the identifier
+        identifier = self.__consume(TokenKind.IDENTIFIER).value
+
+        return IdentifierNode(identifier, type_)

@@ -76,11 +76,12 @@ class BinaryExpressionNode:
 
 
 class IdentifierNode:
-    def __init__(self, value):
+    def __init__(self, value, type_cast=None):
         self.value = value
+        self.type_cast = type_cast
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}IdentifierNode({self.value})"
+        return f"{indent_str(indent)}IdentifierNode(value={self.value}, type_cast={self.type_cast})"
 
 
 class GlobalIdentifierNode:
@@ -587,25 +588,22 @@ class ShiftNode:
         return f"{indent_str(indent)}ShiftNode(left={self.left}, operator={self.operator}, right={self.right})"
 
 class StructDeclarationNode:
-    def __init__(self, identifier, fields):
+    def __init__(self, identifier, block):
         self.identifier = identifier
-        self.fields = fields
+        self.block = block
 
     def __repr__(self, indent=0):
-        string = f"{indent_str(indent)}StructDeclarationNode(identifier={self.identifier}, fields=[\n"
-        for field in self.fields:
-            string += field.__repr__(indent + 1) + "\n"
-        string += f"{indent_str(indent)}])"
+        string = f"{indent_str(indent)}StructDeclarationNode(identifier={self.identifier},\n"
+        string += self.block.__repr__(indent + 1) + "\n"
         return string
 
 class ClassDeclarationNode:
-    def __init__(self, identifier, fields):
+    def __init__(self, identifier, block):
         self.identifier = identifier
-        self.fields = fields
+        self.block = block
 
     def __repr__(self, indent=0):
-        string = f"{indent_str(indent)}ClassDeclarationNode(identifier={self.identifier}, fields=[\n"
-        for field in self.fields:
-            string += field.__repr__(indent + 1) + "\n"
+        string = f"{indent_str(indent)}ClassDeclarationNode(identifier={self.identifier},\n"
+        string += self.block.__repr__(indent + 1)
         string += f"{indent_str(indent)}])"
         return string

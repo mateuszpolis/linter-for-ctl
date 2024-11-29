@@ -60,6 +60,7 @@ Primary             -> number "."?
                     | identifier 
                     | "$" identifier
                     | "&" identifier
+                    | TypeCast
                     | "(" Comparison ")"
                     | FunctionCall
                     | AttributeAccess
@@ -92,4 +93,5 @@ SwitchCase          -> "case" Expression ":" ReturnStatement
                     | "default" ":" ReturnStatement
 StructDeclaration   -> "struct" identifier Block ";"
 ClassDeclaration    -> "class" identifier Block ";"
+TypeCast            -> "(" Type ")" identifier
 ```
