@@ -46,15 +46,11 @@ ARITHMETIC_OPERATORS = [
     "-",
     "*",
     "/",
-    "%",    
+    "%",
     "++",
     "--",
 ]
-ASSIGNMENT_OPERATORS = ["+=",
-    "-=",
-    "*=",
-    "/=",
-    "%=", "="]
+ASSIGNMENT_OPERATORS = ["+=", "-=", "*=", "/=", "%=", "="]
 COMPARISON_OPERATORS = ["==", "!=", ">", ">=", "<", "<="]
 LOGICAL_OPERATORS = ["&&", "||", "!"]
 SYMBOLS = [

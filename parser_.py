@@ -278,7 +278,7 @@ class Parser:
         )
 
     def __detect_assignment(self):
-        # Check for Increment assignment        
+        # Check for Increment assignment
         # The '++i' case
         if self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in [
             "++",
@@ -315,8 +315,10 @@ class Parser:
             if self.__peek(n).kind == TokenKind.ASSIGNMENT_OPERATOR:
                 return True
             # The 'i++' case
-            elif self.__peek(n).kind == TokenKind.ARITHMETIC_OPERATOR and self.__peek(n).value in ["++", "--"]:
-                return True 
+            elif self.__peek(n).kind == TokenKind.ARITHMETIC_OPERATOR and self.__peek(
+                n
+            ).value in ["++", "--"]:
+                return True
 
         return False
 
