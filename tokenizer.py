@@ -381,7 +381,7 @@ class Tokenizer:
         return None
 
     def __match_string(self):
-        str_regex = re.compile(r"\".*?\"")
+        str_regex = re.compile(r'(["\'])(?:\\.|[^\\])*?\1')
 
         match = str_regex.match(self.code[self.pos :])
         if match:
