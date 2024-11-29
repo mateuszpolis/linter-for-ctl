@@ -205,13 +205,23 @@ class IndexAccessNode:
 
 
 class FunctionDeclarationNode:
-    def __init__(self, return_type, identifier, parameters, block, access_modifier=None, is_constructor=False):
+    def __init__(
+        self,
+        return_type,
+        identifier,
+        parameters,
+        block,
+        access_modifier=None,
+        is_constructor=False,
+        modifier=None,
+    ):
         self.return_type = return_type
         self.identifier = identifier
         self.parameters = parameters
         self.block = block
         self.access_modifier = access_modifier
         self.is_constructor = is_constructor
+        self.modifier = modifier
 
     def __repr__(self, indent=0):
         string = f"{indent_str(indent)}FunctionDeclarationNode(\n"
@@ -219,6 +229,7 @@ class FunctionDeclarationNode:
             f"{indent_str(indent + 1)}return_type: {self.return_type.__repr__()}\n"
         )
         string += f"{indent_str(indent + 1)}access_modifier: {self.access_modifier}\n"
+        string += f"{indent_str(indent + 1)}modifier: {self.modifier}\n"
         string += f"{indent_str(indent + 1)}is_constructor: {self.is_constructor}\n"
         string += f"{indent_str(indent + 1)}identifier: {self.identifier}\n"
         string += f"{indent_str(indent + 1)}parameters: {self.parameters}\n"
@@ -380,7 +391,9 @@ class TemplateTypeNode:
 
 
 class ParameterNode:
-    def __init__(self, type_, identifier, default_value=None, is_pointer=False, is_const=False):
+    def __init__(
+        self, type_, identifier, default_value=None, is_pointer=False, is_const=False
+    ):
         self.type_ = type_
         self.identifier = identifier
         self.default_value = default_value
@@ -587,15 +600,19 @@ class ShiftNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ShiftNode(left={self.left}, operator={self.operator}, right={self.right})"
 
+
 class StructDeclarationNode:
     def __init__(self, identifier, block):
         self.identifier = identifier
         self.block = block
 
     def __repr__(self, indent=0):
-        string = f"{indent_str(indent)}StructDeclarationNode(identifier={self.identifier},\n"
+        string = (
+            f"{indent_str(indent)}StructDeclarationNode(identifier={self.identifier},\n"
+        )
         string += self.block.__repr__(indent + 1) + "\n"
         return string
+
 
 class ClassDeclarationNode:
     def __init__(self, identifier, block):
@@ -603,7 +620,9 @@ class ClassDeclarationNode:
         self.block = block
 
     def __repr__(self, indent=0):
-        string = f"{indent_str(indent)}ClassDeclarationNode(identifier={self.identifier},\n"
+        string = (
+            f"{indent_str(indent)}ClassDeclarationNode(identifier={self.identifier},\n"
+        )
         string += self.block.__repr__(indent + 1)
         string += f"{indent_str(indent)}])"
         return string

@@ -19,28 +19,27 @@ KEYWORDS = [
     "default",
     "struct",
     "class",
+    "static",
+    "global"
 ]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
-TYPE_KEYWORDS = [
+BASE_TYPE_KEYWORDS = [
     "string",
-    "dyn_string",
     "int",
-    "dyn_int",
     "float",
-    "dyn_float",
     "bool",
-    "dyn_bool",
     "void",
-    "dyn_dyn_string",
     "mapping",
     "file",
     "uint",
     "time",
-    "dyn_anytype",
-    "dyn_dyn_mixed",
     "anytype",
+    "errClass",
+    "mixed",
+    "ulong"
 ]
-LIBRARY_TYPE_KEYWORDS = ["OaTestResultEnvironment", "OaTestResultStatistic"]
+TYPE_KEYWORDS = []
+LIBRARY_TYPE_KEYWORDS = ["OaTestResultEnvironment", "OaTestResultStatistic", "LogEntry"]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
     "+",
@@ -90,6 +89,14 @@ class Tokenizer:
         self.pos = 0
         self.line = 1
         self.column = 1
+
+        self.__create_type_keywords()
+
+    def __create_type_keywords(self):
+        for keyword in BASE_TYPE_KEYWORDS:
+            TYPE_KEYWORDS.append(keyword)
+            TYPE_KEYWORDS.append("dyn_" + keyword)
+            TYPE_KEYWORDS.append("dyn_dyn_" + keyword)
 
     def tokenize(self):
         tokens = []
@@ -314,10 +321,14 @@ class Tokenizer:
 
         # Floating-point: must have '.' or suffix 'f'/'F'
         if self.code[self.pos].isdigit() or (
-            self.pos + 1 < len(self.code) and self.code[self.pos] == "." and self.code[self.pos + 1].isdigit()
+            self.pos + 1 < len(self.code)
+            and self.code[self.pos] == "."
+            and self.code[self.pos + 1].isdigit()
         ):
             has_dot = False
-            while self.pos < len(self.code) and (self.code[self.pos].isdigit() or self.code[self.pos] == "."):
+            while self.pos < len(self.code) and (
+                self.code[self.pos].isdigit() or self.code[self.pos] == "."
+            ):
                 if self.code[self.pos] == ".":
                     if has_dot:  # Second dot in number is invalid
                         break
@@ -342,7 +353,6 @@ class Tokenizer:
             return self.code[start : self.pos]
 
         return None
-        
 
     def __match_whitespace(self):
         if self.code[self.pos].isspace():
@@ -453,7 +463,7 @@ class Tokenizer:
                 self.pos += len(keyword)
                 return keyword
         return None
-    
+
     def __match_access_identifier(self):
         for keyword in ACCESS_MODIFIERS:
             if (

@@ -2,19 +2,19 @@ from typing import Tuple
 
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    BitwiseAndNode, BitwiseOrNode, BitwiseXorNode, BlockNode,
-                   BooleanNode, BreakNode, CaseStatementNode, CharNode, ClassDeclarationNode,
-                   CommentNode, CompoundAssignmentNode, DeclarationNode,
-                   DividerNode, ElseIfClauseNode, EnumAccessNode,
-                   EnumDeclarationNode, EnumValueNode, ForLoopNode,
-                   FunctionCallNode, FunctionDeclarationNode,
+                   BooleanNode, BreakNode, CaseStatementNode, CharNode,
+                   ClassDeclarationNode, CommentNode, CompoundAssignmentNode,
+                   DeclarationNode, DividerNode, ElseIfClauseNode,
+                   EnumAccessNode, EnumDeclarationNode, EnumValueNode,
+                   ForLoopNode, FunctionCallNode, FunctionDeclarationNode,
                    GlobalIdentifierNode, IdentifierNode, IfStatementNode,
                    IncrementAssignmentNode, IndexAccessNode, LibraryNode,
                    LogicalAndNode, LogicalOrNode, MainNode,
                    MultilineCommentNode, NegationNode, NumberNode,
                    ParameterNode, PointerNode, ProgramNode, RelationalNode,
-                   ReturnNode, ShiftNode, StringNode, StructDeclarationNode, SwitchStatementNode,
-                   TemplateTypeNode, TernaryExpressionNode, TypeNode,
-                   WhileLoopNode)
+                   ReturnNode, ShiftNode, StringNode, StructDeclarationNode,
+                   SwitchStatementNode, TemplateTypeNode,
+                   TernaryExpressionNode, TypeNode, WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
 
 
@@ -153,44 +153,39 @@ class Parser:
     # Helper functions for detecting specific statement types
 
     def __detect_function_declaration(self):
+        peek_index = 0
+
         # Check for optional access modifier
+        if self.__current().kind == TokenKind.ACCESS_MODIFIER:
+            peek_index += 1
+
+        # Check for optional modifier (e.g., static, global)
         if (
-            self.__current().kind == TokenKind.ACCESS_MODIFIER
+            self.__peek(peek_index).kind == TokenKind.KEYWORD
+            and self.__peek(peek_index).value in {"static", "global"}
         ):
-            # Peek ahead for either "Type IDENTIFIER (" or "IDENTIFIER ("
-            if (
-                self.__detect_type(self.__peek())
-                and self.__peek(2).kind == TokenKind.IDENTIFIER
-                and self.__peek(3).value == "("
-            ):
-                return True
-            if (
-                self.__peek().kind == TokenKind.IDENTIFIER
-                and self.__peek(2).value == "("
-            ):
-                # Check if the first element after the ')' is '{'
-                peek_index = 3
+            peek_index += 1
+
+        # Check for optional type
+        if self.__detect_type(self.__peek(peek_index)):
+            peek_index += 1
+
+        # Check for identifier
+        if self.__peek(peek_index).kind == TokenKind.IDENTIFIER:
+            peek_index += 1
+
+            # Check for opening parenthesis '('
+            if self.__peek(peek_index).value == "(":
+                peek_index += 1
+
+                # Find the closing parenthesis ')'
                 while self.__peek(peek_index).value != ")":
                     peek_index += 1
-                if self.__peek(peek_index + 1).value == "{":
+                peek_index += 1  # Move past the closing parenthesis
+
+                # Check if the next token is the opening brace '{'
+                if self.__peek(peek_index).value == "{":
                     return True
-
-        # Check for "Type IDENTIFIER (" without access modifier
-        if (
-            self.__detect_type(self.__current())
-            and self.__peek().kind == TokenKind.IDENTIFIER
-            and self.__peek(2).value == "("
-        ):
-            return True
-
-        # Check for "IDENTIFIER (" without a type or access_modifier
-        if self.__current().kind == TokenKind.IDENTIFIER and self.__peek().value == "(":
-            # Check if the first element after the ')' is '{'
-            peek_index = 2
-            while self.__peek(peek_index).value != ")":
-                peek_index += 1
-            if self.__peek(peek_index + 1).value == "{":
-                return True
 
         # If none of the patterns match, it's not a function declaration
         return False
@@ -215,16 +210,18 @@ class Parser:
     def __parse_function_declaration(self):
         # Check if the function declaration starts with an access modifier
         access_modifier = None
-        if (
-            self.__current().kind == TokenKind.ACCESS_MODIFIER
-        ):
+        if self.__current().kind == TokenKind.ACCESS_MODIFIER:
             access_modifier = self.__consume(TokenKind.ACCESS_MODIFIER).value
+
+        # Parse optional modifiers (static, global, etc.)
+        modifiers = []
+        while self.__current().kind == TokenKind.KEYWORD and self.__current().value in {"static", "global"}:
+            modifiers.append(self.__consume(TokenKind.KEYWORD).value)
 
         # Check if the next token is a type or skip it
         type_ = None
         if self.__detect_type(self.__current()):
             type_ = self.__parse_type()
-
 
         function_name = None
         is_constructor = False
@@ -239,7 +236,7 @@ class Parser:
         # Expect and consume the opening parenthesis for the parameter list
         if not (
             self.__current().kind == TokenKind.SYMBOL and self.__current().value == "("
-        ):                                    
+        ):
             raise SyntaxError("Expected '(' after function name")
         self.__consume(TokenKind.SYMBOL)
 
@@ -258,7 +255,13 @@ class Parser:
 
         # Return a FunctionDeclarationNode with the parsed information
         return FunctionDeclarationNode(
-            type_, function_name.value, parameters, block, access_modifier, is_constructor
+            type_,
+            function_name.value,
+            parameters,
+            block,
+            access_modifier,
+            is_constructor,
+            modifiers[0] if len(modifiers) > 0 else None,
         )
 
     def __detect_assignment(self):
@@ -509,11 +512,20 @@ class Parser:
         return node
 
     def __parse_primary(self):
-        if self.__match(TokenKind.NUMBER) or (self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value == "-" and self.__peek().kind == TokenKind.NUMBER):
-            if self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value == "-":
+        if self.__match(TokenKind.NUMBER) or (
+            self.__match(TokenKind.ARITHMETIC_OPERATOR)
+            and self.__current().value == "-"
+            and self.__peek().kind == TokenKind.NUMBER
+        ):
+            if (
+                self.__match(TokenKind.ARITHMETIC_OPERATOR)
+                and self.__current().value == "-"
+            ):
                 self.__consume(TokenKind.ARITHMETIC_OPERATOR)
-                return NumberNode(self.__consume(TokenKind.NUMBER).value, is_negative=True)
-            
+                return NumberNode(
+                    self.__consume(TokenKind.NUMBER).value, is_negative=True
+                )
+
             value = self.__consume(TokenKind.NUMBER).value
             if (
                 self.__current().kind == TokenKind.SYMBOL
@@ -562,7 +574,11 @@ class Parser:
             # Parse the identifier as a pointer
             identifier = self.__consume(TokenKind.IDENTIFIER)
             return PointerNode(identifier.value)
-        elif self.__match(TokenKind.SYMBOL) and self.__current().value == "(" and self.__detect_type(self.__peek()):
+        elif (
+            self.__match(TokenKind.SYMBOL)
+            and self.__current().value == "("
+            and self.__detect_type(self.__peek())
+        ):
             return self.__parse_type_cast()
         elif self.__match(TokenKind.SYMBOL) and self.__current().value == "(":
             # __Consume the opening parenthesis
@@ -593,7 +609,7 @@ class Parser:
 
         if self.__match(TokenKind.IDENTIFIER):
             return self.__parse_dynamic_type()
-        
+
         raise SyntaxError(
             "Expected a type keyword or identifier. Token: " + str(self.__current())
         )
@@ -669,7 +685,7 @@ class Parser:
         """
         # Check if the declaration starts with an access modifier
         access_modifier = None
-        if self.__match(TokenKind.ACCESS_MODIFIER):            
+        if self.__match(TokenKind.ACCESS_MODIFIER):
             access_modifier = self.__consume(TokenKind.ACCESS_MODIFIER).value
 
         # Check if the declaration starts with "const"
@@ -787,7 +803,9 @@ class Parser:
             default_value = self.__parse_conditional_expression()
 
         # Return a tuple with the type keyword and parameter name
-        return ParameterNode(type_, parameter_name.value, default_value, is_pointer, is_const)
+        return ParameterNode(
+            type_, parameter_name.value, default_value, is_pointer, is_const
+        )
 
     def __parse_function_call(self, function_expression=None):
         # If no function expression is provided, assume a standalone function call with an identifier
@@ -1283,7 +1301,7 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         return StructDeclarationNode(struct_name, block)
-    
+
     def __parse_class_declaration(self) -> ClassDeclarationNode:
         """ClassDeclaration -> "class" identifier Block ";"
 
@@ -1310,7 +1328,7 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         return ClassDeclarationNode(class_name, block)
-    
+
     def __parse_type_cast(self) -> IdentifierNode:
         """TypeCast -> "(" Type ")" identifier
 

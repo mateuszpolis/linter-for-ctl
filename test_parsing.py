@@ -3,7 +3,7 @@ import os
 import subprocess
 
 
-def run_main_for_ctl_files(base_directory, output_file):    
+def run_main_for_ctl_files(base_directory, output_file):
     with open(output_file, "w") as result_file:
         error_count = 0
         # Walk through each directory and subdirectory
@@ -35,8 +35,9 @@ def run_main_for_ctl_files(base_directory, output_file):
                         result_file.write(f"Error:\n{e.output}\n")
                         result_file.write("=" * 40 + "\n")
 
-        # Write the summary to the output file  
-        result_file.write(f"Total errors found: {error_count}\n")        
+        # Write the summary to the output file
+        result_file.write(f"Total errors found: {error_count}\n")
+
 
 if __name__ == "__main__":
     # Parse command-line arguments

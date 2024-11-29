@@ -39,7 +39,8 @@ IncrementAssignment -> Identifier ("++" | "--") ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
 AccessModifier      -> "public" | "private" | "protected"
 Declaration         -> AccessModifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
-FunctionDeclaration -> AccessModifier? (Type)? identifier "(" ParameterList? ")" Block
+FunctionDeclaration -> AccessModifier? Modifier? Type? identifier "(" ParameterList? ")" Block
+Modifier            -> "static" | "global"
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
