@@ -20,7 +20,7 @@ KEYWORDS = [
     "struct",
     "class",
     "static",
-    "global"
+    "global",
 ]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
 BASE_TYPE_KEYWORDS = [
@@ -36,7 +36,7 @@ BASE_TYPE_KEYWORDS = [
     "anytype",
     "errClass",
     "mixed",
-    "ulong"
+    "ulong",
 ]
 TYPE_KEYWORDS = []
 LIBRARY_TYPE_KEYWORDS = ["OaTestResultEnvironment", "OaTestResultStatistic", "LogEntry"]
@@ -46,15 +46,15 @@ ARITHMETIC_OPERATORS = [
     "-",
     "*",
     "/",
-    "%",
-    "+=",
-    "-=",
-    "*=",
-    "/=",
-    "%=",
+    "%",    
     "++",
     "--",
 ]
+ASSIGNMENT_OPERATORS = ["+=",
+    "-=",
+    "*=",
+    "/=",
+    "%=", "="]
 COMPARISON_OPERATORS = ["==", "!=", ">", ">=", "<", "<="]
 LOGICAL_OPERATORS = ["&&", "||", "!"]
 SYMBOLS = [
@@ -135,8 +135,8 @@ class Tokenizer:
                 token = Token(
                     TokenKind.MULTI_LINE_COMMENT,
                     multiline_comment,
-                    self.line,
                     self.column,
+                    self.line,
                 )
                 self.column += len(multiline_comment)
             elif comment := self.__match_comment():
@@ -232,6 +232,7 @@ class Tokenizer:
         sorted_comparison_operators = sort_operators_by_length(COMPARISON_OPERATORS)
         sorted_arithmetic_operators = sort_operators_by_length(ARITHMETIC_OPERATORS)
         sorted_logical_operators = sort_operators_by_length(LOGICAL_OPERATORS)
+        sorted_assignment_operators = sort_operators_by_length(ASSIGNMENT_OPERATORS)
 
         # Check for comparison operators first
         for operator in sorted_comparison_operators:
@@ -247,12 +248,13 @@ class Tokenizer:
                     TokenKind.COMPARISON_OPERATOR, operator, self.line, self.column
                 )
 
-        # Check for assignment operator "=" specifically
-        if self.code[self.pos] == "=" and (
-            self.pos + 1 >= len(self.code) or self.code[self.pos + 1] != "="
-        ):
-            self.pos += 1
-            return Token(TokenKind.ASSIGNMENT_OPERATOR, "=", self.line, self.column)
+        # Check for assignment operators
+        for operator in sorted_assignment_operators:
+            if self.code[self.pos : self.pos + len(operator)] == operator:
+                self.pos += len(operator)
+                return Token(
+                    TokenKind.ASSIGNMENT_OPERATOR, operator, self.line, self.column
+                )
 
         # Check for arithmetic operators
         for operator in sorted_arithmetic_operators:

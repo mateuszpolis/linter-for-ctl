@@ -22,7 +22,7 @@ class TokenError(BaseException):
         self.error = error
         self.token = token
         # Format the error message to include line and column
-        self.message = f"{error} at line {token.line}, column {token.column}"
+        self.message = f"{error} at line {token.line}, column {token.column}. Token value: {token.value}"
         super().__init__(self.message)
 
     def __str__(self):

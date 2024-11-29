@@ -142,9 +142,19 @@ class Parser:
         Returns:
             bool: Wheter declaration is detected or not
         """
-        if self.__match(TokenKind.TYPE_KEYWORD) and self.__peek().kind == TokenKind.IDENTIFIER and (self.__peek(2).value == ";" or self.__peek(2).value == "=" or self.__peek(2).value == ","):
-            return True            
-        elif self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD) and self._:
+        if (
+            self.__match(TokenKind.TYPE_KEYWORD)
+            and self.__peek().kind == TokenKind.IDENTIFIER
+            and (
+                self.__peek(2).value == ";"
+                or self.__peek(2).value == "="
+                or self.__peek(2).value == ","
+            )
+        ):
+            return True
+        elif (
+            self.__match(TokenKind.TEMPLATE_TYPE_KEYWORD) and self.__peek().value == "<"
+        ):
             return True
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "const":
             return True
@@ -161,10 +171,9 @@ class Parser:
             peek_index += 1
 
         # Check for optional modifier (e.g., static, global)
-        if (
-            self.__peek(peek_index).kind == TokenKind.KEYWORD
-            and self.__peek(peek_index).value in {"static", "global"}
-        ):
+        if self.__peek(peek_index).kind == TokenKind.KEYWORD and self.__peek(
+            peek_index
+        ).value in {"static", "global"}:
             peek_index += 1
 
         # Check for optional type
@@ -216,7 +225,10 @@ class Parser:
 
         # Parse optional modifiers (static, global, etc.)
         modifiers = []
-        while self.__current().kind == TokenKind.KEYWORD and self.__current().value in {"static", "global"}:
+        while self.__current().kind == TokenKind.KEYWORD and self.__current().value in {
+            "static",
+            "global",
+        }:
             modifiers.append(self.__consume(TokenKind.KEYWORD).value)
 
         # Check if the next token is a type or skip it
@@ -266,6 +278,14 @@ class Parser:
         )
 
     def __detect_assignment(self):
+        # Check for Increment assignment        
+        # The '++i' case
+        if self.__match(TokenKind.ARITHMETIC_OPERATOR) and self.__current().value in [
+            "++",
+            "--",
+        ]:
+            return True
+
         # Start by checking if we have an identifier
         if self.__match(TokenKind.IDENTIFIER):
             n = 1
@@ -291,9 +311,12 @@ class Parser:
                 else:
                     break
 
-            # After parsing the left side, expect an "=" operator for assignment
+            # After parsing the left side, expect an assignment operator for assignment
             if self.__peek(n).kind == TokenKind.ASSIGNMENT_OPERATOR:
                 return True
+            # The 'i++' case
+            elif self.__peek(n).kind == TokenKind.ARITHMETIC_OPERATOR and self.__peek(n).value in ["++", "--"]:
+                return True 
 
         return False
 
