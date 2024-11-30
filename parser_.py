@@ -1,20 +1,22 @@
-from typing import Any, Tuple
+from typing import Any, List, Tuple
 
 from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    BitwiseAndNode, BitwiseOrNode, BitwiseXorNode, BlockNode,
                    BooleanNode, BreakNode, CaseStatementNode, CharNode,
-                   ClassDeclarationNode, CommentNode, CompoundAssignmentNode,
+                   ClassDeclarationNode, ClassInitializationNode,
+                   ClassStaticAccessNode, CommentNode, CompoundAssignmentNode,
                    DeclarationNode, DividerNode, ElseIfClauseNode,
                    EnumAccessNode, EnumDeclarationNode, EnumValueNode,
                    ForLoopNode, FunctionCallNode, FunctionDeclarationNode,
                    GlobalIdentifierNode, IdentifierNode, IfStatementNode,
-                   IncrementAssignmentNode, IndexAccessNode, LibraryNode,
-                   LogicalAndNode, LogicalOrNode, MainNode,
+                   IncrementAssignmentNode, IndexAccessNode, InheritanceNode,
+                   LibraryNode, LogicalAndNode, LogicalOrNode, MainNode,
                    MultilineCommentNode, NegationNode, NumberNode,
                    ParameterNode, PointerNode, ProgramNode, RelationalNode,
                    ReturnNode, ShiftNode, StringNode, StructDeclarationNode,
                    SwitchStatementNode, TemplateTypeNode,
-                   TernaryExpressionNode, TypeNode, WhileLoopNode)
+                   TernaryExpressionNode, TypeCastNode, TypeNode,
+                   WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
 
 
@@ -124,17 +126,20 @@ class Parser:
             return self.__parse_struct_declaration()
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "class":
             return self.__parse_class_declaration()
+        elif self.__match(TokenKind.SYMBOL) and self.__current().value == "{":
+            return self.__parse_block()
         else:
             raise TokenError(
-                SyntaxError(
-                    "Unexpected statement. Token: " + str(self.__current()),
-                    self.__current().line,
-                    self.__current().column,
-                ),
+                SyntaxError("Unexpected statement"),
                 self.__current(),
             )
 
     # Helper functions for detecting specific statement types
+
+    def __detect_class_initialization(self):
+        if self.__detect_type(self.__current()) and self.__peek().value == "(":
+            return True
+        return False
 
     def __detect_declaration(self) -> bool:
         """Detect declaration
@@ -143,7 +148,7 @@ class Parser:
             bool: Wheter declaration is detected or not
         """
         if (
-            self.__match(TokenKind.TYPE_KEYWORD)
+            self.__detect_type(self.__current())
             and self.__peek().kind == TokenKind.IDENTIFIER
             and (
                 self.__peek(2).value == ";"
@@ -180,22 +185,22 @@ class Parser:
         if self.__detect_type(self.__peek(peek_index)):
             peek_index += 1
 
-        # Check for identifier
+        # Check for identifier (it is not necessary for constructors)
         if self.__peek(peek_index).kind == TokenKind.IDENTIFIER:
             peek_index += 1
 
-            # Check for opening parenthesis '('
-            if self.__peek(peek_index).value == "(":
+        # Check for opening parenthesis '('
+        if self.__peek(peek_index).value == "(":
+            peek_index += 1
+
+            # Find the closing parenthesis ')'
+            while self.__peek(peek_index).value != ")":
                 peek_index += 1
+            peek_index += 1  # Move past the closing parenthesis
 
-                # Find the closing parenthesis ')'
-                while self.__peek(peek_index).value != ")":
-                    peek_index += 1
-                peek_index += 1  # Move past the closing parenthesis
-
-                # Check if the next token is the opening brace '{'
-                if self.__peek(peek_index).value == "{":
-                    return True
+            # Check if the next token is the opening brace '{'
+            if self.__peek(peek_index).value == "{":
+                return True
 
         # If none of the patterns match, it's not a function declaration
         return False
@@ -574,8 +579,8 @@ class Parser:
             and self.__peek().value == "("
         ):
             return self.__parse_function_call()
-        elif self.__match(TokenKind.IDENTIFIER) and self.__peek().value == "::":
-            return self.__parse_enum_access()
+        elif self.__detect_type(self.__current()) and self.__peek().value == "::":
+            return self.__parse_double_colon_access()
         elif self.__match(TokenKind.IDENTIFIER):
             return IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
         elif self.__match(TokenKind.SYMBOL) and self.__current().value == "$":
@@ -619,6 +624,8 @@ class Parser:
             self.__consume(TokenKind.SYMBOL)
 
             return expression
+        elif self.__detect_class_initialization():
+            return self.__parse_class_initialization()
         else:
             raise SyntaxError(
                 "Expected a primary expression. Token: " + str(self.__current())
@@ -698,21 +705,31 @@ class Parser:
         return TemplateTypeNode(keyword, inner_types)
 
     def __parse_declaration(self, parse_semicolon: bool = True) -> DeclarationNode:
-        """Declaration -> AccessModifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
+        """
+        Declaration -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)?
+                    ("," identifier ("=" ConditionalExpression)*)? ";"
 
         Args:
             parse_semicolon (bool, optional): Whether to parse the semicolon at the end of the declaration. Defaults to True.
 
         Raises:
-            SyntaxError: If the declaration is missing a semicolon at the end
+            SyntaxError: If the declaration is missing a semicolon at the end.
 
         Returns:
-            DeclarationNode: The parsed declaration node
+            DeclarationNode: The parsed declaration node.
         """
-        # Check if the declaration starts with an access modifier
+        # Parse optional AccessModifier
         access_modifier = None
         if self.__match(TokenKind.ACCESS_MODIFIER):
             access_modifier = self.__consume(TokenKind.ACCESS_MODIFIER).value
+
+        # Parse optional Modifiers (e.g., static, global, etc.)
+        modifiers = []
+        while self.__match(TokenKind.KEYWORD) and self.__current().value in {
+            "static",
+            "global",
+        }:
+            modifiers.append(self.__consume(TokenKind.KEYWORD).value)
 
         # Check if the declaration starts with "const"
         is_const = False
@@ -775,8 +792,8 @@ class Parser:
         if parse_semicolon:
             self.__consume(TokenKind.SYMBOL)
 
-        # Return a DeclarationNode with the access_modifier, type, list of identifiers, and const flag
-        return DeclarationNode(type_, identifiers, is_const, access_modifier)
+        # Return a DeclarationNode with the access_modifier, modifiers, type, list of identifiers, and const flag
+        return DeclarationNode(type_, identifiers, is_const, access_modifier, modifiers)
 
     def __parse_parameter_list(self):
         # Start with an empty list of parameters
@@ -845,14 +862,19 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         # Parse arguments (expressions within parentheses)
-        arguments = self.__parse_arguments()
+        arguments = self.__parse_argument_list()
 
         # Expect and consume the closing parenthesis
         self.__consume(TokenKind.SYMBOL)
 
         return FunctionCallNode(function_expression, arguments)
 
-    def __parse_arguments(self):
+    def __parse_argument_list(self):
+        """ArgumentList -> Expression ("," Expression)*
+
+        Returns:
+            List: List of parsed arguments
+        """
         # Start with an empty list of arguments
         arguments = []
 
@@ -1222,13 +1244,17 @@ class Parser:
         return EnumDeclarationNode(enum_name, enum_values)
 
     def __parse_enum_value(self) -> EnumValueNode:
-        """EnumValue -> identifier "=" number
+        """EnumValue -> identifier ("=" number)?
 
         Returns:
             EnumValueNode: The parsed enum value node
         """
         # Parse the enum value name
         enum_value_name = self.__consume(TokenKind.IDENTIFIER).value
+
+        # Check if there is assignment
+        if self.__match(TokenKind.SYMBOL):
+            return EnumValueNode(enum_value_name, None)
 
         # Consume the '='
         self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
@@ -1324,7 +1350,7 @@ class Parser:
         return CaseStatementNode(case_expression, return_statement)
 
     def __parse_struct_declaration(self) -> StructDeclarationNode:
-        """StructDeclaration -> "struct" identifier Block ";"
+        """StructDeclaration -> "struct" identifier Inheritance? Block ";"
 
         Returns:
             StructDeclarationNode: The parsed struct declaration node
@@ -1336,6 +1362,14 @@ class Parser:
         # Parse the struct name
         struct_name = self.__consume(TokenKind.IDENTIFIER).value
 
+        # Check for inheritance
+        inheritance = None
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == ":":
+            # Consume the ':'
+            self.__consume(TokenKind.SYMBOL)
+            # Consume the type
+            inheritance = InheritanceNode(self.__parse_type())
+
         # Parse the struct block
         block = self.__parse_block()
 
@@ -1345,7 +1379,7 @@ class Parser:
         # Parse the semicolon
         self.__consume(TokenKind.SYMBOL)
 
-        return StructDeclarationNode(struct_name, block)
+        return StructDeclarationNode(struct_name, block, inheritance)
 
     def __parse_class_declaration(self) -> ClassDeclarationNode:
         """ClassDeclaration -> "class" identifier Block ";"
@@ -1363,6 +1397,14 @@ class Parser:
         # Add the class name to the symbol table before parsing the block, since the block functions may reference the class
         self.symbol_table["classes"][class_name] = {}
 
+        # Check for inheritance
+        inheritance = None
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == ":":
+            # Consume the ':'
+            self.__consume(TokenKind.SYMBOL)
+            # Consume the type
+            inheritance = InheritanceNode(self.__parse_type())
+
         # Parse the class block
         block = self.__parse_block()
 
@@ -1372,13 +1414,13 @@ class Parser:
         # Parse the semicolon
         self.__consume(TokenKind.SYMBOL)
 
-        return ClassDeclarationNode(class_name, block)
+        return ClassDeclarationNode(class_name, block, inheritance)
 
-    def __parse_type_cast(self) -> IdentifierNode:
-        """TypeCast -> "(" Type ")" identifier
+    def __parse_type_cast(self) -> TypeCastNode:
+        """TypeCast -> "(" Type ")" Expression
 
         Returns:
-            IdentifierNode: The parsed identifier node
+            TypeCastNode: The parsed type cast node
         """
         # Parse "("
         self.__consume(TokenKind.SYMBOL)
@@ -1389,10 +1431,10 @@ class Parser:
         # Parse ")"
         self.__consume(TokenKind.SYMBOL)
 
-        # Parse the identifier
-        identifier = self.__consume(TokenKind.IDENTIFIER).value
+        # Parse the expression
+        expression = self.__parse_expression()
 
-        return IdentifierNode(identifier, type_)
+        return TypeCastNode(type_, expression)
 
     def __parse_for_loop_initialization(self) -> Any:
         """ForInitialization -> Declaration | Assignment | identifier
@@ -1407,3 +1449,68 @@ class Parser:
             return self.__parse_assignment(parse_semicolon=False)
         else:
             return IdentifierNode(self.__consume(TokenKind.IDENTIFIER))
+
+    def __parse_class_static_access(self) -> ClassStaticAccessNode:
+        """ClassStaticAccess -> identifier "::" (FunctionCall | identifier)
+
+        Returns:
+            ClassStaticAccessNode: The parsed class static access node
+        """
+
+        # Parse the class name
+        class_name = self.__parse_type().value
+
+        # Consume the '::'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Check if the next token is a function call
+        if self.__detect_function_call():
+            # Parse the function call
+            function_call = self.__parse_function_call()
+            return ClassStaticAccessNode(class_name, function_call)
+        # Otherwise, parse the identifier
+        else:
+            # Parse the identifier
+            identifier = self.__consume(TokenKind.IDENTIFIER).value
+            return ClassStaticAccessNode(class_name, IdentifierNode(identifier))
+
+    def __parse_double_colon_access(self) -> EnumAccessNode | ClassStaticAccessNode:
+        """Parse the double colon access, which can be either an enum access or a class static access
+
+        Returns:
+            EnumAccessNode | ClassStaticAccessNode: The parsed enum access or class static access node
+        """
+
+        # Check if the identifier is an enum or class
+        if self.__current().value in self.symbol_table["enums"]:
+            return self.__parse_enum_access()
+        elif self.__current().value in self.symbol_table["classes"]:
+            return self.__parse_class_static_access()
+        elif self.__detect_type(self.__current()):
+            # If the type is imported from a library parse it as static access for now. In the future check the imports.
+            return self.__parse_class_static_access()
+        else:
+            raise SyntaxError(
+                f"Type '{self.__current().value}' is not defined. Token: {self.__current()}"
+            )
+
+    def __parse_class_initialization(self) -> ClassInitializationNode:
+        """ClassInitialization -> Type "(" ArgumentList? ")"
+
+        Returns:
+            ClassInitializationNode: The parsed class initialization node
+        """
+
+        # Parse the class type
+        class_type = self.__parse_type()
+
+        # Consume '('
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the argument list
+        arguments = self.__parse_argument_list()
+
+        # Consume ')'
+        self.__consume(TokenKind.SYMBOL)
+
+        return ClassInitializationNode(class_type, arguments)

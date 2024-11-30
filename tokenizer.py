@@ -39,7 +39,14 @@ BASE_TYPE_KEYWORDS = [
     "ulong",
 ]
 TYPE_KEYWORDS = []
-LIBRARY_TYPE_KEYWORDS = ["OaTestResultEnvironment", "OaTestResultStatistic", "LogEntry"]
+LIBRARY_TYPE_KEYWORDS = [
+    "OaTestResultEnvironment",
+    "OaTestResultStatistic",
+    "LogEntry",
+    "OaTestResult",
+    "OsInfo",
+    "TfString",
+]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
     "+",

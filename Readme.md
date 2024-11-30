@@ -27,6 +27,7 @@ Statement           -> Assignment
                     | MainFunction
                     | EnumDeclaration
                     | SwitchStatement
+                    | Block
 IfStatement         -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 InlineStatement     -> Statement
 ElseIfClause        -> "else" "if" "(" Comparison ")" (InlineStatement | Block)
@@ -38,10 +39,11 @@ IncrementAssignment -> Identifier ("++" | "--") ";"
                      | ("++" | "--") Identifier ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
 AccessModifier      -> "public" | "private" | "protected"
-Declaration         -> AccessModifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
+Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
 FunctionDeclaration -> AccessModifier? Modifier? Type? identifier "(" ParameterList? ")" Block
 Modifier            -> "static" | "global"
-FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" (Expression ("," Expression)*)? ")"
+FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" ArgumentList? ")"
+ArgumentList        -> Expression ("," Expression)*
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
 TernaryExpression   -> Comparison "?" Expression ":" Expression
@@ -69,6 +71,7 @@ Primary             -> number "."?
                     | String
                     | Character
                     | EnumAccess
+                    | ClassInitialization
 AttributeAccess     -> (identifier | IndexAccess) "." identifier
 IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
 Comment             -> "//" (any_character)*
@@ -89,11 +92,14 @@ ForInitialization   -> Declaration | Assignment | identifier
 MainFunction        -> Type? "main" "(" ")" Block
 EnumDeclaration     -> "enum" identifier "{" EnumValue ("," EnumValue)* "}"
 EnumAccess          -> identifier "::" identifier
-EnumValue           -> identifier "=" number
+ClassStaticAccess   -> identifier "::" (FunctionCall | identifier)
+EnumValue           -> identifier ("=" number)?
 SwitchStatement     -> "switch" "(" Expression ")" "{" SwitchCase* "}"
 SwitchCase          -> "case" Expression ":" ReturnStatement
                     | "default" ":" ReturnStatement
-StructDeclaration   -> "struct" identifier Block ";"
-ClassDeclaration    -> "class" identifier Block ";"
-TypeCast            -> "(" Type ")" identifier
+StructDeclaration -> "struct" identifier Inheritance? Block ";"
+Inheritance -> ":" identifier
+ClassDeclaration    -> "class" identifier Inheritance? Block ";"
+TypeCast            -> "(" Type ")" Expression
+ClassInitialization -> Type "(" ArgumentList? ")"
 ```

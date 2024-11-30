@@ -33,7 +33,9 @@ class AssignmentNode:
 
 
 class DeclarationNode:
-    def __init__(self, type_, identifiers, is_const=False, access_modifier=None):
+    def __init__(
+        self, type_, identifiers, is_const=False, access_modifier=None, modifier=None
+    ):
         """
         :param type_keyword: The data type of the declaration (e.g., 'int' or 'string')
         :param identifiers: A list of tuples where each tuple contains:
@@ -44,10 +46,11 @@ class DeclarationNode:
         self.identifiers = identifiers
         self.is_const = is_const
         self.access_modifier = access_modifier
+        self.modifier = modifier
 
     def __repr__(self, indent=0):
         # Start the string with the type keyword
-        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, access_modifier={self.access_modifier}, type={self.type.__repr__(indent+1)}, identifiers=[\n"
+        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, access_modifier={self.access_modifier}, modifier={self.modifier}, type={self.type.__repr__(indent+1)}, identifiers=[\n"
 
         # Add each identifier with its optional initial value
         for identifier, value in self.identifiers:
@@ -603,27 +606,60 @@ class ShiftNode:
 
 
 class StructDeclarationNode:
-    def __init__(self, identifier, block):
+    def __init__(self, identifier, block, inheritance=None):
         self.identifier = identifier
         self.block = block
+        self.inheritance = None
 
     def __repr__(self, indent=0):
-        string = (
-            f"{indent_str(indent)}StructDeclarationNode(identifier={self.identifier},\n"
-        )
+        string = f"{indent_str(indent)}StructDeclarationNode(inheritance={self.inheritance}, identifier={self.identifier},\n"
         string += self.block.__repr__(indent + 1) + "\n"
         return string
 
 
 class ClassDeclarationNode:
-    def __init__(self, identifier, block):
+    def __init__(self, identifier, block, inheritance=None):
         self.identifier = identifier
         self.block = block
+        self.inheritance = inheritance
 
     def __repr__(self, indent=0):
-        string = (
-            f"{indent_str(indent)}ClassDeclarationNode(identifier={self.identifier},\n"
-        )
+        string = f"{indent_str(indent)}ClassDeclarationNode(inheritance={self.inheritance}, identifier={self.identifier},\n"
         string += self.block.__repr__(indent + 1)
         string += f"{indent_str(indent)}])"
         return string
+
+
+class InheritanceNode:
+    def __init__(self, identifier):
+        self.identifier = identifier
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}InheritanceNode(identifier={self.identifier})"
+
+
+class TypeCastNode:
+    def __init__(self, type_, expression):
+        self.type_ = type_
+        self.expression = expression
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}TypeCastNode(type={self.type_}, expression={self.expression})"
+
+
+class ClassStaticAccessNode:
+    def __init__(self, identifier, attribute):
+        self.identifier = identifier
+        self.attribute = attribute
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}ClassStaticAccessNode(identifier={self.identifier}, attribute={self.attribute})"
+
+
+class ClassInitializationNode:
+    def __init__(self, identifier, arguments):
+        self.identifier = identifier
+        self.arguments = arguments
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}ClassInitializationNode(identifier={self.identifier}, arguments={self.arguments})"
