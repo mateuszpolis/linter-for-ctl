@@ -5,7 +5,7 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    BooleanNode, BreakNode, CaseStatementNode, CharNode,
                    ClassDeclarationNode, ClassInitializationNode,
                    ClassStaticAccessNode, CommentNode, CompoundAssignmentNode,
-                   ContinueNode, DeclarationNode, DividerNode,
+                   ContinueNode, DeclarationNode, DividerNode, DoWhileLoopNode, ElseClauseNode,
                    ElseIfClauseNode, EnumAccessNode, EnumDeclarationNode,
                    EnumValueNode, ForLoopNode, FunctionCallNode,
                    FunctionDeclarationNode, GlobalIdentifierNode,
@@ -16,7 +16,7 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    ParameterNode, PointerNode, ProgramNode, RelationalNode,
                    ReturnNode, ShiftNode, StringNode, StructDeclarationNode,
                    SwitchStatementNode, TemplateTypeNode,
-                   TernaryExpressionNode, TypeCastNode, TypeNode,
+                   TernaryExpressionNode, TryCatchNode, TypeCastNode, TypeNode,
                    WhileLoopNode)
 from token_ import Token, TokenError, TokenKind
 
@@ -103,7 +103,11 @@ class Parser:
             comment = self.__consume(TokenKind.COMMENT)
             return CommentNode(comment.value)
         elif self.__match(TokenKind.IF):
-            return self.__parse_if_statement()
+            if_statement = self.__parse_if_statement()
+            # Check for optional ';' at the end of the if statement
+            if self.__match(TokenKind.SYMBOL) and self.__current().value == ";":
+                self.__consume(TokenKind.SYMBOL)
+            return if_statement
         elif self.__detect_main():
             return self.__parse_main()
         elif self.__match(TokenKind.MULTI_LINE_COMMENT):
@@ -131,6 +135,10 @@ class Parser:
             return self.__parse_block()
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "continue":
             return self.__parse_continue_statement()
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "try":
+            return self.__parse_try_catch()
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "do":
+            return self.__parse_do_while_loop()
         else:
             raise TokenError(
                 SyntaxError("Unexpected statement"),
@@ -981,13 +989,18 @@ class Parser:
         return MainNode(parameters, block, type_)
 
     def __parse_if_statement(self) -> IfStatementNode:
-        """IfStatement -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
+        """IfStatement -> "if" Comment? "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 
         Returns:
             IfStatementNode: The parsed if statement node
         """
         # Consume the "if" keyword
         self.__consume(TokenKind.IF)
+
+        # Check for a comment after the "if" keyword
+        comment = None
+        if self.__match(TokenKind.COMMENT):
+            comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
 
         # Parse the condition within parentheses
         self.__consume(TokenKind.SYMBOL)
@@ -1005,34 +1018,79 @@ class Parser:
         # Parse any "else if" clauses
         else_if_clauses = []
         while self.__match(TokenKind.ELSE_IF):
-            self.__consume(TokenKind.ELSE_IF)
-
-            self.__consume(TokenKind.SYMBOL)
-            else_if_condition = self.__parse_comparison()
-            self.__consume(TokenKind.SYMBOL)
-
-            # Check if there is a block, or a single statement
-            if self.__match(TokenKind.SYMBOL) and self.__current().value == "{":
-                else_if_block = self.__parse_block()
-                else_if_inline_statement = None
-            else:
-                else_if_block = None
-                else_if_inline_statement = self.__parse_statement()
             else_if_clauses.append(
-                ElseIfClauseNode(
-                    else_if_condition, else_if_block, else_if_inline_statement
-                )
+                self.__parse_else_if_clause()
             )
 
         # Parse an optional "else" clause
-        else_block = None
+        else_node = None
         if self.__match(TokenKind.ELSE):
-            self.__consume(TokenKind.ELSE)
-            else_block = self.__parse_block()
+            else_node = self.__parse_else_clause()
 
-        return IfStatementNode(
-            condition, if_block, inline_statement, else_if_clauses, else_block
+        node = IfStatementNode(
+            condition, if_block, inline_statement, else_if_clauses, else_node
         )
+
+        if comment:
+            node.set_comment(comment.value)
+
+        return node
+    
+    def __parse_else_clause(self):
+        """ElseClause -> "else" Comment? (InlineStatement | Block)
+
+        Returns:
+            ElseClauseNode: The parsed else clause node
+        """
+        self.__consume(TokenKind.ELSE)
+
+        # Check for a comment after the "else" keyword
+        comment = None
+        if self.__match(TokenKind.COMMENT):
+            comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+        
+        # Check if there is a block, or a single statement
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == "{":
+            else_block = self.__parse_block()
+            else_inline_statement = None
+        else:
+            else_block = None
+            else_inline_statement = self.__parse_statement()
+        
+        node = ElseClauseNode(else_block, else_inline_statement)
+        if comment:
+            node.set_comment(comment.value)
+        return node
+
+    def __parse_else_if_clause(self) -> ElseIfClauseNode:
+        """"else" "if" Comment? "(" Comparison ")" (InlineStatement | Block)
+
+        Returns:
+            ElseIfClauseNode: The parsed else if clause node
+        """
+        self.__consume(TokenKind.ELSE_IF)
+
+        # Check for a comment after the "else if" keyword
+        comment = None
+        if self.__match(TokenKind.COMMENT):
+            comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+
+        self.__consume(TokenKind.SYMBOL)
+        else_if_condition = self.__parse_comparison()
+        self.__consume(TokenKind.SYMBOL)
+
+        # Check if there is a block, or a single statement
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == "{":
+            else_if_block = self.__parse_block()
+            else_if_inline_statement = None
+        else:
+            else_if_block = None
+            else_if_inline_statement = self.__parse_statement()
+        else_if_node = ElseIfClauseNode( else_if_condition, else_if_block, else_if_inline_statement)
+        if comment:
+            else_if_node.set_comment(comment.value)
+        return else_if_node
+        
 
     def __parse_block(self):
         statements = []
@@ -1591,3 +1649,59 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         return ContinueNode()
+
+    def __parse_try_catch(self) -> TryCatchNode:
+        """TryCatchStatement -> "try" Block "catch" Block ("finally" Block)?
+
+        Returns:
+            TryCatchNode: The parsed try-catch node
+        """
+
+        # Consume the "try" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Parse the try block
+        try_block = self.__parse_block()
+
+        # Consume the "catch" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Parse the catch block
+        catch_block = self.__parse_block()
+
+        # Parse the optional "finally" block
+        finally_block = None
+        if self.__match(TokenKind.KEYWORD) and self.__current().value == "finally":
+            self.__consume(TokenKind.KEYWORD)
+            finally_block = self.__parse_block()
+
+        return TryCatchNode(try_block, catch_block, finally_block)
+    
+    def __parse_do_while_loop(self) -> DoWhileLoopNode:
+        """DoWhileLoop -> "do" Block "while" "(" Comparison ")" ";"
+
+        Returns:
+            DoWhileLoopNode: The parsed do-while loop node
+        """
+        # Consume the "do" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Parse the block
+        block = self.__parse_block()
+
+        # Consume the "while" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Consume '('
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the condition
+        condition = self.__parse_comparison()
+
+        # Consume ')'
+        self.__consume(TokenKind.SYMBOL)
+
+        # Consume ';'
+        self.__consume(TokenKind.SYMBOL)
+
+        return DoWhileLoopNode(condition, block)

@@ -14,7 +14,7 @@ Statement           -> Assignment
                     | Declaration 
                     | FunctionDeclaration 
                     | FunctionCall ";"
-                    | IfStatement
+                    | IfStatement ";"?
                     | DividingLine
                     | Comment
                     | MultiLineComment
@@ -29,10 +29,12 @@ Statement           -> Assignment
                     | SwitchStatement
                     | Block
                     | ContinueStatement
-IfStatement         -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
+                    | TryCatchStatement
+                    | DoWhileLoop
+IfStatement         -> "if" Comment? "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
+ElseIfClause        -> "else" "if" Comment? "(" Comparison ")" (InlineStatement | Block)
+ElseClause          -> "else" Comment? (InlineStatement | Block)
 InlineStatement     -> Statement
-ElseIfClause        -> "else" "if" "(" Comparison ")" (InlineStatement | Block)
-ElseClause          -> "else" (InlineStatement | Block)
 Assignment          -> Identifier "=" ConditionalExpression ";"
                      | IncrementAssignment
                      | CompoundAssignment
@@ -104,4 +106,6 @@ ClassDeclaration    -> "class" identifier Inheritance? Block ";"
 TypeCast            -> "(" Type ")" Expression
 ClassInitialization -> Type "(" ArgumentList? ")"
 ContinueStatement   -> "continue" ";"
+TryCatchStatement   -> "try" Block "catch" Block ("finally" Block)?
+DoWhileLoop         -> "do" Block "while" "(" Comparison ")" ";"
 ```

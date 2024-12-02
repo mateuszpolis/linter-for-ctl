@@ -288,51 +288,56 @@ class MainNode:
         return string
 
 
-class IfStatementNode:
+class IfStatementNode(DefaultNode):
     def __init__(
         self,
         condition,
         if_block=None,
         inline_statement=None,
         else_if_clauses=None,
-        else_block=None,
+        else_node=None,
     ):
+        super().__init__()
         self.condition = condition
         self.if_block = if_block
         self.inline_statement = inline_statement
         self.else_if_clauses = else_if_clauses if else_if_clauses is not None else []
-        self.else_block = else_block
+        self.else_node = else_node
 
     def __repr__(self, indent=0):
         result = f"{indent_str(indent)}IfStatementNode(\n"
         result += f"{indent_str(indent + 1)}condition={self.condition},\n"
+        result += f"{indent_str(indent + 1)}comment,\n"
         result += f"{indent_str(indent + 1)}if_block={self.if_block},\n"
         result += f"{indent_str(indent + 1)}inline_statement={self.inline_statement},\n"
         result += f"{indent_str(indent + 1)}else_if_clauses=[\n"
         for clause in self.else_if_clauses:
             result += clause.__repr__(indent + 2) + "\n"
         result += f"{indent_str(indent + 1)}],\n"
-        result += f"{indent_str(indent + 1)}else_block={self.else_block}\n"
+        result += f"{indent_str(indent + 1)}else_block={self.else_node}\n"
         result += f"{indent_str(indent)})"
         return result
 
 
-class ElseIfClauseNode:
+class ElseIfClauseNode(DefaultNode):
     def __init__(self, condition, block=None, inline_statement=None):
+        super().__init__()
         self.condition = condition
         self.block = block
         self.inline_statement = inline_statement
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}ElseIfClauseNode(condition={self.condition}, block={self.block}, inline_statement={self.inline_statement})"
+        return f"{indent_str(indent)}ElseIfClauseNode(condition={self.condition}, comment={self.comment} block={self.block}, inline_statement={self.inline_statement})"
 
 
-class ElseClauseNode:
-    def __init__(self, block):
+class ElseClauseNode(DefaultNode):
+    def __init__(self, block, inline_statement=None):
+        super().__init__()
         self.block = block
+        self.inline_statement = inline_statement
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}ElseClauseNode(block={self.block})"
+        return f"{indent_str(indent)}ElseClauseNode(comment={self.comment}, block={self.block}, inline_statement={self.inline_statement})"
 
 
 class BlockNode:
@@ -685,3 +690,20 @@ class ClassInitializationNode:
 class ContinueNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ContinueNode()"
+
+class TryCatchNode:
+    def __init__(self, try_block, catch_block, finally_block=None):
+        self.try_block = try_block
+        self.catch_block = catch_block
+        self.finally_block = finally_block
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}TryCatchNode(try_block={self.try_block}, catch_block={self.catch_block}, finally_block={self.finally_block})"
+    
+class DoWhileLoopNode:
+    def __init__(self, block, condition):
+        self.block = block
+        self.condition = condition
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}DoWhileLoopNode(block={self.block}, condition={self.condition})"

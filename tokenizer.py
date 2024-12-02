@@ -19,6 +19,10 @@ KEYWORDS = [
     "default",
     "struct",
     "class",
+    "try",
+    "catch",
+    "finally",
+    "do",
 ]
 MODIFIERS = ["static", "global", "synchronized"]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
