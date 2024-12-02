@@ -176,9 +176,7 @@ class Parser:
             peek_index += 1
 
         # Check for optional modifier (e.g., static, global)
-        if self.__peek(peek_index).kind == TokenKind.KEYWORD and self.__peek(
-            peek_index
-        ).value in {"static", "global"}:
+        if self.__peek(peek_index).kind == TokenKind.MODIFIER:
             peek_index += 1
 
         # Check for optional type
@@ -230,11 +228,8 @@ class Parser:
 
         # Parse optional modifiers (static, global, etc.)
         modifiers = []
-        while self.__current().kind == TokenKind.KEYWORD and self.__current().value in {
-            "static",
-            "global",
-        }:
-            modifiers.append(self.__consume(TokenKind.KEYWORD).value)
+        while self.__current().kind == TokenKind.MODIFIER:
+            modifiers.append(self.__consume(TokenKind.MODIFIER).value)
 
         # Check if the next token is a type or skip it
         type_ = None
@@ -481,15 +476,29 @@ class Parser:
 
         raise TokenError("Invalid assignment statement", self.__current())
 
-    def __parse_expression(self):
+    def __parse_expression(self) -> Any:
+        """Expression -> Term ( ("+" | "-") Comment? Term )*
+
+        Returns:
+            Any: The parsed expression node
+        """
         left = self.__parse_term()
 
         while self.__match(
             TokenKind.ARITHMETIC_OPERATOR
         ) and self.__current().value in ["+", "-"]:
             operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
+
+            # Check for a comment after the operator
+            comment = None
+            if self.__match(TokenKind.COMMENT):
+                comment = self.__consume(TokenKind.COMMENT).value
+
             right = self.__parse_term()
             left = BinaryExpressionNode(left, operator.value, right)
+
+            if comment:
+                left.set_comment(comment)
 
         return left
 
@@ -526,7 +535,9 @@ class Parser:
                 if not (
                     self.__match(TokenKind.SYMBOL) and self.__current().value == "]"
                 ):
-                    raise SyntaxError("Expected closing ']' for list access")
+                    raise TokenError(
+                        "Expected closing ']' for list access", self.__current()
+                    )
                 self.__consume(TokenKind.SYMBOL)
                 node = IndexAccessNode(node, index)
 
@@ -725,11 +736,8 @@ class Parser:
 
         # Parse optional Modifiers (e.g., static, global, etc.)
         modifiers = []
-        while self.__match(TokenKind.KEYWORD) and self.__current().value in {
-            "static",
-            "global",
-        }:
-            modifiers.append(self.__consume(TokenKind.KEYWORD).value)
+        while self.__match(TokenKind.MODIFIER):
+            modifiers.append(self.__consume(TokenKind.MODIFIER).value)
 
         # Check if the declaration starts with "const"
         is_const = False
@@ -870,7 +878,7 @@ class Parser:
         return FunctionCallNode(function_expression, arguments)
 
     def __parse_argument_list(self):
-        """ArgumentList -> Expression ("," Expression)*
+        """ArgumentList -> Expression ("," Comment? Expression)*
 
         Returns:
             List: List of parsed arguments
@@ -891,8 +899,15 @@ class Parser:
             # Consume the comma
             self.__consume(TokenKind.SYMBOL)
 
+            # Check for a comment after the argument
+            comment = None
+            if self.__match(TokenKind.COMMENT):
+                comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+
             # Parse the next argument
             argument = self.__parse_expression()
+            if comment:
+                argument.set_comment(comment.value)
             arguments.append(argument)
 
         return arguments

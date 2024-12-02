@@ -2,6 +2,17 @@ def indent_str(indent_level):
     return "  " * indent_level  # 2 spaces per level
 
 
+class DefaultNode:
+    def __init__(self):
+        self.comment = None
+
+    def set_comment(self, comment):
+        self.comment = comment
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}DefaultNode(comment={self.value})"
+
+
 class ProgramNode:
     def __init__(self, statements):
         self.statements = statements
@@ -63,8 +74,9 @@ class DeclarationNode:
         return string
 
 
-class BinaryExpressionNode:
+class BinaryExpressionNode(DefaultNode):
     def __init__(self, left, operator, right):
+        super().__init__()
         self.left = left
         self.operator = operator
         self.right = right
@@ -73,18 +85,20 @@ class BinaryExpressionNode:
         string = f"{indent_str(indent)}BinaryExpressionNode(\n"
         string += f"{indent_str(indent + 1)}left: {self.left.__repr__(indent + 2)}\n"
         string += f"{indent_str(indent + 1)}operator: {self.operator}\n"
+        string += f"{indent_str(indent + 1)}comment: {self.comment}\n"
         string += f"{indent_str(indent + 1)}right: {self.right.__repr__(indent + 2)}\n"
         string += f"{indent_str(indent)})"
         return string
 
 
-class IdentifierNode:
+class IdentifierNode(DefaultNode):
     def __init__(self, value, type_cast=None):
+        super().__init__()
         self.value = value
         self.type_cast = type_cast
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}IdentifierNode(value={self.value}, type_cast={self.type_cast})"
+        return f"{indent_str(indent)}IdentifierNode(value={self.value}, type_cast={self.type_cast}, comment={self.comment})"
 
 
 class GlobalIdentifierNode:
@@ -121,12 +135,13 @@ class BooleanNode:
         return f"{indent_str(indent)}BooleanNode({self.value})"
 
 
-class StringNode:
+class StringNode(DefaultNode):
     def __init__(self, value):
+        super().__init__()
         self.value = value
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}StringNode({self.value})"
+        return f"{indent_str(indent)}StringNode({self.value}, comment={self.comment})"
 
 
 class OperatorNode:

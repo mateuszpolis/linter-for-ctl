@@ -6,6 +6,7 @@ import subprocess
 def run_main_for_ctl_files(base_directory, output_file):
     with open(output_file, "w") as result_file:
         error_count = 0
+        no_error_count = 0
         # Walk through each directory and subdirectory
         for root, _, files in os.walk(base_directory):
             for file in files:
@@ -28,6 +29,8 @@ def run_main_for_ctl_files(base_directory, output_file):
                             result_file.write(
                                 "=" * 40 + "\n"
                             )  # Separator for readability
+                        else:
+                            no_error_count += 1
 
                     except subprocess.CalledProcessError as e:
                         # Handle errors gracefully and log them
@@ -37,6 +40,7 @@ def run_main_for_ctl_files(base_directory, output_file):
 
         # Write the summary to the output file
         result_file.write(f"Total errors found: {error_count}\n")
+        result_file.write(f"Total files with no errors: {no_error_count}\n")
 
 
 if __name__ == "__main__":

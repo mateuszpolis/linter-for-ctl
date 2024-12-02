@@ -19,9 +19,8 @@ KEYWORDS = [
     "default",
     "struct",
     "class",
-    "static",
-    "global",
 ]
+MODIFIERS = ["static", "global", "synchronized"]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
 BASE_TYPE_KEYWORDS = [
     "string",
@@ -37,6 +36,7 @@ BASE_TYPE_KEYWORDS = [
     "errClass",
     "mixed",
     "ulong",
+    "char",
 ]
 TYPE_KEYWORDS = []
 LIBRARY_TYPE_KEYWORDS = [
@@ -131,6 +131,9 @@ class Tokenizer:
                     self.line,
                     self.column,
                 )
+            elif modifier := self.__match_modifier():
+                token = Token(TokenKind.MODIFIER, modifier, self.line, self.column)
+                self.column += len(modifier)
             elif identifier := self.__match_identifier():
                 token = Token(TokenKind.IDENTIFIER, identifier, self.line, self.column)
                 self.column += len(identifier)
@@ -471,6 +474,16 @@ class Tokenizer:
 
     def __match_access_identifier(self):
         for keyword in ACCESS_MODIFIERS:
+            if (
+                self.code[self.pos : self.pos + len(keyword)] == keyword
+                and not self.code[self.pos + len(keyword)].isalnum()
+            ):
+                self.pos += len(keyword)
+                return keyword
+        return None
+
+    def __match_modifier(self):
+        for keyword in MODIFIERS:
             if (
                 self.code[self.pos : self.pos + len(keyword)] == keyword
                 and not self.code[self.pos + len(keyword)].isalnum()

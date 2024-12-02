@@ -43,7 +43,7 @@ Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) id
 FunctionDeclaration -> AccessModifier? Modifier? Type? identifier "(" ParameterList? ")" Block
 Modifier            -> "static" | "global"
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" ArgumentList? ")"
-ArgumentList        -> Expression ("," Expression)*
+ArgumentList        -> Expression ("," Comment? Expression)*
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
 TernaryExpression   -> Comparison "?" Expression ":" Expression
@@ -56,7 +56,7 @@ BitwiseXor          -> BitwiseAnd ("^" BitwiseAnd)*
 BitwiseAnd          -> Shift ("&" Shift)*
 Shift               -> Relational (("<<" | ">>") Relational)*
 Relational          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )?
-Expression          -> Term ( ("+" | "-") Term )*
+Expression          -> Term ( ("+" | "-") Comment? Term )*
 Term                -> Factor ( ("*" | "/") Factor )*
 Factor              -> Primary
 Primary             -> number "."?
