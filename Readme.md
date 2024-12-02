@@ -24,7 +24,6 @@ Statement           -> Assignment
                     | LibraryImport    
                     | InlineIfStatement
                     | ForLoop
-                    | MainFunction
                     | EnumDeclaration
                     | SwitchStatement
                     | Block
@@ -43,7 +42,7 @@ IncrementAssignment -> Identifier ("++" | "--") ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
 AccessModifier      -> "public" | "private" | "protected"
 Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
-FunctionDeclaration -> AccessModifier? Modifier? Type? identifier "(" ParameterList? ")" Block
+FunctionDeclaration -> AccessModifier? Modifier? Type? (identifier | "main") "(" ParameterList? ")" Block
 Modifier            -> "static" | "global"
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" ArgumentList? ")"
 ArgumentList        -> Expression Comment? ("," Comment? Expression)*
@@ -92,7 +91,6 @@ String              -> '"' (any_character)* '"'
 Character           -> "'" any_character "'"
 ForLoop             -> "for" "(" ForInitialization ";" Comparison ";" Assignment? ")" (Block | Statement)
 ForInitialization   -> Declaration | Assignment | identifier
-MainFunction        -> Type? "main" "(" ")" Block
 EnumDeclaration     -> "enum" identifier "{" EnumValue ("," EnumValue)* "}"
 EnumAccess          -> identifier "::" identifier
 ClassStaticAccess   -> identifier "::" (FunctionCall | identifier)

@@ -107,9 +107,7 @@ class Parser:
             # Check for optional ';' at the end of the if statement
             if self.__match(TokenKind.SYMBOL) and self.__current().value == ";":
                 self.__consume(TokenKind.SYMBOL)
-            return if_statement
-        elif self.__detect_main():
-            return self.__parse_main()
+            return if_statement        
         elif self.__match(TokenKind.MULTI_LINE_COMMENT):
             multi_line_comment = self.__consume(TokenKind.MULTI_LINE_COMMENT)
             return MultilineCommentNode(multi_line_comment.value.split("\n"))
@@ -151,34 +149,6 @@ class Parser:
         if self.__detect_type(self.__current()) and self.__peek().value == "(":
             return True
         return False
-
-    def __detect_main(self) -> bool:
-        """MainFunction -> Type? "main" "(" ")" Block
-
-        Returns:
-            bool: _description_
-        """
-        peek_index = 0
-
-        # Check if there is a type before the "main" keyword
-        if self.__detect_type(self.__current()):
-            peek_index += 1
-
-        # Check if the next token is the "main" keyword
-        if self.__peek(peek_index).kind == TokenKind.MAIN_KEYWORD:
-            peek_index += 1
-
-            # Check if the next token is an opening parenthesis
-            if self.__peek(peek_index).value == "(":
-                peek_index += 1
-
-                # Check if the next token is a closing parenthesis
-                if self.__peek(peek_index).value == ")":
-                    peek_index += 1
-
-                    # Check if the next token is a block
-                    if self.__peek(peek_index).value == "{":
-                        return True
 
     def __detect_declaration(self) -> bool:
         """Detect declaration
@@ -226,6 +196,10 @@ class Parser:
         if self.__peek(peek_index).kind == TokenKind.IDENTIFIER:
             peek_index += 1
 
+        # The function might be a main function
+        if self.__peek(peek_index).kind == TokenKind.MAIN_KEYWORD:
+            peek_index += 1
+
         # Check for opening parenthesis '('
         if self.__peek(peek_index).value == "(":
             peek_index += 1
@@ -259,7 +233,16 @@ class Parser:
 
         return False
 
-    def __parse_function_declaration(self):
+    def __parse_function_declaration(self) -> FunctionDeclarationNode:
+        """FunctionDeclaration -> AccessModifier? Modifier? Type? (identifier | "main") "(" ParameterList? ")" Block_summary_
+
+        Raises:
+            SyntaxError: When the function declaration is missing a block
+            SyntaxError: When the function declaration is missing a closing parenthesis
+
+        Returns:
+            FunctionDeclarationNode: The parsed function declaration node
+        """
         # Check if the function declaration starts with an access modifier
         access_modifier = None
         if self.__current().kind == TokenKind.ACCESS_MODIFIER:
@@ -277,10 +260,16 @@ class Parser:
 
         function_name = None
         is_constructor = False
+        is_main = False
         # If the next token is '(' this function is a constructor and we skip the identifier parsing
-        if self.__match(TokenKind.IDENTIFIER) and self.__peek().value == "(":
-            # Expect and consume the function name (identifier)
-            function_name = self.__consume(TokenKind.IDENTIFIER)
+        if (self.__match(TokenKind.IDENTIFIER) or self.__match(TokenKind.MAIN_KEYWORD)) and self.__peek().value == "(":
+            # Check if the function is a 'main' function
+            if self.__match(TokenKind.MAIN_KEYWORD):
+                is_main = True
+                function_name = self.__consume(TokenKind.MAIN_KEYWORD)
+            else:
+                # Expect and consume the function name (identifier)
+                function_name = self.__consume(TokenKind.IDENTIFIER)                
         elif self.__match(TokenKind.SYMBOL) and self.__current().value == "(":
             function_name = type_
             is_constructor = True
@@ -314,6 +303,7 @@ class Parser:
             access_modifier,
             is_constructor,
             modifiers[0] if len(modifiers) > 0 else None,
+            is_main,
         )
 
     def __detect_assignment(self):
@@ -957,36 +947,6 @@ class Parser:
             arguments.append(argument)
 
         return arguments
-
-    def __parse_main(self):
-        # Check if the main function starts with a type
-        type_ = None
-        if self.__detect_type(self.__current()):
-            type_ = self.__parse_type()
-
-        # Expect and consume the "main" keyword
-        self.__consume(TokenKind.MAIN_KEYWORD)
-
-        # Expect and consume the opening parenthesis for the main function parameter list
-        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == "("):
-            raise SyntaxError("Expected '(' after 'main'")
-        self.__consume(TokenKind.SYMBOL)
-
-        # Parse the argument list for the main function (should be empty)
-        parameters = self.__parse_parameter_list()
-
-        # Expect and consume the closing parenthesis for the main function parameter list
-        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ")"):
-            raise SyntaxError(
-                "Expected ')' after main function parameter list. Token: "
-                + str(self.__current())
-            )
-        self.__consume(TokenKind.SYMBOL)
-
-        block = self.__parse_block()
-
-        # Return a FunctionDeclarationNode with the parsed information
-        return MainNode(parameters, block, type_)
 
     def __parse_if_statement(self) -> IfStatementNode:
         """IfStatement -> "if" Comment? "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?

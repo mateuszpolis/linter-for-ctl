@@ -232,6 +232,7 @@ class FunctionDeclarationNode:
         access_modifier=None,
         is_constructor=False,
         modifier=None,
+        is_main=False,
     ):
         self.return_type = return_type
         self.identifier = identifier
@@ -240,12 +241,14 @@ class FunctionDeclarationNode:
         self.access_modifier = access_modifier
         self.is_constructor = is_constructor
         self.modifier = modifier
+        self.is_main = is_main
 
     def __repr__(self, indent=0):
         string = f"{indent_str(indent)}FunctionDeclarationNode(\n"
         string += (
             f"{indent_str(indent + 1)}return_type: {self.return_type.__repr__()}\n"
         )
+        string += f"{indent_str(indent + 1)}is_main: {self.is_main}\n"
         string += f"{indent_str(indent + 1)}access_modifier: {self.access_modifier}\n"
         string += f"{indent_str(indent + 1)}modifier: {self.modifier}\n"
         string += f"{indent_str(indent + 1)}is_constructor: {self.is_constructor}\n"
