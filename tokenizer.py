@@ -41,6 +41,7 @@ BASE_TYPE_KEYWORDS = [
     "mixed",
     "ulong",
     "char",
+    "unsigned",
 ]
 TYPE_KEYWORDS = []
 LIBRARY_TYPE_KEYWORDS = [
@@ -50,6 +51,16 @@ LIBRARY_TYPE_KEYWORDS = [
     "OaTestResult",
     "OsInfo",
     "TfString",
+    "ProjEnvProject",
+    "fitLookUpTable",
+    "ProjEnvComponent",
+    "JsonFile",
+    "OaTestResultFileFormat",
+    "TfTestRunner",
+    "LogReader",
+    "TfTestProject",
+    "TfNotifier",
+    "TfErrHdl",
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
