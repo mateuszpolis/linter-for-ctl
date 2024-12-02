@@ -28,6 +28,7 @@ Statement           -> Assignment
                     | EnumDeclaration
                     | SwitchStatement
                     | Block
+                    | ContinueStatement
 IfStatement         -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 InlineStatement     -> Statement
 ElseIfClause        -> "else" "if" "(" Comparison ")" (InlineStatement | Block)
@@ -43,7 +44,7 @@ Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) id
 FunctionDeclaration -> AccessModifier? Modifier? Type? identifier "(" ParameterList? ")" Block
 Modifier            -> "static" | "global"
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" ArgumentList? ")"
-ArgumentList        -> Expression ("," Comment? Expression)*
+ArgumentList        -> Expression Comment? ("," Comment? Expression)*
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
 TernaryExpression   -> Comparison "?" Expression ":" Expression
@@ -102,4 +103,5 @@ Inheritance -> ":" identifier
 ClassDeclaration    -> "class" identifier Inheritance? Block ";"
 TypeCast            -> "(" Type ")" Expression
 ClassInitialization -> Type "(" ArgumentList? ")"
+ContinueStatement   -> "continue" ";"
 ```

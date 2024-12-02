@@ -274,12 +274,14 @@ class FunctionCallNode:
 
 
 class MainNode:
-    def __init__(self, parameters, block):
+    def __init__(self, parameters, block, type_=None):
         self.parameters = parameters
         self.block = block
+        self.type = type_
 
     def __repr__(self, indent=0):
         string = f"{indent_str(indent)}MainNode(\n"
+        string += f"{indent_str(indent + 1)}type: {self.type}\n"
         string += f"{indent_str(indent + 1)}parameters: {self.parameters}\n"
         string += f"{indent_str(indent + 1)}block: {self.block}\n"
         string += f"{indent_str(indent)})"
@@ -678,3 +680,8 @@ class ClassInitializationNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ClassInitializationNode(identifier={self.identifier}, arguments={self.arguments})"
+
+
+class ContinueNode:
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}ContinueNode()"

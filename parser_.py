@@ -5,12 +5,13 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    BooleanNode, BreakNode, CaseStatementNode, CharNode,
                    ClassDeclarationNode, ClassInitializationNode,
                    ClassStaticAccessNode, CommentNode, CompoundAssignmentNode,
-                   DeclarationNode, DividerNode, ElseIfClauseNode,
-                   EnumAccessNode, EnumDeclarationNode, EnumValueNode,
-                   ForLoopNode, FunctionCallNode, FunctionDeclarationNode,
-                   GlobalIdentifierNode, IdentifierNode, IfStatementNode,
-                   IncrementAssignmentNode, IndexAccessNode, InheritanceNode,
-                   LibraryNode, LogicalAndNode, LogicalOrNode, MainNode,
+                   ContinueNode, DeclarationNode, DividerNode,
+                   ElseIfClauseNode, EnumAccessNode, EnumDeclarationNode,
+                   EnumValueNode, ForLoopNode, FunctionCallNode,
+                   FunctionDeclarationNode, GlobalIdentifierNode,
+                   IdentifierNode, IfStatementNode, IncrementAssignmentNode,
+                   IndexAccessNode, InheritanceNode, LibraryNode,
+                   LogicalAndNode, LogicalOrNode, MainNode,
                    MultilineCommentNode, NegationNode, NumberNode,
                    ParameterNode, PointerNode, ProgramNode, RelationalNode,
                    ReturnNode, ShiftNode, StringNode, StructDeclarationNode,
@@ -103,7 +104,7 @@ class Parser:
             return CommentNode(comment.value)
         elif self.__match(TokenKind.IF):
             return self.__parse_if_statement()
-        elif self.__match(TokenKind.MAIN_KEYWORD):
+        elif self.__detect_main():
             return self.__parse_main()
         elif self.__match(TokenKind.MULTI_LINE_COMMENT):
             multi_line_comment = self.__consume(TokenKind.MULTI_LINE_COMMENT)
@@ -128,6 +129,8 @@ class Parser:
             return self.__parse_class_declaration()
         elif self.__match(TokenKind.SYMBOL) and self.__current().value == "{":
             return self.__parse_block()
+        elif self.__match(TokenKind.KEYWORD) and self.__current().value == "continue":
+            return self.__parse_continue_statement()
         else:
             raise TokenError(
                 SyntaxError("Unexpected statement"),
@@ -140,6 +143,34 @@ class Parser:
         if self.__detect_type(self.__current()) and self.__peek().value == "(":
             return True
         return False
+
+    def __detect_main(self) -> bool:
+        """MainFunction -> Type? "main" "(" ")" Block
+
+        Returns:
+            bool: _description_
+        """
+        peek_index = 0
+
+        # Check if there is a type before the "main" keyword
+        if self.__detect_type(self.__current()):
+            peek_index += 1
+
+        # Check if the next token is the "main" keyword
+        if self.__peek(peek_index).kind == TokenKind.MAIN_KEYWORD:
+            peek_index += 1
+
+            # Check if the next token is an opening parenthesis
+            if self.__peek(peek_index).value == "(":
+                peek_index += 1
+
+                # Check if the next token is a closing parenthesis
+                if self.__peek(peek_index).value == ")":
+                    peek_index += 1
+
+                    # Check if the next token is a block
+                    if self.__peek(peek_index).value == "{":
+                        return True
 
     def __detect_declaration(self) -> bool:
         """Detect declaration
@@ -878,7 +909,7 @@ class Parser:
         return FunctionCallNode(function_expression, arguments)
 
     def __parse_argument_list(self):
-        """ArgumentList -> Expression ("," Comment? Expression)*
+        """ArgumentList -> Expression Comment? ("," Comment? Expression)*
 
         Returns:
             List: List of parsed arguments
@@ -892,6 +923,13 @@ class Parser:
 
         # Parse the first argument
         argument = self.__parse_expression()
+
+        # Check for a comment after the argument
+        comment = None
+        if self.__match(TokenKind.COMMENT):
+            comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+            argument.set_comment(comment.value)
+
         arguments.append(argument)
 
         # Parse additional arguments if present
@@ -913,6 +951,11 @@ class Parser:
         return arguments
 
     def __parse_main(self):
+        # Check if the main function starts with a type
+        type_ = None
+        if self.__detect_type(self.__current()):
+            type_ = self.__parse_type()
+
         # Expect and consume the "main" keyword
         self.__consume(TokenKind.MAIN_KEYWORD)
 
@@ -935,7 +978,7 @@ class Parser:
         block = self.__parse_block()
 
         # Return a FunctionDeclarationNode with the parsed information
-        return MainNode(parameters, block)
+        return MainNode(parameters, block, type_)
 
     def __parse_if_statement(self) -> IfStatementNode:
         """IfStatement -> "if" "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
@@ -1529,3 +1572,22 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         return ClassInitializationNode(class_type, arguments)
+
+    def __parse_continue_statement(self) -> ContinueNode:
+        """ContinueStatement   -> "continue" ";"
+
+        Returns:
+            ContinueNode: The parsed continue node
+        """
+        # Consume the "continue" keyword
+        self.__consume(TokenKind.KEYWORD)
+
+        # Expect and consume the semicolon at the end of the continue statement
+        if not (self.__match(TokenKind.SYMBOL) and self.__current().value == ";"):
+            raise SyntaxError(
+                "Expected ';' at the end of continue statement. Token: "
+                + str(self.__current())
+            )
+        self.__consume(TokenKind.SYMBOL)
+
+        return ContinueNode()
