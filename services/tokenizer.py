@@ -1,6 +1,6 @@
 import re
 
-from token_ import Token, TokenKind
+from entities.token_ import Token, TokenKind
 
 KEYWORDS = [
     "while",
@@ -42,6 +42,8 @@ BASE_TYPE_KEYWORDS = [
     "ulong",
     "char",
     "unsigned",
+    "bit64",
+    "shape",
 ]
 TYPE_KEYWORDS = []
 LIBRARY_TYPE_KEYWORDS = [
@@ -234,14 +236,14 @@ class Tokenizer:
         return None
 
     def __match_type_keyword(self):
-        kewyrodArr = TYPE_KEYWORDS + LIBRARY_TYPE_KEYWORDS
-        for keyword in kewyrodArr:
-            if (
-                self.code[self.pos : self.pos + len(keyword)] == keyword
-                and not self.code[self.pos + len(keyword)].isalnum()
-            ):
-                self.pos += len(keyword)
-                return keyword
+        keywordArr = TYPE_KEYWORDS + LIBRARY_TYPE_KEYWORDS
+        for keyword in keywordArr:
+            end_pos = self.pos + len(keyword)
+            if self.code[self.pos:end_pos] == keyword:
+                # Check if the next character (if exists) is not a valid identifier continuation
+                if end_pos >= len(self.code) or not (self.code[end_pos].isalnum() or self.code[end_pos] == '_'):
+                    self.pos = end_pos
+                    return keyword
         return None
 
     def __match_operator(self):

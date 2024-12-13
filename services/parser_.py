@@ -1,6 +1,6 @@
 from typing import Any, List, Tuple
 
-from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
+from entities.nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    BitwiseAndNode, BitwiseOrNode, BitwiseXorNode, BlockNode,
                    BooleanNode, BreakNode, CaseStatementNode, CharNode,
                    ClassDeclarationNode, ClassInitializationNode,
@@ -11,14 +11,14 @@ from nodes import (AssignmentNode, AttributeAccessNode, BinaryExpressionNode,
                    FunctionDeclarationNode, GlobalIdentifierNode,
                    IdentifierNode, IfStatementNode, IncrementAssignmentNode,
                    IndexAccessNode, InheritanceNode, LibraryNode,
-                   LogicalAndNode, LogicalOrNode, MainNode,
-                   MultilineCommentNode, NegationNode, NumberNode,
+                   LogicalAndNode, LogicalOrNode,
+                   MultilineCommentNode, NegationNode, NewLineNode, NumberNode,
                    ParameterNode, PointerNode, ProgramNode, RelationalNode,
                    ReturnNode, ShiftNode, StringNode, StructDeclarationNode,
                    SwitchStatementNode, TemplateTypeNode,
                    TernaryExpressionNode, TryCatchNode, TypeCastNode, TypeNode,
                    WhileLoopNode)
-from token_ import Token, TokenError, TokenKind
+from entities.token_ import Token, TokenError, TokenKind
 
 
 class Parser:
@@ -30,6 +30,7 @@ class Parser:
             "structs": {},  # Maps struct names to their fields
             "classes": {},  # Maps class names to their fields
         }
+        self.statements = []
 
     def __current(self):
         while (
@@ -49,23 +50,39 @@ class Parser:
                 pos += 1
         return self.tokens[pos]
 
-    def __advance(self):
+    def __advance(self) -> bool:
+        """Advance to the next token
+
+        Returns:
+            bool: Whether NewLineNode should be appended before
+        """
+        newline = False
+
         self.pos += 1
         while (
             self.pos < len(self.tokens)
             and self.tokens[self.pos].kind == TokenKind.WHITESPACE
         ):
+            if self.tokens[self.pos].kind == TokenKind.WHITESPACE and self.tokens[self.pos].value == "\n":
+                newline = True
             self.pos += 1
+
+        return newline
 
     def __match(self, kind):
         if self.__current().kind == kind:
             return True
         return False
 
-    def __consume(self, kind):
+    def __consume(self, kind) -> Token:        
         if self.__match(kind):
             token = self.__current()
-            self.__advance()
+            append_newline = self.__advance()
+            if append_newline:
+                # TODO: This is not a good approach, but newlines need to be done
+                pass
+                # print(f"Appending newline. {token}")
+                # self.statements.append(NewLineNode)
             return token
         raise TokenError(
             SyntaxError(
@@ -76,12 +93,11 @@ class Parser:
             self.__current(),
         )
 
-    def parse(self):
-        statements = []
+    def parse(self):        
         while self.__current().kind != TokenKind.EOF:
             statement = self.__parse_statement()
-            statements.append(statement)
-        return ProgramNode(statements)
+            self.statements.append(statement)
+        return ProgramNode(self.statements)
 
     # Non-terminal parsing functions
 
@@ -532,13 +548,18 @@ class Parser:
         return left
 
     def __parse_term(self):
+        """Term -> Factor ( ("*" | "/" | "%") Factor )*
+
+        Returns:
+            _type_: _description_
+        """
         # Parse the left side
         left = self.__parse_factor()
 
         # Handle multiplication and division (higher precedence than + and -)
         while self.__match(
             TokenKind.ARITHMETIC_OPERATOR
-        ) and self.__current().value in ["*", "/"]:
+        ) and self.__current().value in ["*", "/", "%"]:
             operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
             right = self.__parse_factor()
             left = BinaryExpressionNode(left, operator.value, right)
@@ -786,7 +807,7 @@ class Parser:
             type_ = self.__parse_type()
 
         # Parse the first identifier
-        identifier = self.__consume(TokenKind.IDENTIFIER)
+        identifier = IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
         identifiers = []  # Start a list to hold identifiers and their initial values
 
         # Check if there's an initialization for the first identifier
@@ -805,7 +826,7 @@ class Parser:
             self.__consume(TokenKind.SYMBOL)
 
             # Expect and consume the next identifier
-            identifier = self.__consume(TokenKind.IDENTIFIER)
+            identifier = IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
 
             # Check if there's an initialization for this identifier
             initial_value = None
@@ -1524,7 +1545,7 @@ class Parser:
         elif self.__detect_assignment():
             return self.__parse_assignment(parse_semicolon=False)
         else:
-            return IdentifierNode(self.__consume(TokenKind.IDENTIFIER))
+            return IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
 
     def __parse_class_static_access(self) -> ClassStaticAccessNode:
         """ClassStaticAccess -> identifier "::" (FunctionCall | identifier)

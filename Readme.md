@@ -59,7 +59,7 @@ BitwiseAnd          -> Shift ("&" Shift)*
 Shift               -> Relational (("<<" | ">>") Relational)*
 Relational          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )?
 Expression          -> Term ( ("+" | "-") Comment? Term )*
-Term                -> Factor ( ("*" | "/") Factor )*
+Term                -> Factor ( ("*" | "/" | "%") Factor )*
 Factor              -> Primary
 Primary             -> number "."?
                     | identifier 

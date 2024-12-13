@@ -1,9 +1,10 @@
 import argparse
 import re
 
-from parser_ import Parser
-from token_ import TokenError
-from tokenizer import Tokenizer
+from services.formatter_ import Formatter
+from services.parser_ import Parser
+from entities.token_ import TokenError
+from services.tokenizer import Tokenizer
 
 
 def main():
@@ -40,11 +41,15 @@ def main():
     try:
         ast = parser.parse()
     except TokenError as e:
-        print("Token error:", e)
+        print("Parsing error: Token error:", e)
         return
     except SyntaxError as e:
-        print("Syntax error:", e)
+        print("Parsing error: Syntax error:", e)
         return
+
+    # Format the code
+    formatter = Formatter(ast)
+    formatted_code = formatter.format()
 
     # Determine output file path for formatted code
     output_file_path = args.output_file if args.output_file else args.input_file
@@ -56,10 +61,9 @@ def main():
         print(f"AST saved to {args.ast_file}")
 
     # Save the formatted output to the specified output path
-    # formatted_code = str(ast)
-    # with open(output_file_path, 'w') as file:
-    #     file.write(formatted_code)
-    # print(f"Formatted code saved to {output_file_path}")
+    with open(output_file_path, 'w') as file:
+        file.write(formatted_code)
+    print(f"Formatted code saved to {output_file_path}")
 
 
 if __name__ == "__main__":
