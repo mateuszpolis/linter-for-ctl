@@ -42,11 +42,11 @@ IncrementAssignment -> Identifier ("++" | "--") ";"
                      | ("++" | "--") Identifier ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
 AccessModifier      -> "public" | "private" | "protected"
-Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? ";"
+Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? (Comment | MultiLineComment)? ";"
 FunctionDeclaration -> AccessModifier? Modifier? Type? (identifier | "main") "(" ParameterList? ")" Block
 Modifier            -> "static" | "global"
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" ArgumentList? ")"
-ArgumentList        -> Expression Comment? ("," Comment? Expression)*
+ArgumentList        -> ConditionalExpression Comment? ("," Comment? ConditionalExpression)*
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
 TernaryExpression   -> Comparison "?" (Expression | TernaryExpression) ":" Expression
@@ -64,7 +64,7 @@ Term                -> Factor ( ("*" | "/" | "%") Factor )*
 Factor              -> Primary
 Primary             -> number "."?
                     | identifier 
-                    | "$" identifier
+                    | "$" (identifier | number)
                     | "&" identifier
                     | TypeCast
                     | "(" Comparison ")"

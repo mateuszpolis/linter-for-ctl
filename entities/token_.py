@@ -8,8 +8,12 @@ class Token:
         self.line = line
         self.column = column
 
-    def __str__(self) -> str:        
-        value = self.value.replace("\n", "\\n").replace("\t", "\\t") if self.value != None else None
+    def __str__(self) -> str:
+        value = (
+            self.value.replace("\n", "\\n").replace("\t", "\\t")
+            if self.value != None
+            else None
+        )
         return f"{self.kind}({value}) at line {self.line}, column {self.column}\n"
 
     def __repr__(self) -> str:

@@ -7,6 +7,7 @@ import html
 SOURCE_DIR = "panels"
 DEST_DIR = "panels_scripts"
 
+
 def extract_scripts_from_xml(file_path):
     """
     Extract content from all <script> tags in the XML file.
@@ -35,6 +36,7 @@ def extract_scripts_from_xml(file_path):
         print(f"Unexpected error in file {file_path}: {e}")
         return ""
 
+
 def process_directory(source_dir, dest_dir):
     """
     Recursively process the source directory and create the same structure in dest_dir.
@@ -62,6 +64,7 @@ def process_directory(source_dir, dest_dir):
                 else:
                     print(f"No script content found in {source_file_path}")
 
+
 def main():
     # Remove existing destination directory if it exists
     if os.path.exists(DEST_DIR):
@@ -71,6 +74,7 @@ def main():
     print("Processing XML files...")
     process_directory(SOURCE_DIR, DEST_DIR)
     print(f"Script processing complete. Output saved to: {DEST_DIR}")
+
 
 if __name__ == "__main__":
     main()

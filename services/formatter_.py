@@ -1,4 +1,11 @@
-from entities.nodes import ClassDeclarationNode, FunctionCallNode, FunctionDeclarationNode, NewLineNode, ProgramNode, StructDeclarationNode
+from entities.nodes import (
+    ClassDeclarationNode,
+    FunctionCallNode,
+    FunctionDeclarationNode,
+    NewLineNode,
+    ProgramNode,
+    StructDeclarationNode,
+)
 
 
 class Formatter:
@@ -8,7 +15,7 @@ class Formatter:
     def format(self):
         self.__add_empty_lines_before_and_after()
         return self.programNode.format()
-    
+
     def __add_empty_lines_before_and_after(self):
         nodes = [FunctionDeclarationNode, ClassDeclarationNode, StructDeclarationNode]
 
@@ -22,4 +29,3 @@ class Formatter:
                 i += 1  # Skip the newly added NewLineNode
                 i += 1
             i += 1
-            

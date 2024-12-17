@@ -43,6 +43,7 @@ class ProgramNode:
                 previous_was_newline = False
         return formatted_code.strip()
 
+
 class AssignmentNode:
     def __init__(self, identifier, value):
         self.identifier = identifier
@@ -52,12 +53,14 @@ class AssignmentNode:
         return f"{indent_str(indent)}AssignmentNode({self.identifier}, {self.value.__repr__(indent + 1)})"
 
     def format(self, indent=0):
-        return f"{indent_str(indent)}{self.identifier.format()} = {self.value.format()};"
+        return (
+            f"{indent_str(indent)}{self.identifier.format()} = {self.value.format()};"
+        )
 
 
 class DeclarationNode:
     def __init__(
-        self, type_, identifiers, is_const=False, access_modifier=None, modifier=None
+        self, type_, identifiers, is_const=False, access_modifier=None, modifier=None, comment = None
     ):
         """
         :param type_keyword: The data type of the declaration (e.g., 'int' or 'string')
@@ -65,15 +68,16 @@ class DeclarationNode:
                             - the identifier name (string)
                             - an optional initial value (AST node or None if no initialization)
         """
-        self.type : TypeNode = type_
+        self.type: TypeNode = type_
         self.identifiers = identifiers
         self.is_const = is_const
         self.access_modifier = access_modifier
         self.modifier = modifier
+        self.comment = comment
 
     def __repr__(self, indent=0):
         # Start the string with the type keyword
-        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, access_modifier={self.access_modifier}, modifier={self.modifier}, type={self.type.__repr__(indent+1)}, identifiers=[\n"
+        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, access_modifier={self.access_modifier}, modifier={self.modifier}, type={self.type.__repr__(indent+1)}, comment={self.comment}, identifiers=[\n"
 
         # Add each identifier with its optional initial value
         for identifier, value in self.identifiers:
@@ -97,6 +101,8 @@ class DeclarationNode:
                 string += f"{identifier.format()} = {value.format()}"
             if i < len(self.identifiers) - 1:
                 string += ", "
+        if self.comment is not None:
+            string += self.comment.format()
 
         if not inline:
             string += ";"
@@ -156,7 +162,7 @@ class PointerNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}PointerNode({self.value})"
-    
+
     def format(self, indent=0):
         return f"&{self.value}"
 
@@ -169,7 +175,7 @@ class NumberNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}NumberNode(is_float={self.is_float}, is_negative={self.is_negative}, value={self.value})"
-    
+
     def format(self, indent=0):
         return f"{self.value}"
 
@@ -180,7 +186,7 @@ class BooleanNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}BooleanNode({self.value})"
-    
+
     def format(self, indent=0):
         return "true" if self.value else "false"
 
@@ -192,9 +198,10 @@ class StringNode(DefaultNode):
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}StringNode({self.value}, comment={self.comment})"
-    
+
     def format(self, indent=0):
-        return f'{self.value}'
+        return f"{self.value}"
+
 
 class CommentNode:
     def __init__(self, value):
@@ -202,7 +209,7 @@ class CommentNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}CommentNode({self.value})"
-    
+
     def format(self, indent=0):
         return f"{indent_str(indent)}// {self.value}"
 
@@ -217,7 +224,7 @@ class MultilineCommentNode:
             string += f"{indent_str(indent + 1)}{line}\n"
         string += f"{indent_str(indent)}])"
         return string
-    
+
     def format(self, indent=0):
         return f"/*\n{indent_str(indent)}{self.lines}\n*/"
 
@@ -228,7 +235,7 @@ class DividerNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}DividerNode({self.value})"
-    
+
     def format(self, indent=0):
         return f"{self.value}"
 
@@ -240,7 +247,7 @@ class AttributeAccessNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}AttributeAccessNode({self.identifier}, {self.attribute})"
-    
+
     def format(self, indent=0):
         return f"{self.identifier.format()}.{self.attribute.format()}"
 
@@ -252,7 +259,7 @@ class IndexAccessNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}IndexAccessNode({self.identifier}, {self.index})"
-    
+
     def format(self, indent=0):
         return f"{self.identifier.format()}[{self.index.format()}]"
 
@@ -293,7 +300,7 @@ class FunctionDeclarationNode:
         string += f"{indent_str(indent + 1)}]\n"
         string += f"{indent_str(indent)})"
         return string
-    
+
     def format(self, indent=0):
         string = f"{indent_str(indent)}"
         if self.access_modifier is not None:
@@ -329,7 +336,7 @@ class FunctionCallNode:
         string += f"{indent_str(indent + 1)}]\n"
         string += f"{indent_str(indent)})"
         return string
-    
+
     def format(self, indent=0):
         string = f"{indent_str(indent)}{self.identifier.format(indent)}("
         for i, argument in enumerate(self.arguments):
@@ -369,7 +376,7 @@ class IfStatementNode(DefaultNode):
         result += f"{indent_str(indent + 1)}else_block={self.else_node}\n"
         result += f"{indent_str(indent)})"
         return result
-    
+
     def format(self, indent=0):
         result = f"{indent_str(indent)}if ({self.condition.format()})"
         if self.if_block is not None:
@@ -404,7 +411,7 @@ class ElseIfClauseNode(DefaultNode):
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ElseIfClauseNode(condition={self.condition}, comment={self.comment} block={self.block}, inline_statement={self.inline_statement})"
-    
+
     def format(self, indent=0):
         result = f" else if ({self.condition.format(indent + 1)})"
         if self.block is not None:
@@ -412,7 +419,7 @@ class ElseIfClauseNode(DefaultNode):
             result += self.block.format(indent + 1)
             result += f"\n{indent_str(indent)}" + "}"
         elif self.inline_statement is not None:
-            result += f"\n{self.inline_statement.format(indent + 1)}\n"        
+            result += f"\n{self.inline_statement.format(indent + 1)}\n"
         return result
 
 
@@ -424,7 +431,7 @@ class ElseClauseNode(DefaultNode):
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ElseClauseNode(comment={self.comment}, block={self.block}, inline_statement={self.inline_statement})"
-    
+
     def format(self, indent=0):
         result = f" else"
         if self.block is not None:
@@ -446,12 +453,12 @@ class BlockNode:
             result += statement.__repr__(indent + 1) + "\n"
         result += f"{indent_str(indent)}])"
         return result
-    
+
     def format(self, indent=0, with_brackets=False):
         if with_brackets:
             result = f"{indent_str(indent)}" + "{\n"
         else:
-            result = ""            
+            result = ""
         previous_was_newline = False
         for i in range(len(self.statements)):
             if isinstance(self.statements[i], NewLineNode):
@@ -464,7 +471,7 @@ class BlockNode:
                 result += self.statements[i].format(indent)
                 previous_was_newline = False
             if isinstance(self.statements[i], FunctionCallNode):
-                    result += ";"
+                result += ";"
             if i < len(self.statements) - 1:
                 result += "\n"
         if with_brackets:
@@ -478,7 +485,7 @@ class ReturnNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ReturnNode({self.expression})"
-    
+
     def format(self, indent=0):
         if self.expression is None:
             return f"{indent_str(indent)}return;"
@@ -488,9 +495,10 @@ class ReturnNode:
 class BreakNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}BreakNode()"
-    
+
     def format(self, indent=0):
         return f"{indent_str(indent)}break;"
+
 
 class WhileLoopNode:
     def __init__(self, condition, block_or_statement):
@@ -504,9 +512,9 @@ class WhileLoopNode:
         return (
             f"{indent_str(indent)}WhileLoopNode("
             f"condition={self.condition}, "
-            f"{block_type}={self.block_or_statement})"            
+            f"{block_type}={self.block_or_statement})"
         )
-    
+
     def format(self, indent=0):
         result = f"{indent_str(indent)}while ({self.condition.format(indent + 1)})"
         if isinstance(self.block_or_statement, list):
@@ -530,7 +538,7 @@ class TypeNode:
             string += f", dyn_type={self.dyn_type}"
         string += ")"
         return string
-    
+
     def format(self, indent=0):
         return f"{self.value}"
 
@@ -546,7 +554,7 @@ class TemplateTypeNode:
             string += f"{indent_str(indent + 1)}{type_.__repr__(indent)}\n"
         string += f"{indent_str(indent)}])"
         return string
-    
+
     def format(self, indent=0):
         return f"{self.template_type_keyword}<{', '.join([type_.format(indent + 1) for type_ in self.types])}>"
 
@@ -563,7 +571,7 @@ class ParameterNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ParameterNode(type={self.type_}, identifier={self.identifier}, default_value={self.default_value}, is_pointer={self.is_pointer}, is_const={self.is_const})"
-    
+
     def format(self, indent=0):
         return f"{self.type_}{'*' if self.is_pointer else ''}{'const ' if self.is_const else ''}{self.identifier}"
 
@@ -574,9 +582,9 @@ class LibraryNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}LibraryNode({self.name})"
-    
+
     def format(self, indent=0):
-        return f'#uses {self.name};'
+        return f"#uses {self.name}"
 
 
 class CharNode:
@@ -585,7 +593,7 @@ class CharNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}CharNode({self.value})"
-    
+
     def format(self, indent=0):
         return f"'{self.value}'"
 
@@ -598,7 +606,7 @@ class TernaryExpressionNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}TernaryExpression({self.comparison}, {self.success_expression}, {self.failure_expression})"
-    
+
     def format(self, indent=0):
         return f"{self.comparison.format(indent + 1)} ? {self.success_expression.format(indent + 1)} : {self.failure_expression.format(indent + 1)}"
 
@@ -608,12 +616,12 @@ class ForLoopNode:
         self.initialization = initialization
         self.condition = condition
         self.increment = increment
-        self.block : BlockNode = block
+        self.block: BlockNode = block
         self.statement = statement
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ForLoopNode(initialization={self.initialization}, condition={self.condition}, increment={self.increment}, block={self.block}), statement={self.statement}"
-    
+
     def format(self, indent=0):
         result = f"{indent_str(indent)}for ({self.initialization.format(inline=True)}; {self.condition.format()}; {self.increment.format()})"
         if self.block is not None:
@@ -632,7 +640,7 @@ class IncrementAssignmentNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}IncrementAssignmentNode(identifier={self.identifier}, operator={self.operator})"
-    
+
     def format(self, indent=0):
         return f"{self.identifier.format()}{self.operator};"
 
@@ -645,7 +653,7 @@ class CompoundAssignmentNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}CompundAssignmentNode(identifier={self.identifier}, operator={self.operator}, value={self.value})"
-    
+
     def format(self, indent=0):
         return f"{indent_str(indent)}{self.identifier.format()} {self.operator} {self.value.format()};"
 
@@ -659,13 +667,12 @@ class LogicalOrNode:
         return (
             f"{indent_str(indent)}LogicalOrNode(left={self.left}, right={self.right})"
         )
-    
+
     def format(self, indent=0):
         result = f"{self.left.format(indent + 1)}"
         if self.right is not None:
             result += f" || {self.right.format(indent + 1)}"
         return result
-    
 
 
 class LogicalAndNode:
@@ -677,12 +684,13 @@ class LogicalAndNode:
         return (
             f"{indent_str(indent)}LogicalAndNode(left={self.left}, right={self.right})"
         )
-    
+
     def format(self, indent=0):
         result = f"{self.left.format(indent + 1)}"
         if self.right is not None:
             result += f" && {self.right.format(indent + 1)}"
         return result
+
 
 class NegationNode:
     def __init__(self, operator, expression):
@@ -691,7 +699,7 @@ class NegationNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}NegationNode(operator={self.operator}, expression={self.expression})"
-    
+
     def format(self, indent=0):
         return f"{self.operator}{self.expression.format()}"
 
@@ -704,7 +712,7 @@ class RelationalNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}RelationalNode(left={self.left}, operator='{self.operator}', right={self.right})"
-    
+
     def format(self, indent=0):
         return f"{self.left.format(1)} {self.operator} {self.right.format()}"
 
@@ -720,10 +728,10 @@ class EnumDeclarationNode:
             string += value.__repr__(indent + 1) + "\n"
         string += f"{indent_str(indent)}])"
         return string
-    
+
     def format(self, indent=0):
         result = f"{indent_str(indent)}enum {self.identifier} {{\n"
-        for i, value in enumerate(self.values):            
+        for i, value in enumerate(self.values):
             result += f"{value.format(indent + 1)}"
             if i < len(self.values) - 1:
                 result += ",\n"
@@ -738,9 +746,13 @@ class EnumValueNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}EnumValueNode(identifier={self.identifier}, value={self.value})"
-    
+
     def format(self, indent=0):
-        return f"{indent_str(indent)}{self.identifier} = {self.value}" if self.value is not None else f"{self.identifier}"
+        return (
+            f"{indent_str(indent)}{self.identifier} = {self.value}"
+            if self.value is not None
+            else f"{self.identifier}"
+        )
 
 
 class EnumAccessNode:
@@ -750,7 +762,7 @@ class EnumAccessNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}EnumAccessNode(identifier={self.identifier}, value={self.value})"
-    
+
     def format(self, indent=0):
         return f"{self.identifier}::{self.value}"
 
@@ -763,11 +775,11 @@ class CaseStatementNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}CaseStatementNode(is_default={self.is_default}, value={self.value}, block={self.block})"
-    
+
     def format(self, indent=0):
         if self.is_default:
             return f"{indent_str(indent)}default:\n{self.block.format(indent + 1)}"
-        return f"{indent_str(indent)}case {self.value.format(indent + 1)}:\n{self.block.format(indent + 1)}"    
+        return f"{indent_str(indent)}case {self.value.format(indent + 1)}:\n{self.block.format(indent + 1)}"
 
 
 class SwitchStatementNode:
@@ -784,9 +796,11 @@ class SwitchStatementNode:
         string += f"{indent_str(indent + 1)}]\n"
         string += f"{indent_str(indent)})"
         return string
-    
+
     def format(self, indent=0):
-        result = f"{indent_str(indent)}switch ({self.expression.format(indent + 1)}) {{\n"
+        result = (
+            f"{indent_str(indent)}switch({self.expression.format(indent + 1)}) {{\n"
+        )
         for case_statement in self.case_statements:
             result += case_statement.format(indent + 1) + "\n"
         result += f"{indent_str(indent)}" + "}"
@@ -802,7 +816,7 @@ class BitwiseOrNode:
         return (
             f"{indent_str(indent)}BitwiseOrNode(left={self.left}, right={self.right})"
         )
-    
+
     def format(self, indent=0):
         result = f"{self.left.format(indent + 1)}"
         if self.right is not None:
@@ -819,12 +833,13 @@ class BitwiseXorNode:
         return (
             f"{indent_str(indent)}BitwiseXorNode(left={self.left}, right={self.right})"
         )
-    
+
     def format(self, indent=0):
         result = f"{self.left.format(indent + 1)}"
         if self.right is not None:
             result += f" ^ {self.right.format(indent + 1)}"
         return result
+
 
 class BitwiseAndNode:
     def __init__(self, left, right):
@@ -835,12 +850,13 @@ class BitwiseAndNode:
         return (
             f"{indent_str(indent)}BitwiseAndNode(left={self.left}, right={self.right})"
         )
-    
+
     def format(self, indent=0):
         result = f"{self.left.format(indent + 1)}"
         if self.right is not None:
             result += f" & {self.right.format(indent + 1)}"
         return result
+
 
 class ShiftNode:
     def __init__(self, left, operator, right):
@@ -850,7 +866,7 @@ class ShiftNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ShiftNode(left={self.left}, operator={self.operator}, right={self.right})"
-    
+
     def format(self, indent=0):
         result = f"{self.left.format(indent + 1)}"
         if self.right is not None:
@@ -867,7 +883,7 @@ class StructDeclarationNode:
         string = f"{indent_str(indent)}StructDeclarationNode(inheritance={self.inheritance}, identifier={self.identifier},\n"
         string += self.block.__repr__(indent + 1) + "\n"
         return string
-    
+
     def format(self, indent=0):
         result = f"{indent_str(indent)}struct {self.identifier} {{\n"
         result += self.block.format(indent + 1) + "\n"
@@ -886,7 +902,7 @@ class ClassDeclarationNode:
         string += self.block.__repr__(indent + 1)
         string += f"{indent_str(indent)}])"
         return string
-    
+
     def format(self, indent=0):
         result = f"{indent_str(indent)}class {self.identifier}"
         if self.inheritance is not None:
@@ -903,7 +919,7 @@ class InheritanceNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}InheritanceNode(identifier={self.identifier})"
-    
+
     def format(self, indent=0):
         return f"{self.identifier}"
 
@@ -915,7 +931,7 @@ class TypeCastNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}TypeCastNode(type={self.type_}, expression={self.expression})"
-    
+
     def format(self, indent=0):
         return f"({self.type_.format(indent)}){self.expression.format(indent + 1)}"
 
@@ -927,7 +943,7 @@ class ClassStaticAccessNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ClassStaticAccessNode(identifier={self.identifier}, attribute={self.attribute})"
-    
+
     def format(self, indent=0):
         return f"{self.identifier}::{self.attribute}"
 
@@ -939,7 +955,7 @@ class ClassInitializationNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ClassInitializationNode(identifier={self.identifier}, arguments={self.arguments})"
-    
+
     def format(self, indent=0):
         result = f"{self.identifier}("
         for i, argument in enumerate(self.arguments):
@@ -953,9 +969,10 @@ class ClassInitializationNode:
 class ContinueNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}ContinueNode()"
-    
+
     def format(self, indent=0):
         return f"{indent_str(indent)}continue;"
+
 
 class TryCatchNode:
     def __init__(self, try_block, catch_block, finally_block=None):
@@ -965,7 +982,7 @@ class TryCatchNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}TryCatchNode(try_block={self.try_block}, catch_block={self.catch_block}, finally_block={self.finally_block})"
-    
+
     def format(self, indent=0):
         result = f"{indent_str(indent)}try " + "{\n"
         result += self.try_block.format(indent + 1) + "\n"
@@ -979,7 +996,8 @@ class TryCatchNode:
             result += self.finally_block.format(indent + 1) + "\n"
             result += f"{indent_str(indent)}" + "}"
         return result
-    
+
+
 class DoWhileLoopNode:
     def __init__(self, block, condition):
         self.block = block
@@ -987,20 +1005,24 @@ class DoWhileLoopNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}DoWhileLoopNode(block={self.block}, condition={self.condition})"
-    
+
     def format(self, indent=0):
         result = f"{indent_str(indent)}do " + "{\n"
         result += self.block.format(indent + 1) + "\n"
-        result += f"{indent_str(indent)}" + "} while ({self.condition.format(indent + 1)});"
+        result += (
+            f"{indent_str(indent)}" + "} while ({self.condition.format(indent + 1)});"
+        )
         return result
-    
+
+
 class NewLineNode:
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}NewLineNode()"
-    
+
     def format(self, indent=0):
         return ""
-    
+
+
 class PropertySetterNode:
     def __init__(self, type, identifier):
         self.type = type
@@ -1008,6 +1030,6 @@ class PropertySetterNode:
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}PropertySetterNode(type={self.type}, identifier={self.identifier})"
-    
+
     def format(self, indent=0):
         return f"#property {self.type.format()} {self.identifier}"

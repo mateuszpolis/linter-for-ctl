@@ -22,8 +22,7 @@ KEYWORDS = [
     "try",
     "catch",
     "finally",
-    "do",
-    "property"
+    "do"
 ]
 MODIFIERS = ["static", "global", "synchronized"]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
@@ -45,7 +44,8 @@ BASE_TYPE_KEYWORDS = [
     "unsigned",
     "bit64",
     "shape",
-    "bit32"
+    "bit32",
+    "long",
 ]
 TYPE_KEYWORDS = []
 LIBRARY_TYPE_KEYWORDS = [
@@ -131,7 +131,7 @@ class Tokenizer:
                 )
                 self.column += len(main_keyword)
             elif type_keyword := self.__match_type_keyword():
-                token = Token(                    
+                token = Token(
                     TokenKind.TYPE_KEYWORD, type_keyword, self.line, self.column
                 )
                 self.column += len(type_keyword)
@@ -246,9 +246,11 @@ class Tokenizer:
         keywordArr = TYPE_KEYWORDS + LIBRARY_TYPE_KEYWORDS
         for keyword in keywordArr:
             end_pos = self.pos + len(keyword)
-            if self.code[self.pos:end_pos] == keyword:
+            if self.code[self.pos : end_pos] == keyword:
                 # Check if the next character (if exists) is not a valid identifier continuation
-                if end_pos >= len(self.code) or not (self.code[end_pos].isalnum() or self.code[end_pos] == '_'):
+                if end_pos >= len(self.code) or not (
+                    self.code[end_pos].isalnum() or self.code[end_pos] == "_"
+                ):
                     self.pos = end_pos
                     return keyword
         return None
@@ -391,31 +393,39 @@ class Tokenizer:
         # Check for whitespace and single newline (but not empty lines)
         new_line = False
         new_line_start = None
-        while self.pos < len(self.code) and (self.code[self.pos].isspace() or self.code[self.pos] == '\n'):
-            if self.code[self.pos] == '\n':  # Check if the newline starts an empty line
+        while self.pos < len(self.code) and (
+            self.code[self.pos].isspace() or self.code[self.pos] == "\n"
+        ):
+            if self.code[self.pos] == "\n":  # Check if the newline starts an empty line
                 temp_pos = self.pos + 1
                 new_line = True
                 new_line_start = 1
                 while temp_pos < len(self.code) and self.code[temp_pos].isspace():
-                    if self.code[temp_pos] == '\n':  # Found a second newline, so not whitespace
+                    if (
+                        self.code[temp_pos] == "\n"
+                    ):  # Found a second newline, so not whitespace
                         return None
                     temp_pos += 1
-                    new_line_start += 1     
+                    new_line_start += 1
             self.pos += 1
 
         # Only return a match if we haven't detected an empty line (two consecutive newlines)
-        return (self.code[start:self.pos] if start < self.pos else None, new_line, new_line_start)
+        return (
+            self.code[start : self.pos] if start < self.pos else None,
+            new_line,
+            new_line_start,
+        )
 
     def __match_newline(self):
         start = self.pos
-        if self.code[self.pos] == '\n':
+        if self.code[self.pos] == "\n":
             temp_pos = self.pos + 1
 
             # Check if it's followed by another newline, possibly with only whitespace in between
             while temp_pos < len(self.code) and self.code[temp_pos].isspace():
-                if self.code[temp_pos] == '\n':
+                if self.code[temp_pos] == "\n":
                     self.pos = temp_pos + 1  # Move past the second newline
-                    return self.code[start:self.pos]
+                    return self.code[start : self.pos]
                 temp_pos += 1
 
         return None
