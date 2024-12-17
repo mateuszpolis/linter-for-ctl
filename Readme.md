@@ -21,7 +21,8 @@ Statement           -> Assignment
                     | ReturnStatement
                     | BreakStatement
                     | WhileLoop       
-                    | LibraryImport    
+                    | LibraryImport
+                    | PropertySetter
                     | InlineIfStatement
                     | ForLoop
                     | EnumDeclaration
@@ -48,7 +49,7 @@ FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" Argument
 ArgumentList        -> Expression Comment? ("," Comment? Expression)*
 Block               -> "{" Statement* "}"
 ConditionalExpression -> TernaryExpression | Comparison
-TernaryExpression   -> Comparison "?" Expression ":" Expression
+TernaryExpression   -> Comparison "?" (Expression | TernaryExpression) ":" Expression
 Comparison          -> LogicalOr | Declaration | Assignment
 LogicalOr           -> LogicalAnd ("||" LogicalAnd)*
 LogicalAnd          -> Negation ("&&" Negation)*
@@ -98,12 +99,13 @@ EnumValue           -> identifier ("=" number)?
 SwitchStatement     -> "switch" "(" Expression ")" "{" SwitchCase* "}"
 SwitchCase          -> "case" Expression ":" ReturnStatement
                     | "default" ":" ReturnStatement
-StructDeclaration -> "struct" identifier Inheritance? Block ";"
-Inheritance -> ":" identifier
+StructDeclaration   -> "struct" identifier Inheritance? Block ";"
+Inheritance         -> ":" identifier
 ClassDeclaration    -> "class" identifier Inheritance? Block ";"
 TypeCast            -> "(" Type ")" Expression
 ClassInitialization -> Type "(" ArgumentList? ")"
 ContinueStatement   -> "continue" ";"
 TryCatchStatement   -> "try" Block "catch" Block ("finally" Block)?
 DoWhileLoop         -> "do" Block "while" "(" Comparison ")" ";"
+PropertySetter      -> # "property" (Type | identifier) identifier
 ```

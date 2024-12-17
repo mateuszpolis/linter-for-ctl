@@ -8,9 +8,9 @@ class Token:
         self.line = line
         self.column = column
 
-    def __str__(self) -> str:
-        value = self.value.replace("\n", "\\n").replace("\t", "\\t")
-        return f"{self.kind}({self.value}) at line {self.line}, column {self.column}"
+    def __str__(self) -> str:        
+        value = self.value.replace("\n", "\\n").replace("\t", "\\t") if self.value != None else None
+        return f"{self.kind}({value}) at line {self.line}, column {self.column}\n"
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -31,6 +31,7 @@ class TokenError(BaseException):
 
 class TokenKind(Enum):
     WHITESPACE = "WHITESPACE"
+    NEWLINE = "NEWLINE"
     EOF = "EOF"
     IDENTIFIER = "IDENTIFIER"
     NUMBER = "NUMBER"

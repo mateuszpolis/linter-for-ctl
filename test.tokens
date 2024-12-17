@@ -1,0 +1,528 @@
+[TokenKind.DIVIDER(────────────────────────────────────────────────────────────────────────────────────────────────────) at line 1, column 1
+, TokenKind.WHITESPACE(\n) at line 1, column 101
+, TokenKind.DIVIDER(─// [(Panel)] [0] - [ScopeLib]) at line 1, column 101
+, TokenKind.WHITESPACE(\n) at line 1, column 131
+, TokenKind.TYPE_KEYWORD(int) at line 1, column 131
+, TokenKind.WHITESPACE( ) at line 1, column 134
+, TokenKind.IDENTIFIER(configurationIdx) at line 1, column 134
+, TokenKind.SYMBOL(;) at line 1, column 150
+, TokenKind.WHITESPACE(\n) at line 1, column 151
+, TokenKind.TYPE_KEYWORD(bool) at line 1, column 151
+, TokenKind.WHITESPACE( ) at line 1, column 155
+, TokenKind.IDENTIFIER(inEditMode) at line 1, column 155
+, TokenKind.SYMBOL(;) at line 1, column 165
+, TokenKind.WHITESPACE(\n) at line 1, column 166
+, TokenKind.DIVIDER(────────────────────────────────────────────────────────────────────────────────────────────────────) at line 1, column 166
+, TokenKind.WHITESPACE(\n) at line 1, column 266
+, TokenKind.DIVIDER(─// [(Panel)] [0] - [Initialize]) at line 1, column 266
+, TokenKind.NEWLINE(None) at line 1, column 298
+, TokenKind.WHITESPACE(\n      ) at line 2, column 1
+, TokenKind.MAIN_KEYWORD(main) at line 2, column 1
+, TokenKind.SYMBOL(() at line 2, column 5
+, TokenKind.SYMBOL()) at line 2, column 6
+, TokenKind.WHITESPACE(      \n) at line 2, column 7
+, TokenKind.SYMBOL({) at line 2, column 7
+, TokenKind.WHITESPACE(\n  ) at line 2, column 8
+, TokenKind.COMMENT( Get the Configuration Names and Values) at line 2, column 8
+, TokenKind.WHITESPACE(\n  ) at line 2, column 47
+, TokenKind.IDENTIFIER(configurationIdx) at line 2, column 47
+, TokenKind.WHITESPACE( ) at line 2, column 63
+, TokenKind.ASSIGNMENT_OPERATOR(=) at line 2, column 63
+, TokenKind.WHITESPACE( ) at line 2, column 64
+, TokenKind.SYMBOL(() at line 2, column 64
+, TokenKind.TYPE_KEYWORD(int) at line 2, column 65
+, TokenKind.SYMBOL()) at line 2, column 68
+, TokenKind.SYMBOL($) at line 2, column 69
+, TokenKind.IDENTIFIER(p1) at line 2, column 70
+, TokenKind.SYMBOL(;) at line 2, column 72
+, TokenKind.WHITESPACE(\n  ) at line 2, column 73
+, TokenKind.IF(if) at line 2, column 73
+, TokenKind.SYMBOL(() at line 2, column 75
+, TokenKind.SYMBOL($) at line 2, column 76
+, TokenKind.IDENTIFIER(p2) at line 2, column 77
+, TokenKind.COMPARISON_OPERATOR(==) at line 2, column 79
+, TokenKind.STRING_LITERAL("true") at line 2, column 81
+, TokenKind.SYMBOL()) at line 2, column 87
+, TokenKind.WHITESPACE( ) at line 2, column 88
+, TokenKind.SYMBOL({) at line 2, column 88
+, TokenKind.IDENTIFIER(inEditMode) at line 2, column 89
+, TokenKind.WHITESPACE( ) at line 2, column 99
+, TokenKind.ASSIGNMENT_OPERATOR(=) at line 2, column 99
+, TokenKind.WHITESPACE( ) at line 2, column 100
+, TokenKind.KEYWORD(true) at line 2, column 100
+, TokenKind.SYMBOL(;) at line 2, column 104
+, TokenKind.WHITESPACE(\n) at line 2, column 105
+, TokenKind.SYMBOL(}) at line 2, column 105
+, TokenKind.ELSE(else) at line 2, column 106
+, TokenKind.WHITESPACE( ) at line 2, column 110
+, TokenKind.SYMBOL({) at line 2, column 110
+, TokenKind.WHITESPACE(\n    ) at line 2, column 111
+, TokenKind.IDENTIFIER(inEditMode) at line 2, column 111
+, TokenKind.WHITESPACE( ) at line 2, column 121
+, TokenKind.ASSIGNMENT_OPERATOR(=) at line 2, column 121
+, TokenKind.WHITESPACE( ) at line 2, column 122
+, TokenKind.KEYWORD(false) at line 2, column 122
+, TokenKind.SYMBOL(;) at line 2, column 127
+, TokenKind.WHITESPACE(\n  ) at line 2, column 128
+, TokenKind.SYMBOL(}) at line 2, column 128
+, TokenKind.NEWLINE(None) at line 2, column 129
+, TokenKind.WHITESPACE(    ) at line 3, column 1
+, TokenKind.IDENTIFIER(disableErrorTextEdit) at line 3, column 1
+, TokenKind.SYMBOL(() at line 3, column 21
+, TokenKind.SYMBOL()) at line 3, column 22
+, TokenKind.SYMBOL(;) at line 3, column 23
+, TokenKind.NEWLINE(None) at line 3, column 24
+, TokenKind.NEWLINE(None) at line 4, column 1
+, TokenKind.NEWLINE(None) at line 5, column 1
+, TokenKind.IDENTIFIER(disableConfigurationNameTextEdit) at line 6, column 1
+, TokenKind.SYMBOL(() at line 6, column 33
+, TokenKind.SYMBOL()) at line 6, column 34
+, TokenKind.SYMBOL(;) at line 6, column 35
+, TokenKind.NEWLINE(None) at line 6, column 36
+, TokenKind.WHITESPACE(  ) at line 7, column 1
+, TokenKind.COMMENT( Clear the background of the ERROR_TEXT_EDIT) at line 7, column 1
+, TokenKind.WHITESPACE(\n      ) at line 7, column 45
+, TokenKind.IDENTIFIER(ERROR_TEXT_EDIT) at line 7, column 45
+, TokenKind.SYMBOL(.) at line 7, column 60
+, TokenKind.IDENTIFIER(backCol) at line 7, column 61
+, TokenKind.SYMBOL(() at line 7, column 68
+, TokenKind.STRING_LITERAL("") at line 7, column 69
+, TokenKind.SYMBOL()) at line 7, column 71
+, TokenKind.SYMBOL(;) at line 7, column 72
+, TokenKind.NEWLINE(None) at line 7, column 73
+, TokenKind.WHITESPACE(  ) at line 8, column 1
+, TokenKind.COMMENT( Update the name) at line 8, column 1
+, TokenKind.WHITESPACE(\n    ) at line 8, column 17
+, TokenKind.IDENTIFIER(dpConnect) at line 8, column 17
+, TokenKind.SYMBOL(() at line 8, column 26
+, TokenKind.STRING_LITERAL("updateConfigurationName") at line 8, column 27
+, TokenKind.SYMBOL(,) at line 8, column 52
+, TokenKind.WHITESPACE( \n    ) at line 8, column 53
+, TokenKind.STRING_LITERAL("fv0_dcs:configurations.configurationNames") at line 8, column 53
+, TokenKind.SYMBOL()) at line 8, column 96
+, TokenKind.SYMBOL(;) at line 8, column 97
+, TokenKind.NEWLINE(None) at line 8, column 98
+, TokenKind.NEWLINE(None) at line 9, column 1
+, TokenKind.NEWLINE(None) at line 10, column 1
+, TokenKind.WHITESPACE(  ) at line 11, column 1
+, TokenKind.COMMENT( Parse the values and update the list) at line 11, column 1
+, TokenKind.WHITESPACE(\n  ) at line 11, column 38
+, TokenKind.IDENTIFIER(dpConnect) at line 11, column 38
+, TokenKind.SYMBOL(() at line 11, column 47
+, TokenKind.STRING_LITERAL("parseValuesAndUpdateList") at line 11, column 48
+, TokenKind.SYMBOL(,) at line 11, column 74
+, TokenKind.WHITESPACE( \n  ) at line 11, column 75
+, TokenKind.STRING_LITERAL("fv0_dcs:configurations.configurationValues") at line 11, column 75
+, TokenKind.SYMBOL()) at line 11, column 119
+, TokenKind.SYMBOL(;) at line 11, column 120
+, TokenKind.WHITESPACE(\n) at line 11, column 121
+, TokenKind.SYMBOL(}) at line 11, column 121
+, TokenKind.NEWLINE(None) at line 11, column 122
+, TokenKind.WHITESPACE(\n) at line 12, column 1
+, TokenKind.TYPE_KEYWORD(void) at line 12, column 1
+, TokenKind.WHITESPACE( ) at line 12, column 5
+, TokenKind.IDENTIFIER(updateConfigurationName) at line 12, column 5
+, TokenKind.SYMBOL(() at line 12, column 28
+, TokenKind.TYPE_KEYWORD(string) at line 12, column 29
+, TokenKind.WHITESPACE( ) at line 12, column 35
+, TokenKind.IDENTIFIER(dpName) at line 12, column 35
+, TokenKind.SYMBOL(,) at line 12, column 41
+, TokenKind.WHITESPACE( ) at line 12, column 42
+, TokenKind.TYPE_KEYWORD(dyn_string) at line 12, column 42
+, TokenKind.WHITESPACE( ) at line 12, column 52
+, TokenKind.IDENTIFIER(names) at line 12, column 52
+, TokenKind.SYMBOL()) at line 12, column 57
+, TokenKind.WHITESPACE( ) at line 12, column 58
+, TokenKind.SYMBOL({) at line 12, column 58
+, TokenKind.WHITESPACE(\n  ) at line 12, column 59
+, TokenKind.COMMENT( Set the name of the CONFIGURATION_NAME_TEXT) at line 12, column 59
+, TokenKind.WHITESPACE(\n  ) at line 12, column 103
+, TokenKind.IDENTIFIER(CONFIGURATION_NAME_TEXT) at line 12, column 103
+, TokenKind.SYMBOL(.) at line 12, column 126
+, TokenKind.IDENTIFIER(text) at line 12, column 127
+, TokenKind.SYMBOL(() at line 12, column 131
+, TokenKind.IDENTIFIER(names) at line 12, column 132
+, TokenKind.SYMBOL([) at line 12, column 137
+, TokenKind.IDENTIFIER(configurationIdx) at line 12, column 138
+, TokenKind.SYMBOL(]) at line 12, column 154
+, TokenKind.SYMBOL()) at line 12, column 155
+, TokenKind.SYMBOL(;) at line 12, column 156
+, TokenKind.WHITESPACE(\n) at line 12, column 157
+, TokenKind.SYMBOL(}) at line 12, column 157
+, TokenKind.NEWLINE(None) at line 12, column 158
+, TokenKind.TYPE_KEYWORD(void) at line 13, column 1
+, TokenKind.WHITESPACE( ) at line 13, column 5
+, TokenKind.IDENTIFIER(parseValuesAndUpdateList) at line 13, column 5
+, TokenKind.SYMBOL(() at line 13, column 29
+, TokenKind.TYPE_KEYWORD(string) at line 13, column 30
+, TokenKind.WHITESPACE( ) at line 13, column 36
+, TokenKind.IDENTIFIER(dpName) at line 13, column 36
+, TokenKind.SYMBOL(,) at line 13, column 42
+, TokenKind.WHITESPACE( ) at line 13, column 43
+, TokenKind.TYPE_KEYWORD(dyn_string) at line 13, column 43
+, TokenKind.WHITESPACE( ) at line 13, column 53
+, TokenKind.IDENTIFIER(configValues) at line 13, column 53
+, TokenKind.SYMBOL()) at line 13, column 65
+, TokenKind.WHITESPACE( ) at line 13, column 66
+, TokenKind.SYMBOL({) at line 13, column 66
+, TokenKind.WHITESPACE(\n  ) at line 13, column 67
+, TokenKind.COMMENT( Split the string into an array and display the names and values in the list) at line 13, column 67
+, TokenKind.WHITESPACE(\n  ) at line 13, column 143
+, TokenKind.TYPE_KEYWORD(dyn_string) at line 13, column 143
+, TokenKind.WHITESPACE( ) at line 13, column 153
+, TokenKind.IDENTIFIER(parameters) at line 13, column 153
+, TokenKind.WHITESPACE( ) at line 13, column 163
+, TokenKind.ASSIGNMENT_OPERATOR(=) at line 13, column 163
+, TokenKind.WHITESPACE( ) at line 13, column 164
+, TokenKind.IDENTIFIER(strsplit) at line 13, column 164
+, TokenKind.SYMBOL(() at line 13, column 172
+, TokenKind.IDENTIFIER(configValues) at line 13, column 173
+, TokenKind.SYMBOL([) at line 13, column 185
+, TokenKind.IDENTIFIER(configurationIdx) at line 13, column 186
+, TokenKind.SYMBOL(]) at line 13, column 202
+, TokenKind.SYMBOL(,) at line 13, column 203
+, TokenKind.WHITESPACE( ) at line 13, column 204
+, TokenKind.STRING_LITERAL(";") at line 13, column 204
+, TokenKind.SYMBOL()) at line 13, column 207
+, TokenKind.SYMBOL(;) at line 13, column 208
+, TokenKind.NEWLINE(None) at line 13, column 209
+, TokenKind.WHITESPACE(  ) at line 14, column 1
+, TokenKind.COMMENT( If the number of elements is not even, the format is incorrect) at line 14, column 1
+, TokenKind.WHITESPACE(\n  ) at line 14, column 64
+, TokenKind.IF(if) at line 14, column 64
+, TokenKind.WHITESPACE( ) at line 14, column 66
+, TokenKind.SYMBOL(() at line 14, column 66
+, TokenKind.IDENTIFIER(dynlen) at line 14, column 67
+, TokenKind.SYMBOL(() at line 14, column 73
+, TokenKind.IDENTIFIER(parameters) at line 14, column 74
+, TokenKind.SYMBOL()) at line 14, column 84
+, TokenKind.WHITESPACE( ) at line 14, column 85
+, TokenKind.ARITHMETIC_OPERATOR(%) at line 14, column 85
+, TokenKind.WHITESPACE( ) at line 14, column 86
+, TokenKind.NUMBER(2) at line 14, column 86
+, TokenKind.WHITESPACE( ) at line 14, column 87
+, TokenKind.COMPARISON_OPERATOR(!=) at line 14, column 87
+, TokenKind.WHITESPACE( ) at line 14, column 89
+, TokenKind.NUMBER(0) at line 14, column 89
+, TokenKind.WHITESPACE( ) at line 14, column 90
+, TokenKind.LOGICAL_OPERATOR(&&) at line 14, column 90
+, TokenKind.WHITESPACE( ) at line 14, column 92
+, TokenKind.IDENTIFIER(dynlen) at line 14, column 92
+, TokenKind.SYMBOL(() at line 14, column 98
+, TokenKind.IDENTIFIER(parameters) at line 14, column 99
+, TokenKind.SYMBOL()) at line 14, column 109
+, TokenKind.WHITESPACE( ) at line 14, column 110
+, TokenKind.COMPARISON_OPERATOR(!=) at line 14, column 110
+, TokenKind.WHITESPACE( ) at line 14, column 112
+, TokenKind.NUMBER(0) at line 14, column 112
+, TokenKind.SYMBOL()) at line 14, column 113
+, TokenKind.WHITESPACE( ) at line 14, column 114
+, TokenKind.SYMBOL({) at line 14, column 114
+, TokenKind.WHITESPACE(\n      ) at line 14, column 115
+, TokenKind.IDENTIFIER(ERROR_TEXT_EDIT) at line 14, column 115
+, TokenKind.SYMBOL(.) at line 14, column 130
+, TokenKind.IDENTIFIER(text) at line 14, column 131
+, TokenKind.SYMBOL(() at line 14, column 135
+, TokenKind.STRING_LITERAL("Number of names <> number of values") at line 14, column 136
+, TokenKind.SYMBOL()) at line 14, column 173
+, TokenKind.SYMBOL(;) at line 14, column 174
+, TokenKind.WHITESPACE(\n      ) at line 14, column 175
+, TokenKind.IDENTIFIER(ERROR_TEXT_EDIT) at line 14, column 175
+, TokenKind.SYMBOL(.) at line 14, column 190
+, TokenKind.IDENTIFIER(backCol) at line 14, column 191
+, TokenKind.SYMBOL(() at line 14, column 198
+, TokenKind.STRING_LITERAL("red") at line 14, column 199
+, TokenKind.SYMBOL()) at line 14, column 204
+, TokenKind.SYMBOL(;) at line 14, column 205
+, TokenKind.WHITESPACE(\n  ) at line 14, column 206
+, TokenKind.SYMBOL(}) at line 14, column 206
+, TokenKind.NEWLINE(None) at line 14, column 207
+, TokenKind.WHITESPACE(  ) at line 15, column 1
+, TokenKind.COMMENT( Update the list) at line 15, column 1
+, TokenKind.WHITESPACE(\n  ) at line 15, column 17
+, TokenKind.TYPE_KEYWORD(dyn_string) at line 15, column 17
+, TokenKind.WHITESPACE( ) at line 15, column 27
+, TokenKind.IDENTIFIER(combinedNames) at line 15, column 27
+, TokenKind.SYMBOL(;) at line 15, column 40
+, TokenKind.WHITESPACE(\n  ) at line 15, column 41
+, TokenKind.KEYWORD(for) at line 15, column 41
+, TokenKind.WHITESPACE( ) at line 15, column 44
+, TokenKind.SYMBOL(() at line 15, column 44
+, TokenKind.TYPE_KEYWORD(int) at line 15, column 45
+, TokenKind.WHITESPACE( ) at line 15, column 48
+, TokenKind.IDENTIFIER(i) at line 15, column 48
+, TokenKind.WHITESPACE( ) at line 15, column 49
+, TokenKind.ASSIGNMENT_OPERATOR(=) at line 15, column 49
+, TokenKind.WHITESPACE( ) at line 15, column 50
+, TokenKind.NUMBER(1) at line 15, column 50
+, TokenKind.SYMBOL(;) at line 15, column 51
+, TokenKind.WHITESPACE( ) at line 15, column 52
+, TokenKind.IDENTIFIER(i) at line 15, column 52
+, TokenKind.WHITESPACE( ) at line 15, column 53
+, TokenKind.COMPARISON_OPERATOR(<=) at line 15, column 53
+, TokenKind.WHITESPACE( ) at line 15, column 55
+, TokenKind.IDENTIFIER(dynlen) at line 15, column 55
+, TokenKind.SYMBOL(() at line 15, column 61
+, TokenKind.IDENTIFIER(parameters) at line 15, column 62
+, TokenKind.SYMBOL()) at line 15, column 72
+, TokenKind.SYMBOL(;) at line 15, column 73
+, TokenKind.WHITESPACE( ) at line 15, column 74
+, TokenKind.IDENTIFIER(i) at line 15, column 74
+, TokenKind.WHITESPACE( ) at line 15, column 75
+, TokenKind.ASSIGNMENT_OPERATOR(+=) at line 15, column 75
+, TokenKind.WHITESPACE( ) at line 15, column 77
+, TokenKind.NUMBER(2) at line 15, column 77
+, TokenKind.SYMBOL()) at line 15, column 78
+, TokenKind.WHITESPACE( ) at line 15, column 79
+, TokenKind.SYMBOL({) at line 15, column 79
+, TokenKind.WHITESPACE(\n    ) at line 15, column 80
+, TokenKind.IDENTIFIER(dynAppend) at line 15, column 80
+, TokenKind.SYMBOL(() at line 15, column 89
+, TokenKind.IDENTIFIER(combinedNames) at line 15, column 90
+, TokenKind.SYMBOL(,) at line 15, column 103
+, TokenKind.WHITESPACE( ) at line 15, column 104
+, TokenKind.IDENTIFIER(parameters) at line 15, column 104
+, TokenKind.SYMBOL([) at line 15, column 114
+, TokenKind.IDENTIFIER(i) at line 15, column 115
+, TokenKind.SYMBOL(]) at line 15, column 116
+, TokenKind.WHITESPACE( ) at line 15, column 117
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 15, column 117
+, TokenKind.WHITESPACE( ) at line 15, column 118
+, TokenKind.STRING_LITERAL(": ") at line 15, column 118
+, TokenKind.WHITESPACE( ) at line 15, column 122
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 15, column 122
+, TokenKind.WHITESPACE( ) at line 15, column 123
+, TokenKind.IDENTIFIER(parameters) at line 15, column 123
+, TokenKind.SYMBOL([) at line 15, column 133
+, TokenKind.IDENTIFIER(i) at line 15, column 134
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 15, column 135
+, TokenKind.NUMBER(1) at line 15, column 136
+, TokenKind.SYMBOL(]) at line 15, column 137
+, TokenKind.SYMBOL()) at line 15, column 138
+, TokenKind.SYMBOL(;) at line 15, column 139
+, TokenKind.WHITESPACE(\n  ) at line 15, column 140
+, TokenKind.SYMBOL(}) at line 15, column 140
+, TokenKind.WHITESPACE(\n  ) at line 15, column 141
+, TokenKind.IDENTIFIER(setValue) at line 15, column 141
+, TokenKind.SYMBOL(() at line 15, column 149
+, TokenKind.STRING_LITERAL("PARAMETERS_LIST") at line 15, column 150
+, TokenKind.SYMBOL(,) at line 15, column 167
+, TokenKind.WHITESPACE( ) at line 15, column 168
+, TokenKind.STRING_LITERAL("items") at line 15, column 168
+, TokenKind.SYMBOL(,) at line 15, column 175
+, TokenKind.WHITESPACE( ) at line 15, column 176
+, TokenKind.IDENTIFIER(combinedNames) at line 15, column 176
+, TokenKind.SYMBOL()) at line 15, column 189
+, TokenKind.SYMBOL(;) at line 15, column 190
+, TokenKind.WHITESPACE(\n) at line 15, column 191
+, TokenKind.SYMBOL(}) at line 15, column 191
+, TokenKind.NEWLINE(None) at line 15, column 192
+, TokenKind.TYPE_KEYWORD(void) at line 16, column 1
+, TokenKind.WHITESPACE( ) at line 16, column 5
+, TokenKind.IDENTIFIER(disableConfigurationNameTextEdit) at line 16, column 5
+, TokenKind.SYMBOL(() at line 16, column 37
+, TokenKind.SYMBOL()) at line 16, column 38
+, TokenKind.WHITESPACE( ) at line 16, column 39
+, TokenKind.SYMBOL({) at line 16, column 39
+, TokenKind.WHITESPACE(\n  ) at line 16, column 40
+, TokenKind.COMMENT( Disable the Text Edit for Configuration Name) at line 16, column 40
+, TokenKind.WHITESPACE(\n  ) at line 16, column 85
+, TokenKind.IDENTIFIER(CONFIGURATION_NAME_TEXT) at line 16, column 85
+, TokenKind.SYMBOL(.) at line 16, column 108
+, TokenKind.IDENTIFIER(enabled) at line 16, column 109
+, TokenKind.SYMBOL(() at line 16, column 116
+, TokenKind.KEYWORD(false) at line 16, column 117
+, TokenKind.SYMBOL()) at line 16, column 122
+, TokenKind.SYMBOL(;) at line 16, column 123
+, TokenKind.WHITESPACE(\n) at line 16, column 124
+, TokenKind.SYMBOL(}) at line 16, column 124
+, TokenKind.NEWLINE(None) at line 16, column 125
+, TokenKind.TYPE_KEYWORD(void) at line 17, column 1
+, TokenKind.WHITESPACE( ) at line 17, column 5
+, TokenKind.IDENTIFIER(disableErrorTextEdit) at line 17, column 5
+, TokenKind.SYMBOL(() at line 17, column 25
+, TokenKind.SYMBOL()) at line 17, column 26
+, TokenKind.WHITESPACE( ) at line 17, column 27
+, TokenKind.SYMBOL({) at line 17, column 27
+, TokenKind.WHITESPACE(\n  ) at line 17, column 28
+, TokenKind.COMMENT( Disable the Text Edit for Error displaying) at line 17, column 28
+, TokenKind.WHITESPACE(\n  ) at line 17, column 71
+, TokenKind.IDENTIFIER(ERROR_TEXT_EDIT) at line 17, column 71
+, TokenKind.SYMBOL(.) at line 17, column 86
+, TokenKind.IDENTIFIER(enabled) at line 17, column 87
+, TokenKind.SYMBOL(() at line 17, column 94
+, TokenKind.KEYWORD(false) at line 17, column 95
+, TokenKind.SYMBOL()) at line 17, column 100
+, TokenKind.SYMBOL(;) at line 17, column 101
+, TokenKind.WHITESPACE(\n) at line 17, column 102
+, TokenKind.SYMBOL(}) at line 17, column 102
+, TokenKind.WHITESPACE(\n) at line 17, column 103
+, TokenKind.DIVIDER(════════════════════════════════════════════════════════════════════════════════════════════════════) at line 17, column 103
+, TokenKind.WHITESPACE(\n) at line 17, column 203
+, TokenKind.DIVIDER(─// [PARAMETERS_LIST] [2] - [DoubleClicked]) at line 17, column 203
+, TokenKind.WHITESPACE(\n) at line 17, column 246
+, TokenKind.MAIN_KEYWORD(main) at line 17, column 246
+, TokenKind.SYMBOL(() at line 17, column 250
+, TokenKind.TYPE_KEYWORD(mapping) at line 17, column 251
+, TokenKind.WHITESPACE( ) at line 17, column 258
+, TokenKind.IDENTIFIER(event) at line 17, column 258
+, TokenKind.SYMBOL()) at line 17, column 263
+, TokenKind.WHITESPACE(\n) at line 17, column 264
+, TokenKind.SYMBOL({) at line 17, column 264
+, TokenKind.WHITESPACE(\n  ) at line 17, column 265
+, TokenKind.COMMENT( Get the index of the parameter) at line 17, column 265
+, TokenKind.WHITESPACE(\n  ) at line 17, column 296
+, TokenKind.TYPE_KEYWORD(int) at line 17, column 296
+, TokenKind.WHITESPACE( ) at line 17, column 299
+, TokenKind.IDENTIFIER(parameterIdx) at line 17, column 299
+, TokenKind.WHITESPACE( ) at line 17, column 311
+, TokenKind.ASSIGNMENT_OPERATOR(=) at line 17, column 311
+, TokenKind.WHITESPACE( ) at line 17, column 312
+, TokenKind.IDENTIFIER(PARAMETERS_LIST) at line 17, column 312
+, TokenKind.SYMBOL(.) at line 17, column 327
+, TokenKind.IDENTIFIER(selectedPos) at line 17, column 328
+, TokenKind.SYMBOL(() at line 17, column 339
+, TokenKind.SYMBOL()) at line 17, column 340
+, TokenKind.SYMBOL(;) at line 17, column 341
+, TokenKind.NEWLINE(None) at line 17, column 342
+, TokenKind.WHITESPACE(  ) at line 18, column 1
+, TokenKind.COMMENT( Set the Configuration and Parameter indices) at line 18, column 1
+, TokenKind.WHITESPACE(\n  ) at line 18, column 45
+, TokenKind.TYPE_KEYWORD(dyn_string) at line 18, column 45
+, TokenKind.WHITESPACE( ) at line 18, column 55
+, TokenKind.IDENTIFIER(params) at line 18, column 55
+, TokenKind.WHITESPACE( ) at line 18, column 61
+, TokenKind.ASSIGNMENT_OPERATOR(=) at line 18, column 61
+, TokenKind.WHITESPACE( ) at line 18, column 62
+, TokenKind.IDENTIFIER(makeDynString) at line 18, column 62
+, TokenKind.SYMBOL(() at line 18, column 75
+, TokenKind.STRING_LITERAL("$p1:") at line 18, column 76
+, TokenKind.WHITESPACE( ) at line 18, column 82
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 18, column 82
+, TokenKind.WHITESPACE( ) at line 18, column 83
+, TokenKind.SYMBOL(() at line 18, column 83
+, TokenKind.TYPE_KEYWORD(string) at line 18, column 84
+, TokenKind.SYMBOL()) at line 18, column 90
+, TokenKind.IDENTIFIER(configurationIdx) at line 18, column 91
+, TokenKind.SYMBOL(,) at line 18, column 107
+, TokenKind.WHITESPACE( ) at line 18, column 108
+, TokenKind.STRING_LITERAL("$p2:") at line 18, column 108
+, TokenKind.WHITESPACE( ) at line 18, column 114
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 18, column 114
+, TokenKind.WHITESPACE( ) at line 18, column 115
+, TokenKind.SYMBOL(() at line 18, column 115
+, TokenKind.TYPE_KEYWORD(string) at line 18, column 116
+, TokenKind.SYMBOL()) at line 18, column 122
+, TokenKind.IDENTIFIER(parameterIdx) at line 18, column 123
+, TokenKind.SYMBOL(,) at line 18, column 135
+, TokenKind.WHITESPACE( ) at line 18, column 136
+, TokenKind.STRING_LITERAL("$p3:") at line 18, column 136
+, TokenKind.WHITESPACE( ) at line 18, column 142
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 18, column 142
+, TokenKind.WHITESPACE( ) at line 18, column 143
+, TokenKind.STRING_LITERAL("true") at line 18, column 143
+, TokenKind.SYMBOL()) at line 18, column 149
+, TokenKind.SYMBOL(;) at line 18, column 150
+, TokenKind.NEWLINE(None) at line 18, column 151
+, TokenKind.WHITESPACE(  ) at line 19, column 1
+, TokenKind.IDENTIFIER(ChildPanelOn) at line 19, column 1
+, TokenKind.SYMBOL(() at line 19, column 13
+, TokenKind.STRING_LITERAL("Configuration/Parameter.xml") at line 19, column 14
+, TokenKind.SYMBOL(,) at line 19, column 43
+, TokenKind.WHITESPACE( ) at line 19, column 44
+, TokenKind.STRING_LITERAL("PARMAETER_PANEL") at line 19, column 44
+, TokenKind.SYMBOL(,) at line 19, column 61
+, TokenKind.WHITESPACE( ) at line 19, column 62
+, TokenKind.IDENTIFIER(params) at line 19, column 62
+, TokenKind.SYMBOL(,) at line 19, column 68
+, TokenKind.WHITESPACE( ) at line 19, column 69
+, TokenKind.NUMBER(0) at line 19, column 69
+, TokenKind.SYMBOL(,) at line 19, column 70
+, TokenKind.WHITESPACE( ) at line 19, column 71
+, TokenKind.NUMBER(0) at line 19, column 71
+, TokenKind.SYMBOL()) at line 19, column 72
+, TokenKind.SYMBOL(;) at line 19, column 73
+, TokenKind.WHITESPACE(\n) at line 19, column 74
+, TokenKind.SYMBOL(}) at line 19, column 74
+, TokenKind.WHITESPACE(\n) at line 19, column 75
+, TokenKind.DIVIDER(════════════════════════════════════════════════════════════════════════════════════════════════════) at line 19, column 75
+, TokenKind.WHITESPACE(\n) at line 19, column 175
+, TokenKind.DIVIDER(─// [ADD_PARAMETER_BUTTON] [3] - [Clicked]) at line 19, column 175
+, TokenKind.WHITESPACE(\n) at line 19, column 217
+, TokenKind.MAIN_KEYWORD(main) at line 19, column 217
+, TokenKind.SYMBOL(() at line 19, column 221
+, TokenKind.TYPE_KEYWORD(mapping) at line 19, column 222
+, TokenKind.WHITESPACE( ) at line 19, column 229
+, TokenKind.IDENTIFIER(event) at line 19, column 229
+, TokenKind.SYMBOL()) at line 19, column 234
+, TokenKind.WHITESPACE(\n) at line 19, column 235
+, TokenKind.SYMBOL({) at line 19, column 235
+, TokenKind.WHITESPACE(\n  ) at line 19, column 236
+, TokenKind.COMMENT( Open the Parameter panel with appropriate parameters) at line 19, column 236
+, TokenKind.NEWLINE(None) at line 19, column 289
+, TokenKind.WHITESPACE(  ) at line 20, column 1
+, TokenKind.COMMENT( Set the Configuration and Parameter indices) at line 20, column 1
+, TokenKind.WHITESPACE(\n  ) at line 20, column 45
+, TokenKind.TYPE_KEYWORD(dyn_string) at line 20, column 45
+, TokenKind.WHITESPACE( ) at line 20, column 55
+, TokenKind.IDENTIFIER(params) at line 20, column 55
+, TokenKind.WHITESPACE( ) at line 20, column 61
+, TokenKind.ASSIGNMENT_OPERATOR(=) at line 20, column 61
+, TokenKind.WHITESPACE(   ) at line 20, column 62
+, TokenKind.IDENTIFIER(makeDynString) at line 20, column 62
+, TokenKind.SYMBOL(() at line 20, column 75
+, TokenKind.STRING_LITERAL("$p1:") at line 20, column 76
+, TokenKind.WHITESPACE( ) at line 20, column 82
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 20, column 82
+, TokenKind.WHITESPACE( ) at line 20, column 83
+, TokenKind.SYMBOL(() at line 20, column 83
+, TokenKind.TYPE_KEYWORD(string) at line 20, column 84
+, TokenKind.SYMBOL()) at line 20, column 90
+, TokenKind.IDENTIFIER(configurationIdx) at line 20, column 91
+, TokenKind.SYMBOL(,) at line 20, column 107
+, TokenKind.WHITESPACE( ) at line 20, column 108
+, TokenKind.STRING_LITERAL("$p2:") at line 20, column 108
+, TokenKind.WHITESPACE( ) at line 20, column 114
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 20, column 114
+, TokenKind.WHITESPACE( ) at line 20, column 115
+, TokenKind.STRING_LITERAL("") at line 20, column 115
+, TokenKind.SYMBOL(,) at line 20, column 117
+, TokenKind.WHITESPACE( ) at line 20, column 118
+, TokenKind.STRING_LITERAL("$p3:") at line 20, column 118
+, TokenKind.WHITESPACE( ) at line 20, column 124
+, TokenKind.ARITHMETIC_OPERATOR(+) at line 20, column 124
+, TokenKind.WHITESPACE( ) at line 20, column 125
+, TokenKind.STRING_LITERAL("false") at line 20, column 125
+, TokenKind.SYMBOL()) at line 20, column 132
+, TokenKind.SYMBOL(;) at line 20, column 133
+, TokenKind.NEWLINE(None) at line 20, column 134
+, TokenKind.NEWLINE(None) at line 21, column 1
+, TokenKind.WHITESPACE(\n  ) at line 22, column 1
+, TokenKind.IDENTIFIER(ChildPanelOn) at line 22, column 1
+, TokenKind.SYMBOL(() at line 22, column 13
+, TokenKind.STRING_LITERAL("Configuration/Parameter.xml") at line 22, column 14
+, TokenKind.SYMBOL(,) at line 22, column 43
+, TokenKind.WHITESPACE( ) at line 22, column 44
+, TokenKind.STRING_LITERAL("PARMAETER_PANEL") at line 22, column 44
+, TokenKind.SYMBOL(,) at line 22, column 61
+, TokenKind.WHITESPACE( ) at line 22, column 62
+, TokenKind.IDENTIFIER(params) at line 22, column 62
+, TokenKind.SYMBOL(,) at line 22, column 68
+, TokenKind.WHITESPACE( ) at line 22, column 69
+, TokenKind.NUMBER(0) at line 22, column 69
+, TokenKind.SYMBOL(,) at line 22, column 70
+, TokenKind.WHITESPACE( ) at line 22, column 71
+, TokenKind.NUMBER(0) at line 22, column 71
+, TokenKind.SYMBOL()) at line 22, column 72
+, TokenKind.SYMBOL(;) at line 22, column 73
+, TokenKind.WHITESPACE(\n) at line 22, column 74
+, TokenKind.SYMBOL(}) at line 22, column 74
+, TokenKind.WHITESPACE(\n) at line 22, column 75
+, TokenKind.DIVIDER(════════════════════════════════════════════════════════════════════════════════════════════════════) at line 22, column 75
+, TokenKind.WHITESPACE(\n) at line 22, column 175
+, TokenKind.EOF() at line 22, column 175
+]
+TokenKind.EOF() at line 22, column 175
+
+AST saved to test.ast
+Formatted code saved to test.ctl

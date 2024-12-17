@@ -32,8 +32,15 @@ class ProgramNode:
 
     def format(self, indent=0):
         formatted_code = ""
+        previous_was_newline = False
         for statement in self.statements:
-            formatted_code += statement.format(indent) + "\n"
+            if isinstance(statement, NewLineNode):
+                if not previous_was_newline:
+                    formatted_code += statement.format(indent) + "\n"
+                previous_was_newline = True
+            else:
+                formatted_code += statement.format(indent) + "\n"
+                previous_was_newline = False
         return formatted_code.strip()
 
 class AssignmentNode:
@@ -287,8 +294,15 @@ class FunctionDeclarationNode:
         string += f"{indent_str(indent)})"
         return string
     
-    def format(self, indent=0):  
-        string = f"{indent_str(indent)}{self.access_modifier + ' ' if self.access_modifier else ''}{self.modifier + ' ' if self.modifier else ''}{self.return_type.format() if self.return_type != None else ""} {self.identifier}("
+    def format(self, indent=0):
+        string = f"{indent_str(indent)}"
+        if self.access_modifier is not None:
+            string += f"{self.access_modifier} "
+        if self.modifier is not None:
+            string += f"{self.modifier} "
+        if self.return_type is not None:
+            string += f"{self.return_type.format()} "
+        string += f"{self.identifier}("
         for i, parameter in enumerate(self.parameters):
             string += f"{parameter.type_.format()} {parameter.identifier}"
             if parameter.default_value is not None:
@@ -438,8 +452,17 @@ class BlockNode:
             result = f"{indent_str(indent)}" + "{\n"
         else:
             result = ""            
+        previous_was_newline = False
         for i in range(len(self.statements)):
-            result += self.statements[i].format(indent)
+            if isinstance(self.statements[i], NewLineNode):
+                if not previous_was_newline:
+                    result += self.statements[i].format(indent)
+                else:
+                    continue
+                previous_was_newline = True
+            else:
+                result += self.statements[i].format(indent)
+                previous_was_newline = False
             if isinstance(self.statements[i], FunctionCallNode):
                     result += ";"
             if i < len(self.statements) - 1:
@@ -553,7 +576,7 @@ class LibraryNode:
         return f"{indent_str(indent)}LibraryNode({self.name})"
     
     def format(self, indent=0):
-        return f'#uses "{self.name}";'
+        return f'#uses {self.name};'
 
 
 class CharNode:
@@ -976,4 +999,15 @@ class NewLineNode:
         return f"{indent_str(indent)}NewLineNode()"
     
     def format(self, indent=0):
-        return "\n"
+        return ""
+    
+class PropertySetterNode:
+    def __init__(self, type, identifier):
+        self.type = type
+        self.identifier = identifier
+
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}PropertySetterNode(type={self.type}, identifier={self.identifier})"
+    
+    def format(self, indent=0):
+        return f"#property {self.type.format()} {self.identifier}"

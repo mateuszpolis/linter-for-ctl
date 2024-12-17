@@ -23,6 +23,7 @@ KEYWORDS = [
     "catch",
     "finally",
     "do",
+    "property"
 ]
 MODIFIERS = ["static", "global", "synchronized"]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
@@ -44,6 +45,7 @@ BASE_TYPE_KEYWORDS = [
     "unsigned",
     "bit64",
     "shape",
+    "bit32"
 ]
 TYPE_KEYWORDS = []
 LIBRARY_TYPE_KEYWORDS = [
@@ -129,7 +131,7 @@ class Tokenizer:
                 )
                 self.column += len(main_keyword)
             elif type_keyword := self.__match_type_keyword():
-                token = Token(
+                token = Token(                    
                     TokenKind.TYPE_KEYWORD, type_keyword, self.line, self.column
                 )
                 self.column += len(type_keyword)
@@ -182,11 +184,16 @@ class Tokenizer:
             elif divider := self.__match_divider():
                 token = Token(TokenKind.DIVIDER, divider, self.line, self.column)
                 self.column += len(divider)
-            elif whitespace := self.__match_whitespace():
+            elif r := self.__match_whitespace():
+                whitespace, new_line, new_line_start = r
                 token = Token(TokenKind.WHITESPACE, whitespace, self.line, self.column)
-                self.line += whitespace.count("\n")
-                if "\n" in whitespace:
-                    self.column = len(whitespace) - whitespace.rindex("\n")
+                if new_line:
+                    self.line += 1
+                    self.column = new_line_start
+            elif _ := self.__match_newline():
+                token = Token(TokenKind.NEWLINE, None, self.line, self.column)
+                self.line += 1
+                self.column = 1
             else:
                 raise SyntaxError(
                     f"Unexpected character {self.code[self.pos]} at line {self.line}, column {self.column}"
@@ -379,13 +386,38 @@ class Tokenizer:
 
         return None
 
-    def __match_whitespace(self):
-        if self.code[self.pos].isspace():
-            start = self.pos
+    def __match_whitespace(self) -> tuple:
+        start = self.pos
+        # Check for whitespace and single newline (but not empty lines)
+        new_line = False
+        new_line_start = None
+        while self.pos < len(self.code) and (self.code[self.pos].isspace() or self.code[self.pos] == '\n'):
+            if self.code[self.pos] == '\n':  # Check if the newline starts an empty line
+                temp_pos = self.pos + 1
+                new_line = True
+                new_line_start = 1
+                while temp_pos < len(self.code) and self.code[temp_pos].isspace():
+                    if self.code[temp_pos] == '\n':  # Found a second newline, so not whitespace
+                        return None
+                    temp_pos += 1
+                    new_line_start += 1     
             self.pos += 1
-            while self.pos < len(self.code) and self.code[self.pos].isspace():
-                self.pos += 1
-            return self.code[start : self.pos]
+
+        # Only return a match if we haven't detected an empty line (two consecutive newlines)
+        return (self.code[start:self.pos] if start < self.pos else None, new_line, new_line_start)
+
+    def __match_newline(self):
+        start = self.pos
+        if self.code[self.pos] == '\n':
+            temp_pos = self.pos + 1
+
+            # Check if it's followed by another newline, possibly with only whitespace in between
+            while temp_pos < len(self.code) and self.code[temp_pos].isspace():
+                if self.code[temp_pos] == '\n':
+                    self.pos = temp_pos + 1  # Move past the second newline
+                    return self.code[start:self.pos]
+                temp_pos += 1
+
         return None
 
     def __match_symbol(self):

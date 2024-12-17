@@ -8,3 +8,6 @@ __pycache__/
 .DS_Store
 
 results.txt
+
+/panels
+/panels_scripts
