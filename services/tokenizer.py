@@ -47,6 +47,7 @@ BASE_TYPE_KEYWORDS = [
     "shape",
     "bit32",
     "long",
+    "palette",
 ]
 TYPE_KEYWORDS = []
 LIBRARY_TYPE_KEYWORDS = [
@@ -69,7 +70,9 @@ LIBRARY_TYPE_KEYWORDS = [
     "DCSUI",
     "LookUpTable",
     "LookUpTableEntry",
-    "Scope"
+    "Scope",
+    "Trend",
+    "Plot",
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector", "shared_ptr"]
 ARITHMETIC_OPERATORS = [

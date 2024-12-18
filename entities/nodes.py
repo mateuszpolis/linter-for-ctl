@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from entities.token_ import Token
 
 
@@ -75,18 +76,17 @@ class DeclarationNode:
                             - an optional initial value (AST node or None if no initialization)
         """
         self.type: TypeNode = type_
-        self.identifiers = identifiers
+        self.identifiers = identifiers # List of tuples (identifier, value, comment)
         self.is_const = is_const
         self.access_modifier = access_modifier
         self.modifier = modifier
-        self.comment = comment
 
     def __repr__(self, indent=0):
         # Start the string with the type keyword
-        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, access_modifier={self.access_modifier}, modifier={self.modifier}, type={self.type.__repr__(indent+1)}, comment={self.comment}, identifiers=[\n"
+        string = f"{indent_str(indent)}DeclarationNode(const={self.is_const}, access_modifier={self.access_modifier}, modifier={self.modifier}, type={self.type.__repr__(indent+1)}, identifiers=[\n"
 
         # Add each identifier with its optional initial value
-        for identifier, value in self.identifiers:
+        for identifier, value, comment in self.identifiers:
             if value is None:
                 string += f"{indent_str(indent + 1)}{identifier}\n"
             else:
@@ -100,16 +100,15 @@ class DeclarationNode:
         string = f"{indent_str(indent)}{'const ' if self.is_const else ''}{self.access_modifier + ' ' if self.access_modifier else ''}{self.modifier + ' ' if self.modifier else ''}{self.type.format()} "
 
         # Add each identifier with its optional initial value
-        for i, (identifier, value) in enumerate(self.identifiers):
-            if value is None:
-                string += f"{identifier.format()}"
-            else:
-                string += f"{identifier.format()} = {value.format()}"
+        for i, (identifier, value, comment) in enumerate(self.identifiers):
+            string += f"{identifier.format()}"
+            if value is not None:
+                string += f" = {value.format()}"
+            if comment is not None:
+                string += f" {comment.format()}"
             if i < len(self.identifiers) - 1:
                 string += ", "
-        if self.comment is not None:
-            string += self.comment.format()
-
+                
         if not inline:
             string += ";"
 
@@ -579,7 +578,7 @@ class ParameterNode:
         return f"{indent_str(indent)}ParameterNode(type={self.type_}, identifier={self.identifier}, default_value={self.default_value}, is_pointer={self.is_pointer}, is_const={self.is_const})"
 
     def format(self, indent=0):
-        return f"{self.type_}{'*' if self.is_pointer else ''}{'const ' if self.is_const else ''}{self.identifier}"
+        return f"{self.type_.format()} {'*' if self.is_pointer else ''}{'const ' if self.is_const else ''}{self.identifier}"
 
 
 class LibraryNode:
@@ -1043,3 +1042,14 @@ class PropertySetterNode:
 
     def format(self, indent=0):
         return f"#property {self.type.format()} {self.identifier}"
+
+class EventNode:
+    def __init__(self, identifier, parameters):
+        self.identifier: IdentifierNode = identifier
+        self.parameters: List[ParameterNode] = parameters
+    
+    def __repr__(self, indent=0):
+        return f"{indent_str(indent)}EventNode(parameters={self.parameters})"
+    
+    def format(self, indent=0):
+        return f"#event {self.identifier.format()}({', '.join([param.format() for param in self.parameters])})"

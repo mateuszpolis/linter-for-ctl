@@ -8,22 +8,8 @@ Error: Expected TokenKind.IDENTIFIER but got TokenKind.MULTI_LINE_COMMENT. Token
 File: panels_scripts/counters_rate.ctl
 Error: Unexpected statement at line 32, column 1. Token value: main
 
-File: panels_scripts/objects/ft0_WienerCrate_new.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 3, column 52
-
-
-File: panels_scripts/objects/fit_FCB.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 4, column 68
-
-
 File: panels_scripts/objects/LookUpEntry.ctl
-Error: Unexpected statement at line 4, column 1. Token value: #
-
-File: panels_scripts/objects/channel.ctl
-Error: Unexpected statement at line 7, column 1. Token value: #
-
-File: panels_scripts/objects/fv0_HV/fv0_HVTrend.ctl
-Error: Type 'Trend' is not defined. Token: TokenKind.COMPARISON_OPERATOR(>) at line 13, column 19
+Error: Expected ';' at the end of declaration. Token: TokenKind.IDENTIFIER(entry) at line 12, column 25
 
 
 File: panels_scripts/objects/fv0_HV/fv0_MCP_5.ctl
@@ -95,15 +81,14 @@ Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/H
 
 
 File: panels_scripts/objects/fv0_dcs/fv0SingleUnit.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 3, column 71
-
+Error: Unexpected statement at line 10, column 5. Token value: statesVScolors
 
 File: panels_scripts/objects/fv0_dcs/runUnit.ctl
 Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:aliDcsRun_1.") at line 42, column 1
 
 
 File: panels_scripts/objects/fv0_dcs/counters/fv0_fullCntRateMap.ctl
-Error: Unexpected statement at line 9, column 1. Token value: palette
+Error: Expected ':' in ternary expression at line 37, column 49. Token value: e7f
 
 File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_1.ctl
 Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 39, column 15
@@ -125,27 +110,6 @@ File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_4.ctl
 Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
  at line 8, column 15. Token value: e3
 
-File: panels_scripts/objects/fv0_dcs/counters/cntRateGradient_line_V2.ctl
-Error: Unexpected statement at line 3, column 1. Token value: #
-
-File: panels_scripts/objects/fv0_BadChannelMap/channel_1.ctl
-Error: Unexpected statement at line 3, column 1. Token value: #
-
-File: panels_scripts/objects/fv0_BadChannelMap/channel_2.ctl
-Error: Unexpected statement at line 3, column 1. Token value: #
-
-File: panels_scripts/objects/fv0_BadChannelMap/channel_3.ctl
-Error: Unexpected statement at line 3, column 1. Token value: #
-
-File: panels_scripts/objects/fv0_BadChannelMap/channel_ref.ctl
-Error: Unexpected statement at line 3, column 1. Token value: #
-
-File: panels_scripts/objects/fv0_BadChannelMap/channel_4.ctl
-Error: Unexpected statement at line 3, column 1. Token value: #
-
-File: panels_scripts/objects/fv0_BadChannelMap/channel_5.ctl
-Error: Unexpected statement at line 3, column 1. Token value: #
-
 File: panels_scripts/objects/fit_PM/fit_PMchannel.ctl
 Error: Expected ';' at the end of declaration. Token: TokenKind.ARITHMETIC_OPERATOR(+) at line 3, column 64
 
@@ -158,8 +122,7 @@ File: panels_scripts/objects/fv0_configuration/fv0_advancedRecipeSaveLoad.ctl
 Error: Unexpected statement at line 863, column 57. Token value: ;
 
 File: panels_scripts/objects/fit_common_ui/device.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 2, column 71
-
+Error: Unexpected statement at line 9, column 5. Token value: statesVScolors
 
 File: panels_scripts/objects/fit_common_ui/run_Unit.ctl
 Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:aliDcsRun_1.") at line 42, column 1
@@ -178,13 +141,6 @@ Error: Unexpected statement at line 5, column 1. Token value: HvFitUi
 File: panels_scripts/objects/fit_LCS/fitTCMLaserGenerator.ctl
 Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 87, column 14
  at line 87, column 14. Token value: e3
-
-File: panels_scripts/objects/fv0_pmtMonitoring/fv0_PMTTrend.ctl
-Error: Type 'Trend' is not defined. Token: TokenKind.COMPARISON_OPERATOR(>) at line 13, column 19
-
-
-File: panels_scripts/objects/fv0_pmtMonitoring/fv0_fullWithNumbers.ctl
-Error: Unexpected statement at line 6, column 1. Token value: #
 
 File: panels_scripts/objects/fv0_EmergencyButton/aliEmergencyButton.ctl
 Error: Unexpected statement at line 24, column 3. Token value: else if

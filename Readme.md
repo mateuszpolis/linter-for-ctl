@@ -32,6 +32,7 @@ Statement           -> Assignment
                     | TryCatchStatement
                     | DoWhileLoop
                     | DoubleColonAccess ";"
+                    | Event
 IfStatement         -> "if" Comment? "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 ElseIfClause        -> "else" "if" Comment? "(" Comparison ")" (InlineStatement | Block)
 ElseClause          -> "else" Comment? (InlineStatement | Block)
@@ -43,7 +44,7 @@ IncrementAssignment -> Identifier ("++" | "--") ";"
                      | ("++" | "--") Identifier ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
 AccessModifier      -> "public" | "private" | "protected"
-Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? ("," identifier ("=" ConditionalExpression)*)? (Comment | MultiLineComment)? ";"
+Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? (Comment | MultiLineComment)? ("," identifier ("=" ConditionalExpression)*)? (Comment | MultiLineComment)? ";"
 FunctionDeclaration -> AccessModifier? Modifier? Type? (identifier | "main") "(" ParameterList? ")" Block
 Modifier            -> "static" | "global"
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" ArgumentList? ")"
@@ -110,5 +111,5 @@ TryCatchStatement   -> "try" Block "catch" Block ("finally" Block)?
 DoWhileLoop         -> "do" Block "while" "(" Comparison ")" ";"
 PropertySetter      -> # "property" (Type | identifier) identifier
 DoubleColonAccess   -> EnumAccessNode | ClassStaticAccessNode
-
+Event               -> # "event" ( ParameterList? )
 ```

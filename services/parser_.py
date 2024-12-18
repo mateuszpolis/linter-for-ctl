@@ -26,6 +26,7 @@ from entities.nodes import (
     EnumAccessNode,
     EnumDeclarationNode,
     EnumValueNode,
+    EventNode,
     ForLoopNode,
     FunctionCallNode,
     FunctionDeclarationNode,
@@ -210,10 +211,26 @@ class Parser:
             # Consume the semicolon at the end of the statement
             self.__consume(TokenKind.SYMBOL, ignore_newline=False)
             return access
+        elif self.__detect_event():
+            return self.__parse_event()
         else:
             raise TokenError(SyntaxError("Unexpected statement"), self.__current())
 
     # Helper functions for detecting specific statement types
+
+    def __detect_event(self) -> bool:
+        """Detect an event: Event -> # "event" FunctionCall
+
+        Returns:
+            bool: Whether an event is detected or not
+        """
+        if (
+            self.__match(TokenKind.SYMBOL)
+            and self.__current().value == "#"
+            and self.__peek().value == "event"
+        ):
+            return True
+        return False
 
     def __detect_double_colon_access(self) -> bool:
         """Detect a double colon access: DoubleColonAccess   -> EnumAccessNode | ClassStaticAccessNode
@@ -249,7 +266,10 @@ class Parser:
         peek_index = 0
         if self.__match(TokenKind.KEYWORD) and self.__current().value == "new":
             peek_index += 1
-        if self.__detect_type(self.__peek(peek_index)) and self.__peek(peek_index + 1).value == "(":
+        if (
+            self.__detect_type(self.__peek(peek_index))
+            and self.__peek(peek_index + 1).value == "("
+        ):
             return True
         return False
 
@@ -863,8 +883,7 @@ class Parser:
 
     def __parse_declaration(self, parse_semicolon: bool = True) -> DeclarationNode:
         """
-        Declaration -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)?
-                    ("," identifier ("=" ConditionalExpression)*)? (Comment | MultiLineComment)? ";"
+        Declaration -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? (Comment | MultiLineComment)? ("," identifier ("=" ConditionalExpression)*)? (Comment | MultiLineComment)? ";"
 
         Args:
             parse_semicolon (bool, optional): Whether to parse the semicolon at the end of the declaration. Defaults to True.
@@ -914,7 +933,17 @@ class Parser:
             # Parse the initial value
             initial_value = self.__parse_conditional_expression()
 
-        identifiers.append((identifier, initial_value))
+
+        # Check for a comment after the first identifier
+        comment = None
+        if self.__match(TokenKind.COMMENT):
+            comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+        elif self.__match(TokenKind.MULTI_LINE_COMMENT):
+            comment = MultilineCommentNode(
+                self.__consume(TokenKind.MULTI_LINE_COMMENT).value.split("\n")
+            )
+        
+        identifiers.append((identifier, initial_value, comment))
 
         # Parse additional identifiers, each optionally initialized
         while self.__match(TokenKind.SYMBOL) and self.__current().value == ",":
@@ -932,16 +961,15 @@ class Parser:
                 # Parse the initial value
                 initial_value = self.__parse_conditional_expression()
 
-            identifiers.append((identifier, initial_value))
+            comment = None
+            if self.__match(TokenKind.COMMENT):
+                comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+            elif self.__match(TokenKind.MULTI_LINE_COMMENT):
+                comment = MultilineCommentNode(
+                    self.__consume(TokenKind.MULTI_LINE_COMMENT).value.split("\n")
+                )
 
-        # Check for a comment after the declaration
-        comment = None
-        if self.__match(TokenKind.COMMENT):
-            comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
-        elif self.__match(TokenKind.MULTI_LINE_COMMENT):
-            comment = MultilineCommentNode(
-                self.__consume(TokenKind.MULTI_LINE_COMMENT).value.split("\n")
-            )
+            identifiers.append((identifier, initial_value, comment))
 
         # Expect and consume the semicolon at the end of the declaration
         if (
@@ -1822,3 +1850,29 @@ class Parser:
         property_name = self.__consume(TokenKind.IDENTIFIER).value
 
         return PropertySetterNode(property_type, property_name)
+
+    def __parse_event(self) -> EventNode:
+        """Event -> # "event" ( ParameterList? )
+
+        Returns:
+            EventNode: The parsed event node
+        """
+        # Consume the # symbol
+        self.__consume(TokenKind.SYMBOL)
+
+        # Consume the "event" identifier
+        self.__consume(TokenKind.IDENTIFIER)
+
+        # Consume the identifier
+        identifier = IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
+
+        # Consume '('
+        self.__consume(TokenKind.SYMBOL)
+
+        # Parse the parameter list
+        parameters = self.__parse_parameter_list()
+
+        # Consume ')'
+        self.__consume(TokenKind.SYMBOL)
+
+        return EventNode(identifier, parameters)
