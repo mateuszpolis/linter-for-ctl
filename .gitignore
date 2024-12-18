@@ -10,4 +10,6 @@ __pycache__/
 results.txt
 
 /panels
-# /panels_scripts
+/panels_scripts
+
+lint_errors.txt

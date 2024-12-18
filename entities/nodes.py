@@ -955,15 +955,19 @@ class ClassStaticAccessNode:
 
 
 class ClassInitializationNode:
-    def __init__(self, identifier, arguments):
+    def __init__(self, identifier, arguments, new=False):
         self.identifier = identifier
         self.arguments = arguments
+        self.new = new
 
     def __repr__(self, indent=0):
-        return f"{indent_str(indent)}ClassInitializationNode(identifier={self.identifier}, arguments={self.arguments})"
+        return f"{indent_str(indent)}ClassInitializationNode(identifier={self.identifier}, arguments={self.arguments}, new={self.new})"
 
     def format(self, indent=0):
-        result = f"{self.identifier}("
+        result = f"{self.identifier}"
+        if self.new:
+            result += f"new "
+        result += "("
         for i, argument in enumerate(self.arguments):
             result += f"{argument.format()}"
             if i < len(self.arguments) - 1:

@@ -5,15 +5,8 @@ File: panels_scripts/fv0_PMDU.ctl
 Error: Expected TokenKind.IDENTIFIER but got TokenKind.MULTI_LINE_COMMENT. Token: TokenKind.MULTI_LINE_COMMENT("fv0_dcs:PMA7",) at line 31, column 3
  at line 31, column 3. Token value: "fv0_dcs:PMA7",
 
-File: panels_scripts/LookUpGlance.ctl
-Error: Type 'shared_ptr' is not defined. Token: TokenKind.COMPARISON_OPERATOR(<) at line 19, column 37
-
-
 File: panels_scripts/counters_rate.ctl
 Error: Unexpected statement at line 32, column 1. Token value: main
-
-File: panels_scripts/suwak.ctl
-Error: Expected ';' at the end of assignment at line 3, column 20. Token value: ::
 
 File: panels_scripts/objects/ft0_WienerCrate_new.ctl
 Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 3, column 52
@@ -30,7 +23,8 @@ File: panels_scripts/objects/channel.ctl
 Error: Unexpected statement at line 7, column 1. Token value: #
 
 File: panels_scripts/objects/fv0_HV/fv0_HVTrend.ctl
-Error: Unexpected statement at line 13, column 3. Token value: shared_ptr
+Error: Type 'Trend' is not defined. Token: TokenKind.COMPARISON_OPERATOR(>) at line 13, column 19
+
 
 File: panels_scripts/objects/fv0_HV/fv0_MCP_5.ctl
 Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
@@ -186,7 +180,8 @@ Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.
  at line 87, column 14. Token value: e3
 
 File: panels_scripts/objects/fv0_pmtMonitoring/fv0_PMTTrend.ctl
-Error: Unexpected statement at line 13, column 3. Token value: shared_ptr
+Error: Type 'Trend' is not defined. Token: TokenKind.COMPARISON_OPERATOR(>) at line 13, column 19
+
 
 File: panels_scripts/objects/fv0_pmtMonitoring/fv0_fullWithNumbers.ctl
 Error: Unexpected statement at line 6, column 1. Token value: #

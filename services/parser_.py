@@ -245,7 +245,11 @@ class Parser:
         return False
 
     def __detect_class_initialization(self):
-        if self.__detect_type(self.__current()) and self.__peek().value == "(":
+        # check for optional "new" keyword
+        peek_index = 0
+        if self.__match(TokenKind.KEYWORD) and self.__current().value == "new":
+            peek_index += 1
+        if self.__detect_type(self.__peek(peek_index)) and self.__peek(peek_index + 1).value == "(":
             return True
         return False
 
@@ -495,11 +499,15 @@ class Parser:
 
     def __parse_conditional_expression(self):
         """
-        ConditionalExpression -> TernaryExpression | Comparison
+        ConditionalExpression -> TernaryExpression | Comparison | DoubleColonAccess
         TernaryExpression     -> Comparison "?" ConditionalExpression ":" ConditionalExpression
         """
-        # Parse the condition, which is a Comparison
-        condition = self.__parse_comparison()
+        # Check if it's a double colon access
+        if self.__detect_double_colon_access():
+            condition = self.__parse_double_colon_access()
+        else:
+            # Parse the condition, which is a Comparison
+            condition = self.__parse_comparison()
 
         # Check if the next token is "?" for a ternary expression
         if not self.__match(TokenKind.SYMBOL) or self.__current().value != "?":
@@ -1690,11 +1698,17 @@ class Parser:
             )
 
     def __parse_class_initialization(self) -> ClassInitializationNode:
-        """ClassInitialization -> Type "(" ArgumentList? ")"
+        """ClassInitialization -> ("new")? Type "(" ArgumentList? ")"
 
         Returns:
             ClassInitializationNode: The parsed class initialization node
         """
+        new_keyword = False
+        # Check if the next token is the "new" keyword
+        if self.__match(TokenKind.KEYWORD) and self.__current().value == "new":
+            # Consume the "new" keyword
+            self.__consume(TokenKind.KEYWORD)
+            new_keyword = True
 
         # Parse the class type
         class_type = self.__parse_type()
@@ -1708,7 +1722,7 @@ class Parser:
         # Consume ')'
         self.__consume(TokenKind.SYMBOL)
 
-        return ClassInitializationNode(class_type, arguments)
+        return ClassInitializationNode(class_type, arguments, new_keyword)
 
     def __parse_continue_statement(self) -> ContinueNode:
         """ContinueStatement   -> "continue" ";"

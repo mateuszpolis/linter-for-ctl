@@ -23,6 +23,7 @@ KEYWORDS = [
     "catch",
     "finally",
     "do",
+    "new",
 ]
 MODIFIERS = ["static", "global", "synchronized"]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
@@ -68,8 +69,9 @@ LIBRARY_TYPE_KEYWORDS = [
     "DCSUI",
     "LookUpTable",
     "LookUpTableEntry",
+    "Scope"
 ]
-TEMPLATE_TYPE_KEYWORDS = ["vector"]
+TEMPLATE_TYPE_KEYWORDS = ["vector", "shared_ptr"]
 ARITHMETIC_OPERATORS = [
     "+",
     "-",

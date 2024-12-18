@@ -49,7 +49,7 @@ Modifier            -> "static" | "global"
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" ArgumentList? ")"
 ArgumentList        -> ConditionalExpression Comment? ("," Comment? ConditionalExpression)*
 Block               -> "{" Statement* "}"
-ConditionalExpression -> TernaryExpression | Comparison
+ConditionalExpression -> TernaryExpression | Comparison | DoubleColonAccess
 TernaryExpression   -> Comparison "?" (Expression | TernaryExpression) ":" Expression
 Comparison          -> LogicalOr | Declaration | Assignment
 LogicalOr           -> LogicalAnd ("||" LogicalAnd)*
@@ -104,10 +104,11 @@ StructDeclaration   -> "struct" identifier Inheritance? Block ";"
 Inheritance         -> ":" identifier
 ClassDeclaration    -> "class" identifier Inheritance? Block ";"
 TypeCast            -> "(" Type ")" Expression
-ClassInitialization -> Type "(" ArgumentList? ")"
+ClassInitialization -> ("new")? Type "(" ArgumentList? ")"
 ContinueStatement   -> "continue" ";"
 TryCatchStatement   -> "try" Block "catch" Block ("finally" Block)?
 DoWhileLoop         -> "do" Block "while" "(" Comparison ")" ";"
 PropertySetter      -> # "property" (Type | identifier) identifier
 DoubleColonAccess   -> EnumAccessNode | ClassStaticAccessNode
+
 ```
