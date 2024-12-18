@@ -76,7 +76,7 @@ class DeclarationNode:
                             - an optional initial value (AST node or None if no initialization)
         """
         self.type: TypeNode = type_
-        self.identifiers = identifiers # List of tuples (identifier, value, comment)
+        self.identifiers = identifiers  # List of tuples (identifier, value, comment), where comment is a tuple (comment1, comment2)
         self.is_const = is_const
         self.access_modifier = access_modifier
         self.modifier = modifier
@@ -103,12 +103,16 @@ class DeclarationNode:
         for i, (identifier, value, comment) in enumerate(self.identifiers):
             string += f"{identifier.format()}"
             if value is not None:
-                string += f" = {value.format()}"
-            if comment is not None:
-                string += f" {comment.format()}"
+                string += " = "
+            if comment[0] is not None:
+                string += f"{comment[0].format()} "
+            if value is not None:
+                string += f"{value.format()}"
+            if comment[1] is not None:
+                string += f" {comment[1].format()}"
             if i < len(self.identifiers) - 1:
                 string += ", "
-                
+
         if not inline:
             string += ";"
 
@@ -231,7 +235,11 @@ class MultilineCommentNode:
         return string
 
     def format(self, indent=0):
-        return f"/*\n{indent_str(indent)}{self.lines}\n*/"
+        result = f"{indent_str(indent)}/*\n"
+        for line in self.lines:
+            result += f"{indent_str(indent + 1)}{line}\n"
+        result += f"{indent_str(indent)}*/"
+        return result
 
 
 class DividerNode:
@@ -775,8 +783,8 @@ class EnumAccessNode:
 class CaseStatementNode:
     def __init__(self, value, block, is_default=False):
         self.value = value
-        self.block = block
-        self.is_default = is_default
+        self.block: BlockNode = block
+        self.is_default: bool = is_default
 
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}CaseStatementNode(is_default={self.is_default}, value={self.value}, block={self.block})"
@@ -788,15 +796,15 @@ class CaseStatementNode:
 
 
 class SwitchStatementNode:
-    def __init__(self, expression, case_statements):
+    def __init__(self, expression, statements):
         self.expression = expression
-        self.case_statements = case_statements
+        self.statements = statements
 
     def __repr__(self, indent=0):
         string = f"{indent_str(indent)}SwitchStatementNode(\n"
         string += f"{indent_str(indent + 1)}expression: {self.expression}\n"
-        string += f"{indent_str(indent + 1)}case_statements: [\n"
-        for case_statement in self.case_statements:
+        string += f"{indent_str(indent + 1)}statements: [\n"
+        for case_statement in self.statements:
             string += case_statement.__repr__(indent + 2) + "\n"
         string += f"{indent_str(indent + 1)}]\n"
         string += f"{indent_str(indent)})"
@@ -806,7 +814,7 @@ class SwitchStatementNode:
         result = (
             f"{indent_str(indent)}switch({self.expression.format(indent + 1)}) {{\n"
         )
-        for case_statement in self.case_statements:
+        for case_statement in self.statements:
             result += case_statement.format(indent + 1) + "\n"
         result += f"{indent_str(indent)}" + "}"
         return result
@@ -1043,13 +1051,14 @@ class PropertySetterNode:
     def format(self, indent=0):
         return f"#property {self.type.format()} {self.identifier}"
 
+
 class EventNode:
     def __init__(self, identifier, parameters):
         self.identifier: IdentifierNode = identifier
         self.parameters: List[ParameterNode] = parameters
-    
+
     def __repr__(self, indent=0):
         return f"{indent_str(indent)}EventNode(parameters={self.parameters})"
-    
+
     def format(self, indent=0):
         return f"#event {self.identifier.format()}({', '.join([param.format() for param in self.parameters])})"

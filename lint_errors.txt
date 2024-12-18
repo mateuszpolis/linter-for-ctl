@@ -12,103 +12,31 @@ File: panels_scripts/objects/LookUpEntry.ctl
 Error: Expected ';' at the end of declaration. Token: TokenKind.IDENTIFIER(entry) at line 12, column 25
 
 
-File: panels_scripts/objects/fv0_HV/fv0_MCP_5.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: panels_scripts/objects/fv0_HV/fv0_MCP_4.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: panels_scripts/objects/fv0_HV/fv0_MCP_1.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 3
-
-
-File: panels_scripts/objects/fv0_HV/fv0_MCP_3.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: panels_scripts/objects/fv0_HV/fv0_ref.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 3
-
-
-File: panels_scripts/objects/fv0_HV/fv0_MCP_2.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_5.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_4.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_1.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 3
-
-
-File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_3.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_2.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_5.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
-
-
-File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_4.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
-
-
-File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_3.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
-
-
-File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_2.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
-
-
-File: panels_scripts/objects/fv0_dcs/fv0_PM.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.KEYWORD. Token: TokenKind.KEYWORD(break) at line 32, column 41
- at line 32, column 41. Token value: break
-
-File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_1.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
-
-
 File: panels_scripts/objects/fv0_dcs/fv0SingleUnit.ctl
 Error: Unexpected statement at line 10, column 5. Token value: statesVScolors
 
-File: panels_scripts/objects/fv0_dcs/runUnit.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:aliDcsRun_1.") at line 42, column 1
-
-
 File: panels_scripts/objects/fv0_dcs/counters/fv0_fullCntRateMap.ctl
-Error: Expected ':' in ternary expression at line 37, column 49. Token value: e7f
+Error: Expected closing ']' for list access at line 69, column 28. Token value: >
 
 File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_1.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 39, column 15
- at line 39, column 15. Token value: e3
+Error: Expected TokenKind.SYMBOL but got TokenKind.MULTI_LINE_COMMENT. Token: TokenKind.MULTI_LINE_COMMENT( + (trigIncl ? "" : " no TRG")) at line 61, column 46
+ at line 61, column 46. Token value:  + (trigIncl ? "" : " no TRG")
 
 File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_3.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
- at line 8, column 15. Token value: e3
+Error: Expected TokenKind.SYMBOL but got TokenKind.MULTI_LINE_COMMENT. Token: TokenKind.MULTI_LINE_COMMENT( + (trigIncl ? "" : " no TRG")) at line 61, column 15
+ at line 61, column 15. Token value:  + (trigIncl ? "" : " no TRG")
 
 File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_2.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
- at line 8, column 15. Token value: e3
+Error: Expected TokenKind.SYMBOL but got TokenKind.MULTI_LINE_COMMENT. Token: TokenKind.MULTI_LINE_COMMENT( + (trigIncl ? "" : " no TRG")) at line 61, column 15
+ at line 61, column 15. Token value:  + (trigIncl ? "" : " no TRG")
 
 File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_5.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
- at line 8, column 15. Token value: e3
+Error: Expected TokenKind.SYMBOL but got TokenKind.MULTI_LINE_COMMENT. Token: TokenKind.MULTI_LINE_COMMENT( + (trigIncl ? "" : " no TRG")) at line 61, column 15
+ at line 61, column 15. Token value:  + (trigIncl ? "" : " no TRG")
 
 File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_4.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
- at line 8, column 15. Token value: e3
+Error: Expected TokenKind.SYMBOL but got TokenKind.MULTI_LINE_COMMENT. Token: TokenKind.MULTI_LINE_COMMENT( + (trigIncl ? "" : " no TRG")) at line 61, column 15
+ at line 61, column 15. Token value:  + (trigIncl ? "" : " no TRG")
 
 File: panels_scripts/objects/fit_PM/fit_PMchannel.ctl
 Error: Expected ';' at the end of declaration. Token: TokenKind.ARITHMETIC_OPERATOR(+) at line 3, column 64
@@ -124,14 +52,6 @@ Error: Unexpected statement at line 863, column 57. Token value: ;
 File: panels_scripts/objects/fit_common_ui/device.ctl
 Error: Unexpected statement at line 9, column 5. Token value: statesVScolors
 
-File: panels_scripts/objects/fit_common_ui/run_Unit.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:aliDcsRun_1.") at line 42, column 1
-
-
-File: panels_scripts/objects/fit_common_ui/detector_status.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(emergencyButtonDPname) at line 113, column 5
- at line 113, column 5. Token value: emergencyButtonDPname
-
 File: panels_scripts/objects/fit_common_ui/FEE_unit.ctl
 Error: Unexpected statement at line 7, column 1. Token value: PmFitUi
 
@@ -139,20 +59,11 @@ File: panels_scripts/objects/fit_common_ui/HV_unit.ctl
 Error: Unexpected statement at line 5, column 1. Token value: HvFitUi
 
 File: panels_scripts/objects/fit_LCS/fitTCMLaserGenerator.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 87, column 14
- at line 87, column 14. Token value: e3
+Error: Unexpected statement at line 117, column 3. Token value: string
 
 File: panels_scripts/objects/fv0_EmergencyButton/aliEmergencyButton.ctl
 Error: Unexpected statement at line 24, column 3. Token value: else if
 
 File: panels_scripts/objects/fv0_EmergencyButton/aliEmergencyButton_v2.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:ft0EmergencyButton") at line 62, column 3
-
-
-File: panels_scripts/objects/fv0_EmergencyButton/_magnetSafety.ctl
-Error: Unexpected statement at line 39, column 5. Token value: case
-
-File: panels_scripts/fwJCOPCourseFSMDemo/_WienerEmulator.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT($sCrateDP) at line 24, column 1
-
+Error: Unexpected statement at line 27, column 3. Token value: else if
 

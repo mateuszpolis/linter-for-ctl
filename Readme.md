@@ -98,9 +98,9 @@ EnumDeclaration     -> "enum" identifier "{" EnumValue ("," EnumValue)* "}"
 EnumAccess          -> identifier "::" identifier
 ClassStaticAccess   -> identifier "::" (FunctionCall | identifier)
 EnumValue           -> identifier ("=" number)?
-SwitchStatement     -> "switch" "(" Expression ")" "{" SwitchCase* "}"
-SwitchCase          -> "case" Expression ":" ReturnStatement
-                    | "default" ":" ReturnStatement
+SwitchStatement     -> "switch" "(" Expression ")" "{" (SwitchCase | Comment | MultiLineComment)* "}"
+SwitchCase          -> "case" Expression ":" Statement*
+                     | "default" ":" Statement*
 StructDeclaration   -> "struct" identifier Inheritance? Block ";"
 Inheritance         -> ":" identifier
 ClassDeclaration    -> "class" identifier Inheritance? Block ";"

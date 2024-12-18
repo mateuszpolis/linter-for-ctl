@@ -171,10 +171,7 @@ class Parser:
                 self.__consume(TokenKind.SYMBOL, ignore_newline=False)
             return if_statement
         elif self.__match(TokenKind.MULTI_LINE_COMMENT):
-            multi_line_comment = self.__consume(
-                TokenKind.MULTI_LINE_COMMENT, ignore_newline=False
-            )
-            return MultilineCommentNode(multi_line_comment.value.split("\n"))
+            return self.__parse_multiline_comment()
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "return":
             return self.__parse_return_statement()
         elif self.__match(TokenKind.KEYWORD) and self.__current().value == "break":
@@ -925,24 +922,33 @@ class Parser:
         identifier = IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
         identifiers = []  # Start a list to hold identifiers and their initial values
 
+        comment = [None, None]
+
         # Check if there's an initialization for the first identifier
         initial_value = None
         if self.__match(TokenKind.ASSIGNMENT_OPERATOR):
             # Consume the "="
             self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+
+            # Check for a comment before the first identifier
+            comment1 = None
+            if self.__match(TokenKind.COMMENT):
+                comment1 = CommentNode(self.__consume(TokenKind.COMMENT).value)
+            elif self.__match(TokenKind.MULTI_LINE_COMMENT):
+                comment1 = self.__parse_multiline_comment()
+            comment[0] = comment1
+
             # Parse the initial value
             initial_value = self.__parse_conditional_expression()
 
-
         # Check for a comment after the first identifier
-        comment = None
+        comment2 = None
         if self.__match(TokenKind.COMMENT):
-            comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+            comment2 = CommentNode(self.__consume(TokenKind.COMMENT).value)
         elif self.__match(TokenKind.MULTI_LINE_COMMENT):
-            comment = MultilineCommentNode(
-                self.__consume(TokenKind.MULTI_LINE_COMMENT).value.split("\n")
-            )
-        
+            comment2 = self.__parse_multiline_comment()
+        comment[1] = comment2
+
         identifiers.append((identifier, initial_value, comment))
 
         # Parse additional identifiers, each optionally initialized
@@ -953,21 +959,31 @@ class Parser:
             # Expect and consume the next identifier
             identifier = IdentifierNode(self.__consume(TokenKind.IDENTIFIER).value)
 
+            comment = [None, None]
+
             # Check if there's an initialization for this identifier
             initial_value = None
             if self.__match(TokenKind.ASSIGNMENT_OPERATOR):
                 # Consume the "="
                 self.__consume(TokenKind.ASSIGNMENT_OPERATOR)
+
+                # Check for a comment before the first identifier
+                comment1 = None
+                if self.__match(TokenKind.COMMENT):
+                    comment1 = CommentNode(self.__consume(TokenKind.COMMENT).value)
+                elif self.__match(TokenKind.MULTI_LINE_COMMENT):
+                    comment1 = self.__parse_multiline_comment()
+                comment[0] = comment1
+
                 # Parse the initial value
                 initial_value = self.__parse_conditional_expression()
 
-            comment = None
+            comment2 = None
             if self.__match(TokenKind.COMMENT):
-                comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+                comment2 = CommentNode(self.__consume(TokenKind.COMMENT).value)
             elif self.__match(TokenKind.MULTI_LINE_COMMENT):
-                comment = MultilineCommentNode(
-                    self.__consume(TokenKind.MULTI_LINE_COMMENT).value.split("\n")
-                )
+                comment2 = self.__parse_multiline_comment()
+            comment[1] = comment2
 
             identifiers.append((identifier, initial_value, comment))
 
@@ -1514,7 +1530,7 @@ class Parser:
         return EnumAccessNode(enum_name, enum_value_name)
 
     def __parse_switch_statement(self) -> SwitchStatementNode:
-        """SwitchStatement -> "switch" "(" Expression ")" "{" SwitchCase* "}"_summary_
+        """SwitchStatement     -> "switch" "(" Expression ")" "{" (SwitchCase | Comment | MultiLineComment)* "}"
 
         Returns:
             SwitchStatementNode: The parsed switch statement node
@@ -1534,51 +1550,64 @@ class Parser:
         # Consume '{'
         self.__consume(TokenKind.SYMBOL)
 
-        # Parse the switch cases
-        cases = []
-        while self.__match(TokenKind.KEYWORD) and (
-            self.__current().value == "case" or self.__current().value == "default"
+        # Parse the switch cases and comments
+        statements = []
+        while (self.__match(TokenKind.KEYWORD) and (
+            self.__current().value == "case" or self.__current().value == "default") or self.__match(TokenKind.COMMENT) or self.__match(TokenKind.MULTI_LINE_COMMENT)
         ):
-            cases.append(self.__parse_case_statement())
+            if self.__match(TokenKind.COMMENT):
+                statements.append(CommentNode(self.__consume(TokenKind.COMMENT).value))
+            elif self.__match(TokenKind.MULTI_LINE_COMMENT):
+                statements.append(self.__parse_multiline_comment())
+            else:
+                statements.append(self.__parse_case_statement())
 
         # Consume '}'
         self.__consume(TokenKind.SYMBOL, ignore_newline=False)
 
-        return SwitchStatementNode(switch_expression, cases)
+        return SwitchStatementNode(switch_expression, statements)
 
     def __parse_case_statement(self) -> CaseStatementNode:
-        """SwitchCase -> "case" Expression ":" ReturnStatement | "default" ":" ReturnStatement
+        """SwitchCase -> "case" Expression ":" Statement* | "default" ":" Statement*
 
         Returns:
             CaseStatementNode: The parsed case statement node
         """
 
+        is_default = False
         # Check if the case is the default case
         if self.__match(TokenKind.KEYWORD) and self.__current().value == "default":
             # Consume the "default" keyword
             self.__consume(TokenKind.KEYWORD)
+            is_default = True
+        else:
+            # Consume the "case" keyword
+            self.__consume(TokenKind.KEYWORD)
 
-            # Consume ':'
-            self.__consume(TokenKind.SYMBOL)
-
-            # Parse the return statement
-            return_statement = self.__parse_statement()
-
-            return CaseStatementNode(None, return_statement, is_default=True)
-
-        # Consume the "case" keyword
-        self.__consume(TokenKind.KEYWORD)
-
-        # Parse the case expression
-        case_expression = self.__parse_expression()
+            # Parse the case expression
+            case_expression = self.__parse_expression()
 
         # Consume ':'
         self.__consume(TokenKind.SYMBOL)
 
-        # Parse the return statement
-        return_statement = self.__parse_statement()
+        # Parse the statements
+        statements = []
+        while not (
+            (
+                self.__match(TokenKind.KEYWORD)
+                and (
+                    self.__current().value == "case"
+                    or self.__current().value == "default"
+                )
+            )
+            or (self.__match(TokenKind.SYMBOL) and self.__current().value == "}")
+        ):
+            statements.append(self.__parse_statement())        
+        block = BlockNode(statements)
 
-        return CaseStatementNode(case_expression, return_statement)
+        return CaseStatementNode(
+            None if is_default else case_expression, block, is_default
+        )
 
     def __parse_struct_declaration(self) -> StructDeclarationNode:
         """StructDeclaration -> "struct" identifier Inheritance? Block ";"
@@ -1876,3 +1905,17 @@ class Parser:
         self.__consume(TokenKind.SYMBOL)
 
         return EventNode(identifier, parameters)
+
+    def __parse_multiline_comment(self) -> MultilineCommentNode:
+        """MultiLineComment -> "/**" (any_character)* "*/" | "/*" (any_character)* "*/"
+
+        Returns:
+            MultilineCommentNode: The parsed multiline comment node
+        """
+        multi_line_comment = self.__consume(
+                TokenKind.MULTI_LINE_COMMENT, ignore_newline=False
+            )
+        lines = multi_line_comment.value.split("\n")
+        # Remove empty lines
+        lines = [line.strip() for line in lines if line.strip()]
+        return MultilineCommentNode(lines)

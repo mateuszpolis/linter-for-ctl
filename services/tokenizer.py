@@ -361,33 +361,44 @@ class Tokenizer:
                 self.pos += 1
             return self.code[start : self.pos]
 
-        # Floating-point: must have '.' or suffix 'f'/'F'
+        # Floating-point: includes '.', 'e', or 'E'
         if self.code[self.pos].isdigit() or (
             self.pos + 1 < len(self.code)
             and self.code[self.pos] == "."
             and self.code[self.pos + 1].isdigit()
         ):
             has_dot = False
-            while self.pos < len(self.code) and (
-                self.code[self.pos].isdigit() or self.code[self.pos] == "."
-            ):
-                if self.code[self.pos] == ".":
+            has_exponent = False
+            while self.pos < len(self.code):
+                char = self.code[self.pos]
+                if char == ".":
                     if has_dot:  # Second dot in number is invalid
                         break
                     has_dot = True
+                elif char in "eE":
+                    if has_exponent:  # Second exponent is invalid
+                        break
+                    has_exponent = True
+                    self.pos += 1  # Move past 'e' or 'E'
+                    if self.pos < len(self.code) and self.code[self.pos] in "+-":  # Handle exponent sign
+                        self.pos += 1
+                    continue
+                elif not char.isdigit():
+                    break
                 self.pos += 1
             # Check for optional floating-point suffix 'f' or 'F'
             if self.pos < len(self.code) and self.code[self.pos] in "fF":
                 self.pos += 1
-            # If no dot and no 'f'/'F', this is not a float
-            if not has_dot and not (self.code[self.pos - 1] in "fF"):
-                self.pos = start  # Reset position and fall through to decimal
-            else:
-                return self.code[start : self.pos]
+            return self.code[start : self.pos]
 
-        # Decimal: digits only, optionally followed by 'U' or 'L'
+        # Decimal: digits only, allows underscores and optionally 'U' or 'L'
         if self.code[self.pos].isdigit():
-            while self.pos < len(self.code) and self.code[self.pos].isdigit():
+            while self.pos < len(self.code):
+                if self.code[self.pos] == "_":  # Allow underscores in numbers
+                    self.pos += 1
+                    continue
+                elif not self.code[self.pos].isdigit():
+                    break
                 self.pos += 1
             # Check for unsigned suffix 'U' or long suffix 'L'
             if self.pos < len(self.code) and self.code[self.pos] in "uUlL":
@@ -395,7 +406,7 @@ class Tokenizer:
             return self.code[start : self.pos]
 
         return None
-
+    
     def __match_whitespace(self) -> tuple:
         start = self.pos
         # Check for whitespace and single newline (but not empty lines)
