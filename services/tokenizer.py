@@ -22,7 +22,7 @@ KEYWORDS = [
     "try",
     "catch",
     "finally",
-    "do"
+    "do",
 ]
 MODIFIERS = ["static", "global", "synchronized"]
 ACCESS_MODIFIERS = ["public", "private", "protected"]
@@ -65,6 +65,9 @@ LIBRARY_TYPE_KEYWORDS = [
     "TfTestProject",
     "TfNotifier",
     "TfErrHdl",
+    "DCSUI",
+    "LookUpTable",
+    "LookUpTableEntry",
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector"]
 ARITHMETIC_OPERATORS = [
@@ -192,7 +195,7 @@ class Tokenizer:
                     self.column = new_line_start
             elif _ := self.__match_newline():
                 token = Token(TokenKind.NEWLINE, None, self.line, self.column)
-                self.line += 1
+                self.line += 2
                 self.column = 1
             else:
                 raise SyntaxError(

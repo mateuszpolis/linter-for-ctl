@@ -60,7 +60,13 @@ class AssignmentNode:
 
 class DeclarationNode:
     def __init__(
-        self, type_, identifiers, is_const=False, access_modifier=None, modifier=None, comment = None
+        self,
+        type_,
+        identifiers,
+        is_const=False,
+        access_modifier=None,
+        modifier=None,
+        comment=None,
     ):
         """
         :param type_keyword: The data type of the declaration (e.g., 'int' or 'string')

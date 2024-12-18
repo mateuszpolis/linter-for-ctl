@@ -31,6 +31,7 @@ Statement           -> Assignment
                     | ContinueStatement
                     | TryCatchStatement
                     | DoWhileLoop
+                    | DoubleColonAccess ";"
 IfStatement         -> "if" Comment? "(" Comparison ")" (InlineStatement | Block) (ElseIfClause)* (ElseClause)?
 ElseIfClause        -> "else" "if" Comment? "(" Comparison ")" (InlineStatement | Block)
 ElseClause          -> "else" Comment? (InlineStatement | Block)
@@ -108,4 +109,5 @@ ContinueStatement   -> "continue" ";"
 TryCatchStatement   -> "try" Block "catch" Block ("finally" Block)?
 DoWhileLoop         -> "do" Block "while" "(" Comparison ")" ";"
 PropertySetter      -> # "property" (Type | identifier) identifier
+DoubleColonAccess   -> EnumAccessNode | ClassStaticAccessNode
 ```

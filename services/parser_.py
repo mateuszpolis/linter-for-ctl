@@ -205,10 +205,24 @@ class Parser:
         elif self.__match(TokenKind.EOF):
             self.__consume(TokenKind.EOF)
             return None
+        elif self.__detect_double_colon_access():
+            access = self.__parse_double_colon_access()
+            # Consume the semicolon at the end of the statement
+            self.__consume(TokenKind.SYMBOL, ignore_newline=False)
+            return access
         else:
             raise TokenError(SyntaxError("Unexpected statement"), self.__current())
 
     # Helper functions for detecting specific statement types
+
+    def __detect_double_colon_access(self) -> bool:
+        """Detect a double colon access: DoubleColonAccess   -> EnumAccessNode | ClassStaticAccessNode
+
+        Returns:
+            bool: Whether a double colon access is detected or not
+        """
+        if self.__detect_type(self.__current()) and self.__peek().value == "::":
+            return True
 
     def __detect_property_setter(self):
         """Detect a property setter: PropertySetter -> # "property" Type identifier"""
@@ -934,7 +948,9 @@ class Parser:
             self.__consume(TokenKind.SYMBOL, ignore_newline=False)
 
         # Return a DeclarationNode with the access_modifier, modifiers, type, list of identifiers, and const flag
-        return DeclarationNode(type_, identifiers, is_const, access_modifier, modifiers, comment)
+        return DeclarationNode(
+            type_, identifiers, is_const, access_modifier, modifiers, comment
+        )
 
     def __parse_parameter_list(self):
         # Start with an empty list of parameters

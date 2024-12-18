@@ -1,218 +1,207 @@
-File: ./panels_scripts/background_counters.ctl
-Error: Unexpected statement at line 50, column 80. Token value: =
+File: panels_scripts/background_counters.ctl
+Error: Unexpected statement at line 56, column 80. Token value: =
 
-File: ./panels_scripts/fv0_PMDU.ctl
-Error: Expected TokenKind.IDENTIFIER but got TokenKind.MULTI_LINE_COMMENT. Token: TokenKind.MULTI_LINE_COMMENT("fv0_dcs:PMA7",) at line 31, column 2
- at line 31, column 2. Token value: "fv0_dcs:PMA7",
+File: panels_scripts/fv0_PMDU.ctl
+Error: Expected TokenKind.IDENTIFIER but got TokenKind.MULTI_LINE_COMMENT. Token: TokenKind.MULTI_LINE_COMMENT("fv0_dcs:PMA7",) at line 31, column 3
+ at line 31, column 3. Token value: "fv0_dcs:PMA7",
 
-File: ./panels_scripts/fv0_dcs.ctl
-Error: Unexpected statement at line 36, column 3. Token value: DCSUI
+File: panels_scripts/LookUpGlance.ctl
+Error: Type 'shared_ptr' is not defined. Token: TokenKind.COMPARISON_OPERATOR(<) at line 19, column 37
 
-File: ./panels_scripts/LookUpGlance.ctl
-Error: Unexpected statement at line 9, column 1. Token value: LookUpTable
 
-File: ./panels_scripts/counters_rate.ctl
-Error: Unexpected statement at line 29, column 1. Token value: main
+File: panels_scripts/counters_rate.ctl
+Error: Unexpected statement at line 32, column 1. Token value: main
 
-File: ./panels_scripts/suwak.ctl
+File: panels_scripts/suwak.ctl
 Error: Expected ';' at the end of assignment at line 3, column 20. Token value: ::
 
-File: ./panels_scripts/objects/ft0_WienerCrate_new.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 2, column 52
+File: panels_scripts/objects/ft0_WienerCrate_new.ctl
+Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 3, column 52
 
 
-File: ./panels_scripts/objects/fit_FCB.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 3, column 68
+File: panels_scripts/objects/fit_FCB.ctl
+Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 4, column 68
 
 
-File: ./panels_scripts/objects/LookUpEntry.ctl
+File: panels_scripts/objects/LookUpEntry.ctl
+Error: Unexpected statement at line 4, column 1. Token value: #
+
+File: panels_scripts/objects/channel.ctl
+Error: Unexpected statement at line 7, column 1. Token value: #
+
+File: panels_scripts/objects/fv0_HV/fv0_HVTrend.ctl
+Error: Unexpected statement at line 13, column 3. Token value: shared_ptr
+
+File: panels_scripts/objects/fv0_HV/fv0_MCP_5.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+
+
+File: panels_scripts/objects/fv0_HV/fv0_MCP_4.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+
+
+File: panels_scripts/objects/fv0_HV/fv0_MCP_1.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 3
+
+
+File: panels_scripts/objects/fv0_HV/fv0_MCP_3.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+
+
+File: panels_scripts/objects/fv0_HV/fv0_ref.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 3
+
+
+File: panels_scripts/objects/fv0_HV/fv0_MCP_2.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+
+
+File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_5.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+
+
+File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_4.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+
+
+File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_1.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 3
+
+
+File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_3.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+
+
+File: panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_2.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+
+
+File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_5.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
+
+
+File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_4.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
+
+
+File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_3.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
+
+
+File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_2.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
+
+
+File: panels_scripts/objects/fv0_dcs/fv0_PM.ctl
+Error: Expected TokenKind.SYMBOL but got TokenKind.KEYWORD. Token: TokenKind.KEYWORD(break) at line 32, column 41
+ at line 32, column 41. Token value: break
+
+File: panels_scripts/objects/fv0_dcs/fv0_mcpStatus_1.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 6
+
+
+File: panels_scripts/objects/fv0_dcs/fv0SingleUnit.ctl
+Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 3, column 71
+
+
+File: panels_scripts/objects/fv0_dcs/runUnit.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:aliDcsRun_1.") at line 42, column 1
+
+
+File: panels_scripts/objects/fv0_dcs/counters/fv0_fullCntRateMap.ctl
+Error: Unexpected statement at line 9, column 1. Token value: palette
+
+File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_1.ctl
+Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 39, column 15
+ at line 39, column 15. Token value: e3
+
+File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_3.ctl
+Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
+ at line 8, column 15. Token value: e3
+
+File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_2.ctl
+Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
+ at line 8, column 15. Token value: e3
+
+File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_5.ctl
+Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
+ at line 8, column 15. Token value: e3
+
+File: panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_4.ctl
+Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 8, column 15
+ at line 8, column 15. Token value: e3
+
+File: panels_scripts/objects/fv0_dcs/counters/cntRateGradient_line_V2.ctl
 Error: Unexpected statement at line 3, column 1. Token value: #
 
-File: ./panels_scripts/objects/channel.ctl
+File: panels_scripts/objects/fv0_BadChannelMap/channel_1.ctl
+Error: Unexpected statement at line 3, column 1. Token value: #
+
+File: panels_scripts/objects/fv0_BadChannelMap/channel_2.ctl
+Error: Unexpected statement at line 3, column 1. Token value: #
+
+File: panels_scripts/objects/fv0_BadChannelMap/channel_3.ctl
+Error: Unexpected statement at line 3, column 1. Token value: #
+
+File: panels_scripts/objects/fv0_BadChannelMap/channel_ref.ctl
+Error: Unexpected statement at line 3, column 1. Token value: #
+
+File: panels_scripts/objects/fv0_BadChannelMap/channel_4.ctl
+Error: Unexpected statement at line 3, column 1. Token value: #
+
+File: panels_scripts/objects/fv0_BadChannelMap/channel_5.ctl
+Error: Unexpected statement at line 3, column 1. Token value: #
+
+File: panels_scripts/objects/fit_PM/fit_PMchannel.ctl
+Error: Expected ';' at the end of declaration. Token: TokenKind.ARITHMETIC_OPERATOR(+) at line 3, column 64
+
+
+File: panels_scripts/objects/fit_PM/fit_PMchannel_withoutlock.ctl
+Error: Expected ';' at the end of declaration. Token: TokenKind.ARITHMETIC_OPERATOR(+) at line 3, column 64
+
+
+File: panels_scripts/objects/fv0_configuration/fv0_advancedRecipeSaveLoad.ctl
+Error: Unexpected statement at line 863, column 57. Token value: ;
+
+File: panels_scripts/objects/fit_common_ui/device.ctl
+Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 2, column 71
+
+
+File: panels_scripts/objects/fit_common_ui/run_Unit.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:aliDcsRun_1.") at line 42, column 1
+
+
+File: panels_scripts/objects/fit_common_ui/detector_status.ctl
+Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(emergencyButtonDPname) at line 113, column 5
+ at line 113, column 5. Token value: emergencyButtonDPname
+
+File: panels_scripts/objects/fit_common_ui/FEE_unit.ctl
+Error: Unexpected statement at line 7, column 1. Token value: PmFitUi
+
+File: panels_scripts/objects/fit_common_ui/HV_unit.ctl
+Error: Unexpected statement at line 5, column 1. Token value: HvFitUi
+
+File: panels_scripts/objects/fit_LCS/fitTCMLaserGenerator.ctl
+Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 87, column 14
+ at line 87, column 14. Token value: e3
+
+File: panels_scripts/objects/fv0_pmtMonitoring/fv0_PMTTrend.ctl
+Error: Unexpected statement at line 13, column 3. Token value: shared_ptr
+
+File: panels_scripts/objects/fv0_pmtMonitoring/fv0_fullWithNumbers.ctl
 Error: Unexpected statement at line 6, column 1. Token value: #
 
-File: ./panels_scripts/objects/fv0_laserCalibration.ctl
-Error: Unexpected statement at line 32, column 3. Token value: DCSUI
+File: panels_scripts/objects/fv0_EmergencyButton/aliEmergencyButton.ctl
+Error: Unexpected statement at line 24, column 3. Token value: else if
 
-File: ./panels_scripts/objects/fv0_HV/fv0_HVTrend.ctl
-Error: Unexpected statement at line 10, column 3. Token value: shared_ptr
+File: panels_scripts/objects/fv0_EmergencyButton/aliEmergencyButton_v2.ctl
+Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:ft0EmergencyButton") at line 62, column 3
 
-File: ./panels_scripts/objects/fv0_HV/fv0_HVmultiConfig.ctl
-Error: Unexpected statement at line 106, column 3. Token value: DCSUI
 
-File: ./panels_scripts/objects/fv0_HV/fv0_MCP_5.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
+File: panels_scripts/objects/fv0_EmergencyButton/_magnetSafety.ctl
+Error: Unexpected statement at line 39, column 5. Token value: case
 
-
-File: ./panels_scripts/objects/fv0_HV/fv0_MCP_4.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: ./panels_scripts/objects/fv0_HV/fv0_MCP_1.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 2
-
-
-File: ./panels_scripts/objects/fv0_HV/fv0_MCP_3.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: ./panels_scripts/objects/fv0_HV/fv0_ref.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 2
-
-
-File: ./panels_scripts/objects/fv0_HV/fv0_MCP_2.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: ./panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_5.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: ./panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_4.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: ./panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_1.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 2
-
-
-File: ./panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_3.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: ./panels_scripts/objects/fv0_HV/top_layer/fv0_MCP_2.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 1
-
-
-File: ./panels_scripts/objects/fv0_dcs/fv0_mcpStatus_5.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 5
-
-
-File: ./panels_scripts/objects/fv0_dcs/fv0_mcpStatus_4.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 5
-
-
-File: ./panels_scripts/objects/fv0_dcs/fv0_mcpStatus_3.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 5
-
-
-File: ./panels_scripts/objects/fv0_dcs/fv0_mcpStatus_2.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 5
-
-
-File: ./panels_scripts/objects/fv0_dcs/fv0_PM.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.KEYWORD. Token: TokenKind.KEYWORD(break) at line 31, column 41
- at line 31, column 41. Token value: break
-
-File: ./panels_scripts/objects/fv0_dcs/fv0_mcpStatus_1.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("FT0/HV/FT0_A/MCP_A1") at line 37, column 5
-
-
-File: ./panels_scripts/objects/fv0_dcs/fv0SingleUnit.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 2, column 71
-
-
-File: ./panels_scripts/objects/fv0_dcs/fv0_configInfo.ctl
-Error: Unexpected statement at line 45, column 34. Token value: )
-
-File: ./panels_scripts/objects/fv0_dcs/runUnit.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:aliDcsRun_1.") at line 42, column 1
-
-
-File: ./panels_scripts/objects/fv0_dcs/counters/fv0_fullCntRateMap.ctl
-Error: Unexpected statement at line 8, column 1. Token value: palette
-
-File: ./panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_1.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 36, column 15
- at line 36, column 15. Token value: e3
-
-File: ./panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_3.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 7, column 15
- at line 7, column 15. Token value: e3
-
-File: ./panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_2.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 7, column 15
- at line 7, column 15. Token value: e3
-
-File: ./panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_5.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 7, column 15
- at line 7, column 15. Token value: e3
-
-File: ./panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_4.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 7, column 15
- at line 7, column 15. Token value: e3
-
-File: ./panels_scripts/objects/fv0_dcs/counters/cntRateGradient_line_V2.ctl
-Error: Unexpected statement at line 2, column 1. Token value: #
-
-File: ./panels_scripts/objects/fv0_BadChannelMap/channel_1.ctl
-Error: Unexpected statement at line 2, column 1. Token value: #
-
-File: ./panels_scripts/objects/fv0_BadChannelMap/channel_2.ctl
-Error: Unexpected statement at line 2, column 1. Token value: #
-
-File: ./panels_scripts/objects/fv0_BadChannelMap/channel_3.ctl
-Error: Unexpected statement at line 2, column 1. Token value: #
-
-File: ./panels_scripts/objects/fv0_BadChannelMap/channel_ref.ctl
-Error: Unexpected statement at line 2, column 1. Token value: #
-
-File: ./panels_scripts/objects/fv0_BadChannelMap/channel_4.ctl
-Error: Unexpected statement at line 2, column 1. Token value: #
-
-File: ./panels_scripts/objects/fv0_BadChannelMap/channel_5.ctl
-Error: Unexpected statement at line 2, column 1. Token value: #
-
-File: ./panels_scripts/objects/fit_PM/fit_PMchannel.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.ARITHMETIC_OPERATOR(+) at line 2, column 64
-
-
-File: ./panels_scripts/objects/fit_PM/fit_PMchannel_withoutlock.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.ARITHMETIC_OPERATOR(+) at line 2, column 64
-
-
-File: ./panels_scripts/objects/fv0_configuration/fv0_advancedRecipeSaveLoad.ctl
-Error: Unexpected statement at line 710, column 57. Token value: ;
-
-File: ./panels_scripts/objects/fit_common_ui/device.ctl
-Error: Expected ';' at the end of declaration. Token: TokenKind.SYMBOL(,) at line 2, column 71
-
-
-File: ./panels_scripts/objects/fit_common_ui/run_Unit.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:aliDcsRun_1.") at line 42, column 1
-
-
-File: ./panels_scripts/objects/fit_common_ui/detector_status.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(emergencyButtonDPname) at line 107, column 5
- at line 107, column 5. Token value: emergencyButtonDPname
-
-File: ./panels_scripts/objects/fit_common_ui/FEE_unit.ctl
-Error: Unexpected statement at line 6, column 1. Token value: PmFitUi
-
-File: ./panels_scripts/objects/fit_common_ui/HV_unit.ctl
-Error: Unexpected statement at line 4, column 1. Token value: HvFitUi
-
-File: ./panels_scripts/objects/fit_LCS/fitTCMLaserGenerator.ctl
-Error: Expected TokenKind.SYMBOL but got TokenKind.IDENTIFIER. Token: TokenKind.IDENTIFIER(e3) at line 77, column 14
- at line 77, column 14. Token value: e3
-
-File: ./panels_scripts/objects/fv0_pmtMonitoring/fv0_PMTTrend.ctl
-Error: Unexpected statement at line 10, column 3. Token value: shared_ptr
-
-File: ./panels_scripts/objects/fv0_pmtMonitoring/fv0_fullWithNumbers.ctl
-Error: Unexpected statement at line 5, column 1. Token value: #
-
-File: ./panels_scripts/objects/fv0_EmergencyButton/aliEmergencyButton.ctl
-Error: Unexpected statement at line 19, column 3. Token value: else if
-
-File: ./panels_scripts/objects/fv0_EmergencyButton/aliEmergencyButton_v2.ctl
-Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT("ft0_dcs:ft0EmergencyButton") at line 62, column 2
-
-
-File: ./panels_scripts/objects/fv0_EmergencyButton/_magnetSafety.ctl
-Error: Unexpected statement at line 31, column 5. Token value: case
-
-File: ./panels_scripts/fwJCOPCourseFSMDemo/_WienerEmulator.ctl
+File: panels_scripts/fwJCOPCourseFSMDemo/_WienerEmulator.ctl
 Error: Expected a primary expression. Token: TokenKind.MULTI_LINE_COMMENT($sCrateDP) at line 24, column 1
 
 
