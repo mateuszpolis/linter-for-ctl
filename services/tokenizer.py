@@ -73,6 +73,8 @@ LIBRARY_TYPE_KEYWORDS = [
     "Scope",
     "Trend",
     "Plot",
+    "PmFitUi",
+    "HvFitUi"
 ]
 TEMPLATE_TYPE_KEYWORDS = ["vector", "shared_ptr"]
 ARITHMETIC_OPERATORS = [
@@ -380,7 +382,9 @@ class Tokenizer:
                         break
                     has_exponent = True
                     self.pos += 1  # Move past 'e' or 'E'
-                    if self.pos < len(self.code) and self.code[self.pos] in "+-":  # Handle exponent sign
+                    if (
+                        self.pos < len(self.code) and self.code[self.pos] in "+-"
+                    ):  # Handle exponent sign
                         self.pos += 1
                     continue
                 elif not char.isdigit():
@@ -406,7 +410,7 @@ class Tokenizer:
             return self.code[start : self.pos]
 
         return None
-    
+
     def __match_whitespace(self) -> tuple:
         start = self.pos
         # Check for whitespace and single newline (but not empty lines)

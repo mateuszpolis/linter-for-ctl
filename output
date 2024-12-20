@@ -1,0 +1,115 @@
+Primary $iCHANNEL_NO Result $iCHANNEL_NO Indent 0
+Primary "" Result "" Indent 0
+Primary "k" Result "k" Indent 0
+Primary "M" Result "M" Indent 0
+Primary "" Result "" Indent 0
+Primary "k" Result "k" Indent 0
+Primary "M" Result "M" Indent 0
+Primary makeDynString("", "k", "M") Result makeDynString("", "k", "M") Indent 0
+Primary true Result true Indent 0
+Primary 1 Result 1 Indent 0
+Primary rate Result rate Indent 0
+Primary 1e3 Result 1e3 Indent 0
+Primary rate Result rate Indent 0
+Primary 1e3 Result 1e3 Indent 0
+Primary ucnt Result ucnt Indent 0
+Primary 3 Result 3 Indent 0
+Primary ucnt Result ucnt Indent 0
+Primary toolTipText Result toolTipText Indent 0
+Primary formatAct Result formatAct Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary rate Result rate Indent 0
+Primary ucnt Result ucnt Indent 0
+Primary ucnt Result ucnt Indent 0
+Primary units[ucnt] Result units[ucnt] Indent 0
+Primary isRate Result isRate Indent 0
+Primary "Hz" Result "Hz" Indent 0
+Primary "hits" Result "hits" Indent 0
+Primary toolTipText Result toolTipText Indent 0
+Primary formatAct Result formatAct Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary rate Result rate Indent 0
+Primary ucnt Result ucnt Indent 0
+Primary ucnt Result ucnt Indent 0
+Primary units[ucnt] Result units[ucnt] Indent 0
+Primary isRate Result isRate Indent 0
+Primary "Hz" Result "Hz" Indent 0
+Primary "hits" Result "hits" Indent 0
+Primary sprintf(toolTipText, formatAct, channelNo, rate, units[ucnt], isRate ? "Hz" : "hits") Result   sprintf(toolTipText, formatAct, channelNo, rate, units[ucnt], isRate ? "Hz" : "hits") Indent 1
+Primary toolTipText Result toolTipText /*
+  + (trigIncl ? "" : " no TRG")
+*/ Indent 0
+Primary toolTipText Result toolTipText /*
+  + (trigIncl ? "" : " no TRG")
+*/ Indent 0
+Primary cell.toolTipText(toolTipText /*
+  + (trigIncl ? "" : " no TRG")
+*/) Result   cell.toolTipText(toolTipText /*
+  + (trigIncl ? "" : " no TRG")
+*/) Indent 1
+Primary backCol Result backCol Indent 0
+Primary backCol Result backCol Indent 0
+Primary cell.backCol(backCol) Result   cell.backCol(backCol) Indent 1
+Primary getSystemName() Result getSystemName() Indent 0
+Primary FV0_SYSTEM_NAME Result FV0_SYSTEM_NAME Indent 0
+Primary PROJ_PATH Result PROJ_PATH Indent 0
+Primary "Z:/DCS_Common/dcs_share/fv0_share/" Result "Z:/DCS_Common/dcs_share/fv0_share/" Indent 0
+Primary "panels/LookUpGlance_V2.xml" Result "panels/LookUpGlance_V2.xml" Indent 0
+Primary "Channel Properties" Result "Channel Properties" Indent 0
+Primary "$iPosition:" Result "$iPosition:" Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary 1 Result 1 Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary 1 Result 1 Indent 0
+Primary (string)channelNo + 1 Result (string)channelNo + 1 Indent 0
+Primary "$iPosition:" Result "$iPosition:" Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary 1 Result 1 Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary 1 Result 1 Indent 0
+Primary (string)channelNo + 1 Result (string)channelNo + 1 Indent 0
+Primary makeDynString("$iPosition:" + (string)channelNo + 1) Result makeDynString("$iPosition:" + (string)channelNo + 1) Indent 0
+Primary getSystemName() Result getSystemName() Indent 0
+Primary FV0_SYSTEM_NAME Result FV0_SYSTEM_NAME Indent 0
+Primary PROJ_PATH Result PROJ_PATH Indent 0
+Primary "Z:/DCS_Common/dcs_share/fv0_share/" Result "Z:/DCS_Common/dcs_share/fv0_share/" Indent 0
+Primary "panels/LookUpGlance_V2.xml" Result "panels/LookUpGlance_V2.xml" Indent 0
+Primary "Channel Properties" Result "Channel Properties" Indent 0
+Primary "$iPosition:" Result "$iPosition:" Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary 1 Result 1 Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary 1 Result 1 Indent 0
+Primary (string)channelNo + 1 Result (string)channelNo + 1 Indent 0
+Primary "$iPosition:" Result "$iPosition:" Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary 1 Result 1 Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary 1 Result 1 Indent 0
+Primary (string)channelNo + 1 Result (string)channelNo + 1 Indent 0
+Primary makeDynString("$iPosition:" + (string)channelNo + 1) Result makeDynString("$iPosition:" + (string)channelNo + 1) Indent 0
+Primary ChildPanelOnCentralModal(getSystemName() == FV0_SYSTEM_NAME ? PROJ_PATH : "Z:/DCS_Common/dcs_share/fv0_share/" + "panels/LookUpGlance_V2.xml", "Channel Properties", makeDynString("$iPosition:" + (string)channelNo + 1)) Result   ChildPanelOnCentralModal(getSystemName() == FV0_SYSTEM_NAME ? PROJ_PATH : "Z:/DCS_Common/dcs_share/fv0_share/" + "panels/LookUpGlance_V2.xml", "Channel Properties", makeDynString("$iPosition:" + (string)channelNo + 1)) Indent 1
+Primary FV0_LUTE_CHANNEL_NO Result FV0_LUTE_CHANNEL_NO Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary FV0_LUTE_CHANNEL_NO Result FV0_LUTE_CHANNEL_NO Indent 0
+Primary channelNo Result channelNo Indent 0
+Primary FV0_LUTE_PM_CHANNEL.getCorrespondingProperty(FV0_LUTE_CHANNEL_NO, channelNo) Result FV0_LUTE_PM_CHANNEL.getCorrespondingProperty(FV0_LUTE_CHANNEL_NO, channelNo) Indent 0
+Primary "cell" Result "cell" Indent 0
+Primary "cell" Result "cell" Indent 0
+Primary cell.type("cell") Result   cell.type("cell") Indent 1
+Primary formatAct Result formatAct Indent 0
+Primary "#%03d=" Result "#%03d=" Indent 0
+Primary PMchannelName Result PMchannelName Indent 0
+Primary ":\n%.1f %s%s" Result ":\n%.1f %s%s" Indent 0
+Primary formatInact Result formatInact Indent 0
+Primary PMchannelName Result PMchannelName Indent 0
+Primary "(%d) inactive" Result "(%d) inactive" Indent 0
+Primary doubleClicked() Result   doubleClicked() Indent 1
+Formatted code saved to panels_scripts/objects/fv0_dcs/counters/channel_CNT_RATE_4.ctl
+
+--- Linting Results ---
+Total files processed: 1
+Files successful: 1
+Files with errors: 0
+Success rate: 100.00%
+Error rate: 0.00%

@@ -59,6 +59,7 @@ from entities.nodes import (
     TypeCastNode,
     TypeNode,
     WhileLoopNode,
+    FactorNode,
 )
 from entities.token_ import Token, TokenError, TokenKind
 
@@ -82,15 +83,24 @@ class Parser:
             self.pos += 1
         return self.tokens[self.pos]
 
-    def __peek(self, n=1) -> Token:
+    def __peek(self, n=1, skip_comments=True) -> Token:
         pos = self.pos
         for _ in range(n):
             pos += 1
-            while pos < len(self.tokens) and (
-                self.tokens[pos].kind == TokenKind.WHITESPACE
-                or self.tokens[pos].kind == TokenKind.NEWLINE
-            ):
-                pos += 1
+            if skip_comments:
+                while pos < len(self.tokens) and (
+                    self.tokens[pos].kind == TokenKind.WHITESPACE
+                    or self.tokens[pos].kind == TokenKind.COMMENT
+                    or self.tokens[pos].kind == TokenKind.MULTI_LINE_COMMENT
+                    or self.tokens[pos].kind == TokenKind.NEWLINE
+                ):
+                    pos += 1
+            else:
+                while pos < len(self.tokens) and (
+                    self.tokens[pos].kind == TokenKind.WHITESPACE
+                    or self.tokens[pos].kind == TokenKind.NEWLINE
+                ):
+                    pos += 1
         return self.tokens[pos]
 
     def __advance(self, ignore_newline=True) -> bool:
@@ -278,11 +288,11 @@ class Parser:
         """
         if (
             self.__detect_type(self.__current())
-            and self.__peek().kind == TokenKind.IDENTIFIER
+            and self.__peek(skip_comments=True).kind == TokenKind.IDENTIFIER
             and (
-                self.__peek(2).value == ";"
-                or self.__peek(2).value == "="
-                or self.__peek(2).value == ","
+                self.__peek(2, skip_comments=True).value == ";"
+                or self.__peek(2, skip_comments=True).value == "="
+                or self.__peek(2, skip_comments=True).value == ","
             )
         ):
             return True
@@ -452,12 +462,14 @@ class Parser:
                 elif next_symbol == "[":
                     # Index access expects an expression and a closing bracket
                     n += 1  # Move past "["
-                    while not (
-                        self.__peek(n).kind == TokenKind.SYMBOL
-                        and self.__peek(n).value == "]"
-                    ):
+                    bracket_count = 1
+                    while bracket_count > 0:
+                        if self.__peek(n).kind == TokenKind.SYMBOL:
+                            if self.__peek(n).value == "[":
+                                bracket_count += 1
+                            elif self.__peek(n).value == "]":
+                                bracket_count -= 1
                         n += 1
-                    n += 1  # Move past "]"
                 else:
                     break
 
@@ -635,7 +647,7 @@ class Parser:
         raise TokenError("Invalid assignment statement", self.__current())
 
     def __parse_expression(self) -> Any:
-        """Expression -> Term ( ("+" | "-") Comment? Term )*
+        """Expression -> Term ( ("+" | "-") Term )*
 
         Returns:
             Any: The parsed expression node
@@ -647,16 +659,8 @@ class Parser:
         ) and self.__current().value in ["+", "-"]:
             operator = self.__consume(TokenKind.ARITHMETIC_OPERATOR)
 
-            # Check for a comment after the operator
-            comment = None
-            if self.__match(TokenKind.COMMENT):
-                comment = self.__consume(TokenKind.COMMENT).value
-
             right = self.__parse_term()
             left = BinaryExpressionNode(left, operator.value, right)
-
-            if comment:
-                left.set_comment(comment)
 
         return left
 
@@ -679,7 +683,18 @@ class Parser:
 
         return left
 
-    def __parse_factor(self):
+    def __parse_factor(self) -> FactorNode:
+        """Factor -> Comment? Primary Comment?
+
+        Raises:
+            TokenError: If the factor is missing a primary expression
+
+        Returns:
+            FactorNode: The parsed factor node
+        """
+        # Check for a comment before the primary expression
+        comment1 = self.__parse_comment()
+
         # Start by parsing a primary expression
         node = self.__parse_primary()
 
@@ -694,7 +709,7 @@ class Parser:
             elif self.__match(TokenKind.SYMBOL) and self.__current().value == "[":
                 # Handle list indexing as usual
                 self.__consume(TokenKind.SYMBOL)
-                index = self.__parse_expression()
+                index = self.__parse_conditional_expression()
                 if not (
                     self.__match(TokenKind.SYMBOL) and self.__current().value == "]"
                 ):
@@ -714,7 +729,10 @@ class Parser:
                     node
                 )  # Treat as a function call on the attribute
 
-        return node
+        # Check for a comment after the primary expression
+        comment2 = self.__parse_comment()
+
+        return FactorNode(node, comment1, comment2)
 
     def __parse_primary(self):
         if self.__match(TokenKind.NUMBER) or (
@@ -1245,7 +1263,7 @@ class Parser:
         while (
             self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "||"
         ):
-            operator = self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '||'
+            self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '||'
             right = self.__parse_logical_and()
             left = LogicalOrNode(left, right)
 
@@ -1257,7 +1275,7 @@ class Parser:
         while (
             self.__match(TokenKind.LOGICAL_OPERATOR) and self.__current().value == "&&"
         ):
-            operator = self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '&&'
+            self.__consume(TokenKind.LOGICAL_OPERATOR)  # Consume '&&'
             right = self.__parse_negation()
             left = LogicalAndNode(left, right)
 
@@ -1280,7 +1298,7 @@ class Parser:
         left = self.__parse_bitwise_xor()
 
         while self.__match(TokenKind.SYMBOL) and self.__current().value == "|":
-            operator = self.__consume(TokenKind.SYMBOL)  # Consume '|'
+            self.__consume(TokenKind.SYMBOL)  # Consume '|'
             right = self.__parse_bitwise_xor()
             left = BitwiseOrNode(left, right)
 
@@ -1290,7 +1308,7 @@ class Parser:
         left = self.__parse_bitwise_and()
 
         while self.__match(TokenKind.SYMBOL) and self.__current().value == "^":
-            operator = self.__consume(TokenKind.SYMBOL)  # Consume '^'
+            self.__consume(TokenKind.SYMBOL)  # Consume '^'
             right = self.__parse_bitwise_and()
             left = BitwiseXorNode(left, right)
 
@@ -1300,7 +1318,7 @@ class Parser:
         left = self.__parse_shift()
 
         while self.__match(TokenKind.SYMBOL) and self.__current().value == "&":
-            operator = self.__consume(TokenKind.SYMBOL)  # Consume '&'
+            self.__consume(TokenKind.SYMBOL)  # Consume '&'
             right = self.__parse_shift()
             left = BitwiseAndNode(left, right)
 
@@ -1436,6 +1454,10 @@ class Parser:
         # Otherwise parse the signle statement
         else:
             statement = self.__parse_statement()
+        
+        # Check for optional semicolon
+        if self.__match(TokenKind.SYMBOL) and self.__current().value == ";":
+            self.__consume(TokenKind.SYMBOL)
 
         return ForLoopNode(initialization, condition, increment, block, statement)
 
@@ -1552,8 +1574,13 @@ class Parser:
 
         # Parse the switch cases and comments
         statements = []
-        while (self.__match(TokenKind.KEYWORD) and (
-            self.__current().value == "case" or self.__current().value == "default") or self.__match(TokenKind.COMMENT) or self.__match(TokenKind.MULTI_LINE_COMMENT)
+        while (
+            self.__match(TokenKind.KEYWORD)
+            and (
+                self.__current().value == "case" or self.__current().value == "default"
+            )
+            or self.__match(TokenKind.COMMENT)
+            or self.__match(TokenKind.MULTI_LINE_COMMENT)
         ):
             if self.__match(TokenKind.COMMENT):
                 statements.append(CommentNode(self.__consume(TokenKind.COMMENT).value))
@@ -1602,7 +1629,7 @@ class Parser:
             )
             or (self.__match(TokenKind.SYMBOL) and self.__current().value == "}")
         ):
-            statements.append(self.__parse_statement())        
+            statements.append(self.__parse_statement())
         block = BlockNode(statements)
 
         return CaseStatementNode(
@@ -1913,9 +1940,23 @@ class Parser:
             MultilineCommentNode: The parsed multiline comment node
         """
         multi_line_comment = self.__consume(
-                TokenKind.MULTI_LINE_COMMENT, ignore_newline=False
-            )
+            TokenKind.MULTI_LINE_COMMENT, ignore_newline=False
+        )
         lines = multi_line_comment.value.split("\n")
         # Remove empty lines
         lines = [line.strip() for line in lines if line.strip()]
         return MultilineCommentNode(lines)
+
+    def __parse_comment(self) -> CommentNode | MultilineCommentNode | None:
+        """Comment -> "//" (any_character)* | MultiLineComment
+
+        Returns:
+            CommentNode | MultilineCommentNode | None: The parsed comment node or None if no comment is present
+        """
+        comment = None
+        if self.__match(TokenKind.COMMENT):
+            comment = CommentNode(self.__consume(TokenKind.COMMENT).value)
+        elif self.__match(TokenKind.MULTI_LINE_COMMENT):
+            comment = self.__parse_multiline_comment()
+
+        return comment

@@ -44,7 +44,7 @@ IncrementAssignment -> Identifier ("++" | "--") ";"
                      | ("++" | "--") Identifier ";"
 CompoundAssignment  -> Identifier ("+=" | "-=" | "*=" | "/=" | "%=") ConditionalExpression ";"
 AccessModifier      -> "public" | "private" | "protected"
-Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? (Comment | MultiLineComment)? ("," identifier ("=" ConditionalExpression)*)? (Comment | MultiLineComment)? ";"
+Declaration         -> AccessModifier? Modifier? ("const" (Type | ε) | Type) identifier ("=" ConditionalExpression)? Comment? ("," identifier ("=" ConditionalExpression)*)? Comment? ";"
 FunctionDeclaration -> AccessModifier? Modifier? Type? (identifier | "main") "(" ParameterList? ")" Block
 Modifier            -> "static" | "global"
 FunctionCall        -> (identifier | AttributeAccess | IndexAccess) "(" ArgumentList? ")"
@@ -61,9 +61,9 @@ BitwiseXor          -> BitwiseAnd ("^" BitwiseAnd)*
 BitwiseAnd          -> Shift ("&" Shift)*
 Shift               -> Relational (("<<" | ">>") Relational)*
 Relational          -> Expression ( ("==" | "!=" | ">" | ">=" | "<" | "<=") Expression )?
-Expression          -> Term ( ("+" | "-") Comment? Term )*
+Expression          -> Term ( ("+" | "-") Term )*
 Term                -> Factor ( ("*" | "/" | "%") Factor )*
-Factor              -> Primary
+Factor              -> Comment? Primary Comment?
 Primary             -> number "."?
                     | identifier 
                     | "$" (identifier | number)
@@ -79,7 +79,7 @@ Primary             -> number "."?
                     | ClassInitialization
 AttributeAccess     -> (identifier | IndexAccess) "." identifier
 IndexAccess         -> (identifier | AttributeAccess) "[" Expression "]"
-Comment             -> "//" (any_character)*
+Comment             -> "//" (any_character)* | MultiLineComment
 MultiLineComment    -> "/**" (any_character)* "*/" | "/*" (any_character)* "*/"
 ReturnStatement     -> "return" (ConditionalExpression)? ";"
 BreakStatement      -> "break" ";"
