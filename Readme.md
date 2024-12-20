@@ -1,4 +1,4 @@
-# Linter for .ctl ("Control") language files
+# Linter for .ctl **CTRL** [(Control) language](https://www.winccoa.com/documentation/WinCCOA/latest/en_US/Control_Grundlagen/Control_Grundlagen.html)
 
 !WARNING! This is a work in progress. The linter is not yet complete.
 
